@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { isEmail, isEmpty, validateMobileNumber, isNull } from './validators';
-
-const moment = require("moment");
+import moment from "moment";
 
 export function getKeyboardType(textType) {
     switch (textType) {
