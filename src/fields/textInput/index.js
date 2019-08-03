@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 export default class TextInputField extends Component {
-    handleChange(event){
+    handleChange=(event)=>{
         this.props.updateValue( this.props.attributes.name,event.target.value)
     }
+
     render() {
         const { attributes } = this.props;
-
         return (
             <div  style={{width:'75%',margin:10, display:"flex",flexDirection: 'row'}}>
                 <label >
