@@ -1,12 +1,18 @@
 {
-  "name": "react-formo",
-  "version": "1.0.0",
+  "name": "react-jsonSchema-formo",
+  "version": "0.0.1",
   "description": "Build model based simple forms for React",
-  "main": "index.js",
+  "main": "build/bundles.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack --watch",
-    "build": "webpack"
+    "clean": "build/bundles.js",
+    "build-dev": "webpack -d --mode development",
+    "build-prod": "webpack -p --mode production"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ]
   },
   "repository": {
     "type": "git",
@@ -20,15 +26,24 @@
   },
   "homepage": "https://github.com/sharathchandramg/react-formo#readme",
   "dependencies": {
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "webpack": "^2.6.1"
+    "react-dom": "^16.8.6"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^7.5.5",
-    "babel-loader": "^7.0.0",
-    "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-env": "^1.5.1"
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "css-loader": "^3.1.0",
+    "lodash-webpack-plugin": "^0.11.5",
+    "node-sass": "^4.12.0",
+    "prettier": "^1.18.2",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.6"
   }
 }
