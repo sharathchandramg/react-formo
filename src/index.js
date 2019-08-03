@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
+import _ from "lodash";
 import TextInputField from "./fields/textInput/index.js";
-import styles from "./styles.css"
 import { autoValidate, getDefaultValue, getResetValue } from "./utils/helper";
 
-const _ = require("lodash");
+import styles from "./styles.css"
 
 const DefaultErrorComponent = (props) => {
     const attributes = props.attributes;
@@ -45,7 +45,7 @@ export default class FormO extends Component {
         }
     }
     
-	getInitialState(fields) {
+	getInitialState =(fields)=> {
 		const state = {};
 		fields.forEach((field,index)=>{
 			const fieldObj = field;
@@ -59,7 +59,7 @@ export default class FormO extends Component {
 		return state;
     }
     
-    onValidateFields() {
+    onValidateFields =()=>{
         const newFields = {};
         Object.keys(this.state).forEach((fieldName) => {
             const field = this.state[fieldName];
@@ -76,7 +76,7 @@ export default class FormO extends Component {
         this.setState({ ...newFields });
     }
 
-    onAddNewFields(name, newObj) {
+    onAddNewFields =(name, newObj) =>{
         let fieldObj = this.state[name];
         if (fieldObj) {
             if (fieldObj.type === 'sub-form') {
@@ -106,8 +106,7 @@ export default class FormO extends Component {
         }
     }
 
-
-    resetForm() {
+    resetForm =()=>{
         const newFields = {};
         Object.keys(this.state).forEach((fieldName) => {
             const field = this.state[fieldName];
@@ -126,8 +125,7 @@ export default class FormO extends Component {
         this.setState({ ...newFields });
     }
 
-
-    onValueChange(name, value) {
+    onValueChange=(name, value)=> {
         const valueObj = this.state[name];
         if (valueObj) {
             if (valueObj.type !== 'sub-form') {
@@ -153,7 +151,7 @@ export default class FormO extends Component {
         }
     }
 
-    onSummitTextInput(name) {
+    onSummitTextInput =(name)=> {
         const index = Object.keys(this.state).indexOf(name);
         if (index !== -1 && this[Object.keys(this.state)[index + 1]]
             && this[Object.keys(this.state)[index + 1]].textInput) {
@@ -161,7 +159,7 @@ export default class FormO extends Component {
         } 
     }
 
-    getValues() {
+    getValues =() =>{
         this.onValidateFields();
         const values = {};
         let isValidFields = true;
@@ -180,9 +178,8 @@ export default class FormO extends Component {
             return null;
         }
     }
-
     
-    getFieldValue(fieldObj, value) {
+    getFieldValue=(fieldObj, value) =>{
         const field = fieldObj;
         if (field.type === 'group') {
             const subFields = {};
@@ -204,8 +201,7 @@ export default class FormO extends Component {
         return field;
     }
 
-
-    setValues(...args) {
+    setValues =(...args) =>{
         if (args && args.length && args[0]) {
             const newFields = {};
             Object.keys(args[0]).forEach((fieldName) => {
@@ -218,8 +214,7 @@ export default class FormO extends Component {
         }
     }
 
-
-	onValueChange (name,value){
+	onValueChange =(name,value)=>{
 		const valueObj = this.state[name];
 		if (valueObj) {
             if (valueObj.type !== 'sub-form') {
@@ -234,8 +229,9 @@ export default class FormO extends Component {
                 }
             }
         }
-	}
-	generateFields (){
+    }
+    
+	generateFields = ()=>{
         let formKeys = Object.keys(this.state);
         const { customComponents, errorComponent } = this.props;
         const renderFields = formKeys.map((fieldName,index)=>{
@@ -247,7 +243,7 @@ export default class FormO extends Component {
                     updateValue: this.onValueChange,
                     onAddNewFields: this.onAddNewFields,
                     getValue: this.getValue,
-                    // ErrorComponent: errorComponent || DefaultErrorComponent,
+                    ErrorComponent: errorComponent || DefaultErrorComponent,
                     navigation: this.props['navigation']|| null
                 };
 
