@@ -1,38 +1,34 @@
 import React, { Component } from 'react';
-import PropTypes from "prop-types";
-import _ from "lodash";
-import TextInputField from "./fields/textInput/index.js";
-import { autoValidate, getDefaultValue, getResetValue } from "./utils/helper";
+import PropTypes from 'prop-types';
+import _ from 'lodash';
+import TextInputField from './fields/textInput/index.js';
+import { autoValidate, getDefaultValue, getResetValue } from './utils/helper';
 
-import styles from "./styles.css"
+import styles from './styles.css';
 
-const DefaultErrorComponent = (props) => {
+const DefaultErrorComponent = props => {
     const attributes = props.attributes;
     const theme = props.theme;
     if (attributes.error) {
         return (
-            <p style={{ color: theme.errorMsgColor }}>
-                {attributes.errorMsg}
-            </p>
+            <p style={{ color: theme.errorMsgColor }}>{attributes.errorMsg}</p>
         );
     }
     return null;
 };
 
 export default class FormO extends Component {
-
-	constructor(props) {
-		super(props);
-		const initialState = this.getInitialState(props.fields);
+    constructor(props) {
+        super(props);
+        const initialState = this.getInitialState(props.fields);
 
         this.state = {
             ...initialState,
-            formData:{},
-            errorStatus: false
-        }
-
+            formData: {},
+            errorStatus: false,
+        };
     }
-    
+
     componentDidMount() {
         const { formData } = this.props;
         this.setValues(formData);
@@ -44,24 +40,24 @@ export default class FormO extends Component {
             this.setValues(formData);
         }
     }
-    
-	getInitialState =(fields)=> {
-		const state = {};
-		fields.forEach((field,index)=>{
-			const fieldObj = field;
-			fieldObj.error = false;
-			fieldObj.errorMsg = '';
-			if (field && field.type) {
-				fieldObj.value = '';
-				state[field.name] = fieldObj;
-			}
-		})
-		return state;
-    }
-    
-    onValidateFields =()=>{
+
+    getInitialState = fields => {
+        const state = {};
+        fields.forEach((field, index) => {
+            const fieldObj = field;
+            fieldObj.error = false;
+            fieldObj.errorMsg = '';
+            if (field && field.type) {
+                fieldObj.value = '';
+                state[field.name] = fieldObj;
+            }
+        });
+        return state;
+    };
+
+    onValidateFields = () => {
         const newFields = {};
-        Object.keys(this.state).forEach((fieldName) => {
+        Object.keys(this.state).forEach(fieldName => {
             const field = this.state[fieldName];
             if (field) {
                 if (field.required !== undefined && field.required) {
@@ -69,30 +65,40 @@ export default class FormO extends Component {
                     field.error = validate.error;
                     field.errorMsg = validate.errorMsg;
                 }
-                
+
                 newFields[field.name] = field;
             }
         });
         this.setState({ ...newFields });
-    }
+    };
 
-    onAddNewFields =(name, newObj) =>{
+    onAddNewFields = (name, newObj) => {
         let fieldObj = this.state[name];
         if (fieldObj) {
             if (fieldObj.type === 'sub-form') {
-                if (typeof fieldObj.value === 'undefined' || fieldObj.value === null || fieldObj.value.length === 0) {
+                if (
+                    typeof fieldObj.value === 'undefined' ||
+                    fieldObj.value === null ||
+                    fieldObj.value.length === 0
+                ) {
                     fieldObj.value = [newObj];
                 } else {
-                    let gIndex = _.indexOf(Object.keys(this.state), fieldObj.name);
+                    let gIndex = _.indexOf(
+                        Object.keys(this.state),
+                        fieldObj.name
+                    );
                     let newValue;
                     if (gIndex !== -1) {
                         let preValue = Object.values(this.state)[gIndex].value;
-                        let oIndex = _.findIndex(preValue, item => item._id === newObj._id);
+                        let oIndex = _.findIndex(
+                            preValue,
+                            item => item._id === newObj._id
+                        );
                         if (oIndex !== -1) {
                             preValue[oIndex] = newObj;
                             newValue = preValue;
                         } else {
-                            newValue =  _.concat(newObj, preValue);
+                            newValue = _.concat(newObj, preValue);
                         }
                     } else {
                         newValue = [newObj];
@@ -104,16 +110,17 @@ export default class FormO extends Component {
                 this.setState({ ...newField });
             }
         }
-    }
+    };
 
-    resetForm =()=>{
+    resetForm = () => {
         const newFields = {};
-        Object.keys(this.state).forEach((fieldName) => {
+        Object.keys(this.state).forEach(fieldName => {
             const field = this.state[fieldName];
             if (field) {
-                field.value = (field.editable !== undefined && !field.editable) ?
-                    getDefaultValue(field) :
-                    getResetValue(field);
+                field.value =
+                    field.editable !== undefined && !field.editable
+                        ? getDefaultValue(field)
+                        : getResetValue(field);
                 field.error = false;
                 field.errorMsg = '';
                 if (field.type === 'group') {
@@ -123,53 +130,71 @@ export default class FormO extends Component {
             }
         });
         this.setState({ ...newFields });
-    }
+    };
 
-    onValueChange=(name, value)=> {
+    onValueChange = (name, value) => {
         const valueObj = this.state[name];
         if (valueObj) {
             if (valueObj.type !== 'sub-form') {
                 valueObj.value = value;
                 //autovalidate the fields
-                if (this.props.autoValidation === undefined || this.props.autoValidation) {
+                if (
+                    this.props.autoValidation === undefined ||
+                    this.props.autoValidation
+                ) {
                     Object.assign(valueObj, autoValidate(valueObj));
                 }
                 // apply some custom logic for validation
-                if (this.props.customValidation
-                    && typeof this.props.customValidation === 'function') {
-                    Object.assign(valueObj, this.props.customValidation(valueObj));
+                if (
+                    this.props.customValidation &&
+                    typeof this.props.customValidation === 'function'
+                ) {
+                    Object.assign(
+                        valueObj,
+                        this.props.customValidation(valueObj)
+                    );
                 }
                 const newField = {};
                 newField[valueObj.name] = valueObj;
-                if (this.props.onValueChange &&
-                    typeof this.props.onValueChange === 'function') {
-                    this.setState({ ...newField }, () => this.props.onValueChange());
+                if (
+                    this.props.onValueChange &&
+                    typeof this.props.onValueChange === 'function'
+                ) {
+                    this.setState({ ...newField }, () =>
+                        this.props.onValueChange()
+                    );
                 } else {
                     this.setState({ ...newField });
                 }
             }
         }
-    }
+    };
 
-    onSummitTextInput =(name)=> {
+    onSummitTextInput = name => {
         const index = Object.keys(this.state).indexOf(name);
-        if (index !== -1 && this[Object.keys(this.state)[index + 1]]
-            && this[Object.keys(this.state)[index + 1]].textInput) {
+        if (
+            index !== -1 &&
+            this[Object.keys(this.state)[index + 1]] &&
+            this[Object.keys(this.state)[index + 1]].textInput
+        ) {
             this[Object.keys(this.state)[index + 1]].textInput._root.focus();
-        } 
-    }
+        }
+    };
 
-    getValues =() =>{
+    getValues = () => {
         this.onValidateFields();
         const values = {};
         let isValidFields = true;
-        Object.keys(this.state).forEach((fieldName) => {
+        Object.keys(this.state).forEach(fieldName => {
             const field = this.state[fieldName];
             if (field) {
                 if (field.error !== undefined && field.error) {
                     isValidFields = false;
                 }
-                values[field.name] = field.type && field.type.match(/number/i) ? parseFloat(field.value) : field.value;
+                values[field.name] =
+                    field.type && field.type.match(/number/i)
+                        ? parseFloat(field.value)
+                        : field.value;
             }
         });
         if (isValidFields) {
@@ -177,106 +202,116 @@ export default class FormO extends Component {
         } else {
             return null;
         }
-    }
-    
-    getFieldValue=(fieldObj, value) =>{
+    };
+
+    getFieldValue = (fieldObj, value) => {
         const field = fieldObj;
         if (field.type === 'group') {
             const subFields = {};
-            Object.keys(value).forEach((fieldName) => {
+            Object.keys(value).forEach(fieldName => {
                 subFields[fieldName] = value[fieldName];
             });
             this[field.name].group.setValues(subFields);
             field.value = this[field.name].group.getValues();
         } else {
             field.value = value;
-            if (this.props.autoValidation === undefined || this.props.autoValidation) {
+            if (
+                this.props.autoValidation === undefined ||
+                this.props.autoValidation
+            ) {
                 Object.assign(field, autoValidate(field));
             }
-            if (this.props.customValidation
-                && typeof this.props.customValidation === 'function') {
+            if (
+                this.props.customValidation &&
+                typeof this.props.customValidation === 'function'
+            ) {
                 Object.assign(field, this.props.customValidation(field));
             }
         }
         return field;
-    }
+    };
 
-    setValues =(...args) =>{
+    setValues = (...args) => {
         if (args && args.length && args[0]) {
             const newFields = {};
-            Object.keys(args[0]).forEach((fieldName) => {
+            Object.keys(args[0]).forEach(fieldName => {
                 const field = this.state[fieldName];
                 if (field) {
-                    newFields[field.name] = this.getFieldValue(field, args[0][fieldName]);
+                    newFields[field.name] = this.getFieldValue(
+                        field,
+                        args[0][fieldName]
+                    );
                 }
             });
             this.setState({ ...newFields });
         }
-    }
+    };
 
-	onValueChange =(name,value)=>{
-		const valueObj = this.state[name];
-		if (valueObj) {
+    onValueChange = (name, value) => {
+        const valueObj = this.state[name];
+        if (valueObj) {
             if (valueObj.type !== 'sub-form') {
                 valueObj.value = value;
                 const newField = {};
                 newField[valueObj.name] = valueObj;
-                if (this.props.onValueChange &&
-                    typeof this.props.onValueChange === 'function') {
-                    this.setState({ ...newField }, () => this.props.onValueChange());
+                if (
+                    this.props.onValueChange &&
+                    typeof this.props.onValueChange === 'function'
+                ) {
+                    this.setState({ ...newField }, () =>
+                        this.props.onValueChange()
+                    );
                 } else {
                     this.setState({ ...newField });
                 }
             }
         }
-    }
-    
-	generateFields = ()=>{
+    };
+
+    generateFields = () => {
         let formKeys = Object.keys(this.state);
         const { customComponents, errorComponent } = this.props;
-        const renderFields = formKeys.map((fieldName,index)=>{
+        const renderFields = formKeys.map((fieldName, index) => {
             const field = this.state[fieldName];
             if (!field.hidden) {
-				const commonProps = {
+                const commonProps = {
                     key: index,
                     attributes: this.state[field.name],
                     updateValue: this.onValueChange,
                     onAddNewFields: this.onAddNewFields,
                     getValue: this.getValue,
                     ErrorComponent: errorComponent || DefaultErrorComponent,
-                    navigation: this.props['navigation']|| null
+                    navigation: this.props['navigation'] || null,
                 };
 
                 switch (field.type) {
-                    case "text":
-                    case "email":
-                    case "number":
-                    case "url":
-                    case "mobNumber":
-                    case "password":
-                    case "phone":
-                    case "calculated":
-                        return <TextInputField
-							ref={(c) => { this[field.name] = c; }}
-							{...commonProps}
-                            onSummitTextInput={this.onSummitTextInput}
-						/>
+                    case 'text':
+                    case 'email':
+                    case 'number':
+                    case 'url':
+                    case 'mobNumber':
+                    case 'password':
+                    case 'phone':
+                    case 'calculated':
+                        return (
+                            <TextInputField
+                                ref={c => {
+                                    this[field.name] = c;
+                                }}
+                                {...commonProps}
+                                onSummitTextInput={this.onSummitTextInput}
+                            />
+                        );
 
-					default:
+                    default:
                         return null;
-				}
+                }
             }
         });
         return renderFields;
+    };
 
+    render() {
+        return <div className="mainForm">{this.generateFields()}</div>;
     }
-
-	render() {
-		return (
-			<div className="mainForm" >
-                {this.generateFields()}	
-			</div>
-		);
-	}
 }
-

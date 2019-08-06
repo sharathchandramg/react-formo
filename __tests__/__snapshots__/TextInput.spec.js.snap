@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormO Renders FormO 1`] = `[Function]`;
+
+exports[`TextInputField Renders text Input field 1`] = `[Function]`;
