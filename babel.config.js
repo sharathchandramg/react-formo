@@ -1,18 +1,20 @@
 module.exports = {
-    "plugins": ["@babel/plugin-syntax-dynamic-import", "@babel/transform-runtime"],
-    "presets": [
-      [
-        "@babel/preset-es2015",
-        {
-          "modules": false
-        }
-      ],
-      "react",
+    plugins: [
+        '@babel/plugin-syntax-dynamic-import',
+        '@babel/transform-runtime',
+        '@babel/plugin-proposal-class-properties',
     ],
-    "env": {
-        "test": {
-          "presets": ["@babel/preset-env", "@babel/preset-react"],
-          "plugins": ["transform-export-extensions","dynamic-import-node"],
-        }
+    presets: [
+        [
+            '@babel/preset-env',
+            {
+                modules: false,
+            },
+        ],
+    ],
+    env: {
+        test: {
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+        },
     },
-  }
+};
