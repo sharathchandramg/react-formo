@@ -17,7 +17,7 @@ export default class TextInputField extends Component {
                         {attributes['label']}:  
                     </p>)}
                 </div>
-                {attributes['error'] &&(<p style={{color:'red',fontSize:'10px',margin: 0}}>{attributes['errorMsg']}</p>)}
+                {attributes['error'] &&(<p className="error_msg" id="error" style={{color:'red',fontSize:'10px',margin: 0}}>{attributes['errorMsg']}</p>)}
                     <input 
                         type={attributes['type']}   
                         value={attributes['value']} 

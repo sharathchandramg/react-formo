@@ -1,26 +1,41 @@
 import React from "react";
-import { shallow } from 'enzyme';
+import {
+  shallow,
+  mount
+} from 'enzyme';
 import App from "../App";
+//  const data = require("../../../schema/00-basic_types.json");
 
-describe(App,()=>{
+const testData = {
+  "type": "phone",
+  "name": "phone_number",
+  "label": "Phone Number",
+  "required": true,
+  "editable": true,
+  "hidden": false
+};
+
+describe(App, () => {
   it('Renders App', () => {
-    const app = shallow(<App />);
+    const app = shallow( < App / > );
     expect(App).toMatchSnapshot();
   });
 
-  it('Renders text input area',()=>{
-    const app= shallow(<App/>);
-    
+  it('should call function when submit button is clicked', () => {
+    const wrapper = mount( < App / > );
+    const submitBtn = wrapper.find('button.subBtn');
+    submitBtn.simulate('click');
+    console.log(wrapper.render().find('.error_msg'));
+    // const text = wrapper.render().find('p.error').text()
+    // expect(text).toEqual('Phone Number is required');
   })
 
-  it('Renders text input area with email and phone',()=>{
-    const app= shallow(<App/>);
-    const expectedOutput='<div>'+'<label>'+'<div>'+'<p>'+'</p>'+'</div>'+'<input type:"text"/>'+'</label>'+'</div>'
-    +'<div>'+'<label>'+'<div>'+'<p>'+'</p>'+'</div>'+'<input type:"text"/>'+'</label>'+'</div>'+
-    '<div>'+'<label>'+'<div>'+'<p>'+'</p>'+'</div>'+'<input type:"phone"/>'+'</label>'+'</div>'+
-    '<div>'+'<label>'+'<div>'+'<p>'+'</p>'+'</div>'+'<input type:"email"/>'+'</label>'+'</div>';
-
-    const realOutput=app.find('div.form').html();
-    expect(realOutput.indexOf(expectedOutput)>-1).toEqual(true);
+  it('should call function when validate button is clicked', () => {
+    const wrapper = mount( < App / > );
+    const validateBtn = wrapper.find('button.vldBtn');
+    validateBtn.simulate('click');
+    // const text = wrapper.find('p.error').text();
+    // expect(text).toEqual('Phone Number is required');
   })
+
 });

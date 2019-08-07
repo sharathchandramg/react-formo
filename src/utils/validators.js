@@ -1,34 +1,34 @@
 export function isEmpty(value) {
-    switch(typeof value){
-        case 'string':{
-            if( value &&  value.trim() !== ""){
-                return false; 
-            }else{
+    switch (typeof value) {
+        case 'string': {
+            if (value && value.trim() !== "") {
+                return false;
+            } else {
                 return true;
             }
         }
-        case 'number':{
+        case 'number': {
             let val = value.toString();
-            if(val && val.trim() !== ""){
+            if (val && val.trim() !== "") {
                 return false
-            }else{
+            } else {
                 return true;
             }
         }
         case 'undefined':
             return true;
-        case 'object':{
-            if(Array.isArray(value)){
-                return value.length > 0? false:true;
-            }else{
-                if(value === null || Object.keys(value).length === 0){
+        case 'object': {
+            if (Array.isArray(value)) {
+                return value.length > 0 ? false : true;
+            } else {
+                if (value === null || Object.keys(value).length === 0) {
                     return true;
                 }
                 return false;
             }
         }
         default:
-            return false 
+            return false
     }
 }
 
@@ -37,7 +37,7 @@ export function isEmail(value) {
     return emailRegex.test(value);
 }
 export const validateMobileNumber = (mobNumber) => {
-    const re = /^\+?([0-9]{2})?([0-9]{10})$/;
+    const re = /^\+?([0-9]{2})?(([6-9]{1})+([0-9]{9}))$/;
     return re.test(mobNumber);
 };
 
