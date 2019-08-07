@@ -1,9 +1,9 @@
 const { defaults } = require('jest-config');
 module.exports = {
-    roots: ['./'],
+    roots: ['./src'],
 
     transformIgnorePatterns: ['./node_modules/'],
-    testRegex: '/__tests__/.*.spec.(js|ts|tsx)?$',
+    testRegex: '/src/Test/.*.test.(js|ts|tsx)?$',
     moduleFileExtensions: [
         ...defaults.moduleFileExtensions,
         'web.js',

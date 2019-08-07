@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import FormO from '../src/index';
-import TextInputField from '../src/fields/textInput/index';
+import FormO from '../index';
+import TextInputField from '../fields/textInput/index';
 
 const testSchema = {
     type: 'text',
@@ -12,8 +12,8 @@ const testSchema = {
     hidden: false,
 };
 
-const fields = require('../schema/00-basic_types.json');
-const fields1 = require('../schema/01-phone-and-email.json');
+const fields = require('../../schema/00-basic_types.json');
+const fields1 = require('../../schema/01-phone-and-email.json');
 
 describe(FormO, () => {
     it('Renders FormO with schema 00-basic_types', () => {
