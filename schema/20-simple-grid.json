@@ -6,13 +6,11 @@
         "required": false,
         "editable": true,
         "hidden": false,
-        "data":{
-
+        "data": {
             "header": {
                 "Critical": "Critical",
                 "Major": "Major",
                 "Minor": "Minor"
-            
             },
 
             "type": {
@@ -21,8 +19,8 @@
                 "Minor": "Number"
             },
 
-            "style":{
-                "column_width":{
+            "style": {
+                "column_width": {
                     "Critical": 80,
                     "Major": 100,
                     "Minor": 120
@@ -34,7 +32,6 @@
                 "Critical": 1,
                 "Major": "ABC",
                 "Minor": ""
-                
             },
             "Color": {
                 "Critical": 5,
@@ -45,7 +42,6 @@
                 "Critical": 1,
                 "Major": "ABC",
                 "Minor": ""
-                
             },
             "Color1": {
                 "Critical": 5,
@@ -56,7 +52,6 @@
                 "Critical": 1,
                 "Major": "ABC",
                 "Minor": ""
-                
             },
             "Color2": {
                 "Critical": 5,

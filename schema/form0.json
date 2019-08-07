@@ -1,4 +1,4 @@
-[   
+[
     {
         "type": "location",
         "name": "office_location",
@@ -7,7 +7,7 @@
         "editable": true,
         "hidden": false
     },
-    
+
     {
         "type": "image",
         "name": "bill",
@@ -15,7 +15,6 @@
         "required": true,
         "editable": true,
         "hidden": false
-
     },
     {
         "type": "text",
@@ -126,12 +125,7 @@
         "required": false,
         "editable": true,
         "hidden": false,
-        "options": [
-            "Pending",
-            "On Hold",
-            "Shortlisted",
-            "Rejected"
-        ]
+        "options": ["Pending", "On Hold", "Shortlisted", "Rejected"]
     },
     {
         "type": "picker",
@@ -140,10 +134,7 @@
         "required": false,
         "editable": true,
         "hidden": false,
-        "options": [
-            "Stage 1",
-            "Stage 2"
-        ]
+        "options": ["Stage 1", "Stage 2"]
     },
     {
         "type": "text",
@@ -172,5 +163,4 @@
         "hidden": false,
         "mode": "time"
     }
-    
 ]

@@ -6,12 +6,7 @@
         "required": false,
         "editable": true,
         "hidden": false,
-        "options": [
-            "Pending",
-            "On Hold",
-            "Shortlisted",
-            "Rejected"
-        ]
+        "options": ["Pending", "On Hold", "Shortlisted", "Rejected"]
     },
     {
         "type": "currency",
@@ -20,10 +15,10 @@
         "required": true,
         "editable": true,
         "hidden": false,
-        "showCurrencyOptions":true,
-        "currencyOptions": ["INR", "USD","EUR","CNY","GBP"],
-        "defaultValue":0,
-        "defaultCurrency" : "INR"
+        "showCurrencyOptions": true,
+        "currencyOptions": ["INR", "USD", "EUR", "CNY", "GBP"],
+        "defaultValue": 0,
+        "defaultCurrency": "INR"
     },
     {
         "type": "location",

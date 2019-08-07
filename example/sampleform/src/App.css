@@ -1,24 +1,24 @@
-.App{
-  margin:4%;
-  width:80%;
-  padding:2.5% 0 0 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-items: center;
-  border-style: outset;
-  border-radius:5px;
+.App {
+    margin: 4%;
+    width: 80%;
+    padding: 2.5% 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    border-style: outset;
+    border-radius: 5px;
 }
-.buttons{
-  width:100%;
-  padding:2.5%;
-  display: flex;   
-  flex-wrap: wrap;
+.buttons {
+    width: 100%;
+    padding: 2.5%;
+    display: flex;
+    flex-wrap: wrap;
 }
-.button{
-  background-color: aquamarine;  
-  width:15%;
-  height:30px;
-  margin:0% 2.5% 2% 5%;
-  border-radius: 10px;
+.button {
+    background-color: aquamarine;
+    width: 15%;
+    height: 30px;
+    margin: 0% 2.5% 2% 5%;
+    border-radius: 10px;
 }

@@ -13,7 +13,7 @@ const testSchema = {
 };
 
 const fields = require('../schema/00-basic_types.json');
-const fields1=require("../schema/01-phone-and-email.json");
+const fields1 = require('../schema/01-phone-and-email.json');
 
 describe(FormO, () => {
     it('Renders FormO with schema 00-basic_types', () => {

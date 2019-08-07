@@ -7,18 +7,18 @@
         "labelKey": "first_name",
         "primaryKey": "_id",
         "objectType": true,
-        "options":[],
-        "data_source" : {
-            "type" : "remote", 
-            "referenceId" : "" ,
+        "options": [],
+        "data_source": {
+            "type": "remote",
+            "referenceId": "",
             "key": "user"
         },
-        
-        "additional":{
-            "searchEnable":false, 
-            "filterEnable":false
+
+        "additional": {
+            "searchEnable": false,
+            "filterEnable": false
         },
-        "filterCategory":[] 
+        "filterCategory": []
     },
     {
         "type": "select",
@@ -29,17 +29,17 @@
         "primaryKey": "_id",
         "objectType": true,
         "options": [],
-        
-        "data_source" : {
-            "type" : "remote", 
-            "referenceId" : "" ,
+
+        "data_source": {
+            "type": "remote",
+            "referenceId": "",
             "key": "user"
         },
-        
-        "additional":{
-            "searchEnable":false, 
-            "filterEnable":false
+
+        "additional": {
+            "searchEnable": false,
+            "filterEnable": false
         },
-        "filterCategory":[] 
+        "filterCategory": []
     }
 ]
