@@ -36,6 +36,6 @@
         "hidden": false,
         "mode": "datetime",
         "minDate": "today",
-        "defaultValue" : 120 
+        "defaultValue": 120
     }
 ]

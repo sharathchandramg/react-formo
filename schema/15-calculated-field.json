@@ -30,7 +30,7 @@
         "required": false,
         "editable": true,
         "hidden": false,
-        "fields" : ["quantity", "retail_price"],
-        "expression" : "quantity * retail_price"
+        "fields": ["quantity", "retail_price"],
+        "expression": "quantity * retail_price"
     }
 ]

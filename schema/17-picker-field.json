@@ -6,13 +6,8 @@
         "required": false,
         "editable": true,
         "hidden": false,
-        "options": [
-            "Pending",
-            "On Hold",
-            "Shortlisted",
-            "Rejected"
-        ],
-        "defaultValue":"Pending"
+        "options": ["Pending", "On Hold", "Shortlisted", "Rejected"],
+        "defaultValue": "Pending"
     },
     {
         "type": "picker",
@@ -21,10 +16,7 @@
         "required": false,
         "editable": true,
         "hidden": false,
-        "options": [
-            "Stage 1",
-            "Stage 2"
-        ],
-        "defaultValue":"None"
+        "options": ["Stage 1", "Stage 2"],
+        "defaultValue": "None"
     }
 ]

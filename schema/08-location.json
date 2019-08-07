@@ -7,7 +7,7 @@
         "editable": true,
         "hidden": false
     },
-    
+
     {
         "type": "location",
         "name": "office_location",

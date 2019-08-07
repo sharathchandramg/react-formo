@@ -1,5 +1,4 @@
 [
-
     {
         "type": "date",
         "name": "followup_date",
@@ -9,6 +8,6 @@
         "hidden": false,
         "mode": "datetime",
         "minDate": "today",
-        "defaultDate":"120"
+        "defaultDate": "120"
     }
 ]

@@ -22,12 +22,7 @@
         "required": false,
         "editable": true,
         "hidden": false,
-        "options": [
-            "Pending",
-            "On Hold",
-            "Shortlisted",
-            "Rejected"
-        ]
+        "options": ["Pending", "On Hold", "Shortlisted", "Rejected"]
     },
     {
         "type": "image",
@@ -36,6 +31,5 @@
         "required": true,
         "editable": true,
         "hidden": false
-
     }
 ]

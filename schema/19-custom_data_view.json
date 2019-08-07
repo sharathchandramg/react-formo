@@ -8,12 +8,12 @@
         "hidden": false,
         "multiple": false,
         "objectType": true,
-        "view_name" : "mo_catalog_1", 
-        "data":[{}],
-        "data_source" : {
-            "type" : "asynstorage/filestorage/api",
-            "key" : ""  
-        },    
+        "view_name": "mo_catalog_1",
+        "data": [{}],
+        "data_source": {
+            "type": "asynstorage/filestorage/api",
+            "key": ""
+        },
         "defaultValue": {}
     }
 ]

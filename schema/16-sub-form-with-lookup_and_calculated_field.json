@@ -1,5 +1,5 @@
-
-[  {
+[
+    {
         "type": "text",
         "name": "data_source",
         "label": "Data Source",
@@ -22,12 +22,7 @@
         "required": false,
         "editable": true,
         "hidden": false,
-        "options": [
-            "Pending",
-            "On Hold",
-            "Shortlisted",
-            "Rejected"
-        ]
+        "options": ["Pending", "On Hold", "Shortlisted", "Rejected"]
     },
     {
         "type": "sub-form",
@@ -84,9 +79,8 @@
                         "required": true,
                         "editable": false,
                         "hidden": false
-                    } 
+                    }
                 ]
-
             },
             {
                 "type": "number",
@@ -103,8 +97,8 @@
                 "required": true,
                 "editable": true,
                 "hidden": false,
-                "fields" : ["mrp", "quantity"],
-                "expression" : "quantity * mrp"
+                "fields": ["mrp", "quantity"],
+                "expression": "quantity * mrp"
             }
         ]
     }

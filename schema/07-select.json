@@ -22,12 +22,7 @@
         "required": false,
         "editable": true,
         "hidden": false,
-        "options": [
-            "Pending",
-            "On Hold",
-            "Shortlisted",
-            "Rejected"
-        ]
+        "options": ["Pending", "On Hold", "Shortlisted", "Rejected"]
     },
     {
         "type": "select",
@@ -94,13 +89,7 @@
         "label": "Intrest",
         "multiple": true,
         "objectType": false,
-        "options": [
-            "Cricket",
-            "Football",
-            "Hockey"
-        ],
-        "defaultValue": [
-            "Cricket"
-        ]
+        "options": ["Cricket", "Football", "Hockey"],
+        "defaultValue": ["Cricket"]
     }
 ]

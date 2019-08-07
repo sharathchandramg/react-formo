@@ -2,16 +2,16 @@ var path = require('path');
 const webpack = require('webpack');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 module.exports = {
-    mode: "production",
+    mode: 'production',
     cache: true,
-    context: __dirname + "/src",
-    entry: "./index.js",
+    context: __dirname + '/src',
+    entry: './index.js',
     output: {
-        path: path.join(__dirname, "build"),
-        publicPath: "/build/",
-        filename: "bundles.js",
-        library: "JSONSchemaFormO",
-        libraryTarget: 'umd'
+        path: path.join(__dirname, 'build'),
+        publicPath: '/build/',
+        filename: 'bundles.js',
+        library: 'JSONSchemaFormO',
+        libraryTarget: 'umd',
     },
 
     module: {
@@ -19,53 +19,41 @@ module.exports = {
             {
                 test: /\.(js|jsx)$/,
                 use: 'babel-loader',
-                exclude: /node_modules/
+                exclude: /node_modules/,
             },
             {
                 test: /\.css$/,
-                use: [
-                    'style-loader',
-                    'css-loader'
-                ]
+                use: ['style-loader', 'css-loader'],
             },
             {
                 test: /\.scss$/,
-                use: [
-                    'style-loader',
-                    'css-loader',
-                    'sass-loader'
-                ]
-            }
-        ]
+                use: ['style-loader', 'css-loader', 'sass-loader'],
+            },
+        ],
     },
     resolve: {
-        extensions: [
-            '.js',
-            '.jsx'
-        ]
+        extensions: ['.js', '.jsx'],
     },
-
-
 
     externals: {
         react: {
-            root: "React",
-            commonjs: "react",
-            commonjs2: "react",
-            amd: "react"
+            root: 'React',
+            commonjs: 'react',
+            commonjs2: 'react',
+            amd: 'react',
         },
         'react-dom': {
-            root: "ReactDOM",
+            root: 'ReactDOM',
             commonjs2: 'react-dom',
             commonjs: 'react-dom',
             amd: 'react-dom',
             umd: 'react-dom',
-        }
+        },
     },
 
     plugins: [
         new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
-        new LodashModuleReplacementPlugin
-    ]
+        new LodashModuleReplacementPlugin(),
+    ],
 };
 module.exports = config;
