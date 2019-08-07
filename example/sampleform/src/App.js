@@ -1,14 +1,24 @@
 import React, { Component } from 'react';
 import './App.css';
-const fields = require("./schema/01-phone-and-email.json");
 import Form from "react-jsonSchema-formo";
+
+// const data = require("../../../schema/01-phone-and-email.json");
+
+const testData = [{
+  "type": "phone",
+  "name": "phone_number",
+  "label": "Phone Number",
+  "required": true,
+  "editable": true,
+  "hidden": false
+}];
 
 class App extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			fields: fields,
+			fields: testData,
 			formData: {},
 
 		}
