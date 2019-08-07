@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Form from 'react-jsonSchema-formo';
 
-// const data = require("../../../schema/01-phone-and-email.json");
+const data = require("./schema/00-basic_types.json");
 
 const testData = [
     {
