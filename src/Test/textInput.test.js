@@ -17,11 +17,11 @@ const fields1 = require('../../schema/01-phone-and-email.json');
 
 describe(FormO, () => {
     it('Renders FormO with schema 00-basic_types', () => {
-        const form = mount(<FormO fields={fields} />);
+        mount(<FormO fields={fields} />);
         expect(FormO).toMatchSnapshot();
     });
     it('Renders FormO with phone-and-email', () => {
-        const form = mount(<FormO fields={fields1} />);
+        mount(<FormO fields={fields1} />);
         expect(FormO).toMatchSnapshot();
     });
 });
