@@ -22,16 +22,15 @@ describe(App, () => {
         const wrapper = mount(<App />);
         const submitBtn = wrapper.find('button.subBtn');
         submitBtn.simulate('click');
-        console.log(wrapper.render().find('.error_msg'));
-        // const text = wrapper.render().find('p.error').text()
-        // expect(text).toEqual('Phone Number is required');
+        const text = wrapper.find('#error').text();
+        expect(text).toEqual('Phone Number is required');
     });
 
     it('should call function when validate button is clicked', () => {
         const wrapper = mount(<App />);
         const validateBtn = wrapper.find('button.vldBtn');
         validateBtn.simulate('click');
-        // const text = wrapper.find('p.error').text();
-        // expect(text).toEqual('Phone Number is required');
+        const text = wrapper.find('#error').text();
+        expect(text).toEqual('Phone Number is required');
     });
 });
