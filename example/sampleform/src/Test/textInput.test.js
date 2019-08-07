@@ -1,16 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import App from '../App';
-//  const data = require("../../../schema/00-basic_types.json");
-
-const testData = {
-    type: 'phone',
-    name: 'phone_number',
-    label: 'Phone Number',
-    required: true,
-    editable: true,
-    hidden: false,
-};
 
 describe(App, () => {
     it('Renders App', () => {
@@ -33,4 +23,5 @@ describe(App, () => {
         const text = wrapper.find('#error').text();
         expect(text).toEqual('Phone Number is required');
     });
+
 });

@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormO Renders FormO with phone-and-email 1`] = `[Function]`;
+
+exports[`FormO Renders FormO with schema 00-basic_types 1`] = `[Function]`;
+
+exports[`TextInputField Renders text Input field 1`] = `[Function]`;
