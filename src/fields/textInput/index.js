@@ -30,7 +30,6 @@ export default class TextInputField extends Component {
                     </div>
                     {attributes['error'] && (
                         <p
-                            className="error_msg"
                             id="error"
                             style={{
                                 color: 'red',
