@@ -9,7 +9,7 @@ export function isEmpty(value) {
         }
         case 'number': {
             let val = value.toString();
-            if (val === "" && !val.includes('e', 0)) {
+            if (val === '' && !val.includes('e', 0)) {
                 return true;
             } else {
                 return false;
@@ -37,11 +37,11 @@ export function isEmail(value) {
     return emailRegex.test(value);
 }
 
-export const isValidNumber = (num) => {
-    console.log(num)
+export const isValidNumber = num => {
+    console.log(num);
     const req = /^[0-9](\.[0-9]+)?$/;
     return req.test(num);
-}
+};
 
 export const validateMobileNumber = mobNumber => {
     const re = /^(\+([0-9]{2}))?(([6-9]{1})+([0-9]{9}))$/;
@@ -53,8 +53,8 @@ export function isNull(value) {
     else return false;
 }
 
-export function isValidUrl(url){
-    const pattern=/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
+export function isValidUrl(url) {
+    const pattern = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
     return pattern.test(url);
 }
 

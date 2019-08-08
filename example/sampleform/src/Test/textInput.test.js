@@ -24,11 +24,11 @@ describe(App, () => {
         expect(text).toEqual('Phone Number is required');
     });
 
-    it('should validate the input when submit button is clicked',()=>{
+    it('should validate the input when submit button is clicked', () => {
         const newValue = 'testing component';
-        const wrapper= mount(<App />);
+        const wrapper = mount(<App />);
         const input = wrapper.find('input');
-        input.simulate('change', { target: { value: newValue }});
+        input.simulate('change', { target: { value: newValue } });
         const submitBtn = wrapper.find('button.subBtn');
         submitBtn.simulate('click');
         const text = wrapper.find('#error').text();

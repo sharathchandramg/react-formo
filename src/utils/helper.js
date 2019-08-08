@@ -1,5 +1,12 @@
 import _ from 'lodash';
-import { isEmail, isEmpty, validateMobileNumber, isNull, isValidNumber, isValidUrl } from './validators';
+import {
+    isEmail,
+    isEmpty,
+    validateMobileNumber,
+    isNull,
+    isValidNumber,
+    isValidUrl,
+} from './validators';
 import moment from 'moment';
 
 export function getKeyboardType(textType) {
@@ -279,11 +286,11 @@ export function autoValidate(field) {
                 break;
 
             case 'url':
-                if(isEmpty(field.value)){
-                    error=true;
-                    errorMsg= `${field.label} is required`
-                }else if(!isValidUrl(field.value)){
-                    error=true;
+                if (isEmpty(field.value)) {
+                    error = true;
+                    errorMsg = `${field.label} is required`;
+                } else if (!isValidUrl(field.value)) {
+                    error = true;
                     errorMsg = `${field.label} should be valid url`;
                 }
                 break;

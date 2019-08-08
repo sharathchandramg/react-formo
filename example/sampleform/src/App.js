@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Form from 'react-jsonSchema-formo';
 
-const data = require("./schema/02-text-and-number.json");
+const data = require('./schema/02-text-and-number.json');
 
 const testData = [
     {

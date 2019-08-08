@@ -116,8 +116,10 @@ export default class FormO extends Component {
         Object.keys(this.state).forEach(fieldName => {
             const field = this.state[fieldName];
             if (field) {
-                field.value =""
-                field.editable !== undefined && !field.editable? getDefaultValue(field): getResetValue(field);
+                field.value = '';
+                field.editable !== undefined && !field.editable
+                    ? getDefaultValue(field)
+                    : getResetValue(field);
                 field.error = false;
                 field.errorMsg = '';
                 if (field.type === 'group') {
@@ -189,7 +191,9 @@ export default class FormO extends Component {
                     isValidFields = false;
                 }
                 values[field.name] =
-                    field.type && field.type.match(/number/i) ? parseFloat(field.value) : field.value;
+                    field.type && field.type.match(/number/i)
+                        ? parseFloat(field.value)
+                        : field.value;
             }
         });
         if (isValidFields) {
