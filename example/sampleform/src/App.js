@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import './App.css';
 import Form from 'react-jsonSchema-formo';
 
-const data = require("./schema/00-basic_types.json");
+const data = require("./schema/02-text-and-number.json");
 
 const testData = [
     {
-        type: 'phone',
-        name: 'phone_number',
-        label: 'Phone Number',
+        type: 'url',
+        name: 'url',
+        label: 'URL',
         required: true,
         editable: true,
         hidden: false,

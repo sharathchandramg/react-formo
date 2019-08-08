@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import TextInputField from './fields/textInput/index.js';
 import { autoValidate, getDefaultValue, getResetValue } from './utils/helper';
-
 import styles from './styles.css';
 
 const DefaultErrorComponent = props => {
@@ -117,10 +116,8 @@ export default class FormO extends Component {
         Object.keys(this.state).forEach(fieldName => {
             const field = this.state[fieldName];
             if (field) {
-                field.value =
-                    field.editable !== undefined && !field.editable
-                        ? getDefaultValue(field)
-                        : getResetValue(field);
+                field.value =""
+                field.editable !== undefined && !field.editable? getDefaultValue(field): getResetValue(field);
                 field.error = false;
                 field.errorMsg = '';
                 if (field.type === 'group') {
@@ -192,9 +189,7 @@ export default class FormO extends Component {
                     isValidFields = false;
                 }
                 values[field.name] =
-                    field.type && field.type.match(/number/i)
-                        ? parseFloat(field.value)
-                        : field.value;
+                    field.type && field.type.match(/number/i) ? parseFloat(field.value) : field.value;
             }
         });
         if (isValidFields) {
@@ -244,27 +239,6 @@ export default class FormO extends Component {
                 }
             });
             this.setState({ ...newFields });
-        }
-    };
-
-    onValueChange = (name, value) => {
-        const valueObj = this.state[name];
-        if (valueObj) {
-            if (valueObj.type !== 'sub-form') {
-                valueObj.value = value;
-                const newField = {};
-                newField[valueObj.name] = valueObj;
-                if (
-                    this.props.onValueChange &&
-                    typeof this.props.onValueChange === 'function'
-                ) {
-                    this.setState({ ...newField }, () =>
-                        this.props.onValueChange()
-                    );
-                } else {
-                    this.setState({ ...newField });
-                }
-            }
         }
     };
 

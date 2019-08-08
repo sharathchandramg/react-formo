@@ -9,10 +9,10 @@ export function isEmpty(value) {
         }
         case 'number': {
             let val = value.toString();
-            if (val && val.trim() !== '') {
-                return false;
-            } else {
+            if (val === "" && !val.includes('e', 0)) {
                 return true;
+            } else {
+                return false;
             }
         }
         case 'undefined':
@@ -36,14 +36,26 @@ export function isEmail(value) {
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-z\-0-9]+\.)+[a-z]{2,}))$/;
     return emailRegex.test(value);
 }
+
+export const isValidNumber = (num) => {
+    console.log(num)
+    const req = /^[0-9](\.[0-9]+)?$/;
+    return req.test(num);
+}
+
 export const validateMobileNumber = mobNumber => {
-    const re = /^\+?([0-9]{2})?(([6-9]{1})+([0-9]{9}))$/;
+    const re = /^(\+([0-9]{2}))?(([6-9]{1})+([0-9]{9}))$/;
     return re.test(mobNumber);
 };
 
 export function isNull(value) {
     if (!value || value === null || typeof value === 'undefined') return true;
     else return false;
+}
+
+export function isValidUrl(url){
+    const pattern=/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
+    return pattern.test(url);
 }
 
 export const sum = arr => arr.reduce((acc, n) => acc + n, 0);

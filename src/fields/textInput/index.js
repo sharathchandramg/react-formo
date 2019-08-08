@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+
 export default class TextInputField extends Component {
-    handleChange = event => {
+
+    handleChange = (event) => {
         this.props.updateValue(this.props.attributes.name, event.target.value);
     };
 
@@ -41,15 +43,17 @@ export default class TextInputField extends Component {
                         </p>
                     )}
                     <input
+                    
                         type={attributes['type']}
                         value={attributes['value']}
-                        onChange={this.handleChange}
+                        id={attributes['name']}
                         style={{
                             width: '80%',
                             height: 25,
                             margin: 5,
                             borderRadius: 5,
                         }}
+                        onChange={this.handleChange}
                     />
                 </label>
             </div>
