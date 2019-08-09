@@ -1,34 +1,16 @@
 {
-  "name": "react-formo",
-  "version": "1.0.0",
-  "description": "Build model based simple forms for React",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack --watch",
-    "build": "webpack"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sharathchandramg/react-formo.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/sharathchandramg/react-formo/issues"
-  },
-  "homepage": "https://github.com/sharathchandramg/react-formo#readme",
-  "dependencies": {
-    "react": "^16.8.6",
-    "webpack": "^2.6.1"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^7.5.5",
-    "babel-loader": "^7.0.0",
-    "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-env": "^1.5.1"
-  }
+    "name": "react-web-formo",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "private": false,
+    "devDependencies": {
+        "husky": "^3.0.3",
+        "lerna": "^3.16.4"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lerna run --concurrency 1 --stream precommit"
+        }
+    }
 }
