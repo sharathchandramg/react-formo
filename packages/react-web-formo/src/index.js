@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import TextInputField from './fields/textInput/index.js';
+import PickerField from './fields/picker/index';
+import StatusPicker from './fields/statusPicker/index';
 import { autoValidate, getDefaultValue, getResetValue } from './utils/helper';
 import styles from './styles.css';
 
@@ -278,6 +280,26 @@ export default class FormO extends Component {
                                 }}
                                 {...commonProps}
                                 onSummitTextInput={this.onSummitTextInput}
+                            />
+                        );
+
+                    case 'picker':
+                        return (
+                            <PickerField
+                                ref={c => {
+                                    this[field.name] = c;
+                                }}
+                                {...commonProps}
+                            />
+                        );
+
+                    case 'status_picker':
+                        return (
+                            <StatusPicker
+                                ref={c => {
+                                    this[field.name] = c;
+                                }}
+                                {...commonProps}
                             />
                         );
 

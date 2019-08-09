@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import './App.css';
 import Form from 'react-web-formo';
 
-const data = require('./schema/02-text-and-number.json');
+const data = require('./schema/form0.json');
 
 const testData = [
     {
-        type: 'url',
-        name: 'url',
-        label: 'URL',
+        type: 'phone',
+        name: 'phone_number',
+        label: 'Phone Number',
         required: true,
         editable: true,
         hidden: false,
@@ -19,7 +19,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            fields: testData,
+            fields: data,
             formData: {},
         };
     }
@@ -27,13 +27,15 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <Form
-                    className="form"
-                    ref={c => (this.formGenerator = c)}
-                    fields={this.state.fields}
-                    formData={this.state.formData}
-                />
-                <div className="buttons">
+                <div style={{ width: '85%' }}>
+                    <Form
+                        className="form"
+                        ref={c => (this.formGenerator = c)}
+                        fields={this.state.fields}
+                        formData={this.state.formData}
+                    />
+                </div>
+                <div className="buttons" style={{ justifyContent: 'center' }}>
                     <button
                         className="button subBtn"
                         type="button"
