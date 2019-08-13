@@ -34,19 +34,22 @@ export default class StatusPickerField extends Component {
                     justifyContent: 'flex-start',
                     alignItems: 'start',
                     fontSize: '20px',
+                    margin: '10px',
                 }}
             >
-                <p
-                    style={{
-                        margin: 0,
-                        justifySelf: 'flexStart',
-                        marginRight: '20px',
-                    }}
-                >
-                    {attributes.label}
-                    {attributes.required && '*'}
-                </p>
-                <div style={{ flex: 5 }}>
+                <div style={{ flex: 3 }}>
+                    <p
+                        style={{
+                            margin: 0,
+                            justifySelf: 'flexStart',
+                            marginRight: '20px',
+                            marginLeft: '10px',
+                        }}
+                    >
+                        {attributes.label}
+                    </p>
+                </div>
+                <div style={{ flex: 7 }}>
                     <select
                         style={{
                             width: '400px',

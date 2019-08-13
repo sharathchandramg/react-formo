@@ -27,13 +27,36 @@ export default class PickerField extends Component {
     renderWebPicker = pickerValue => {
         const { theme, attributes } = this.props;
         return (
-            <div>
-                <div style={{ flex: 5 }}>
-                    <p style={{ paddingStart: 5 }}>{attributes.label}</p>
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'start',
+                    fontSize: '20px',
+                    margin: '10px',
+                }}
+            >
+                <div style={{ flex: 3 }}>
+                    <p
+                        style={{
+                            margin: 0,
+                            justifySelf: 'flexStart',
+                            marginRight: '20px',
+                            marginLeft: '10px',
+                        }}
+                    >
+                        {attributes.label}
+                    </p>
                 </div>
-                <div style={{ flex: 5 }}>
+                <div style={{ flex: 7 }}>
                     <select
-                        style={{ padding: 2 }}
+                        style={{
+                            padding: 2,
+                            width: '400px',
+                            height: '25px',
+                            backgroundColor: 'white',
+                        }}
                         mode={attributes.mode}
                         value={pickerValue}
                         onChange={this.handleChange}

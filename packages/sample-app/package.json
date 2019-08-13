@@ -41,15 +41,15 @@
         "enzyme-adapter-react-16": "^1.14.0",
         "enzyme-to-json": "^3.4.0",
         "html-webpack-plugin": "^3.2.0",
-        "jest": "24.7.1",
+        "jest": "^24.7.1",
         "jest-watch-typeahead": "^0.3.1",
         "lint-staged": "^9.2.1",
         "mocha": "^6.2.0",
         "prettier": "^1.18.2",
         "react-addons-test-utils": "^15.6.2",
-        "style-loader": "^0.23.1",
-        "webpack": "4.29.6",
-        "webpack-cli": "3.3.0",
+        "style-loader": "^1.0.0",
+        "webpack": "4.39.1",
+        "webpack-cli": "3.3.6",
         "webpack-dev-server": "3.2.1"
     }
 }
