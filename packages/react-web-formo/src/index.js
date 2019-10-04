@@ -25,7 +25,6 @@ export default class FormO extends Component {
 
         this.state = {
             ...initialState,
-            errorStatus: false,
         };
     }
 
