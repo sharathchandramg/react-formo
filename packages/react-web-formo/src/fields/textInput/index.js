@@ -27,6 +27,8 @@ export default class TextInputField extends Component {
           <div
             style={{
               width: '30%',
+              display: 'flex',
+              justifyContent: 'flex-start',
             }}
           >
             {attributes['required'] && (
@@ -41,7 +43,8 @@ export default class TextInputField extends Component {
           <div
             style={{
               width: '70%',
-              textAlign: 'right',
+              display: 'flex',
+              justifyContent: 'flex-end',
             }}
           >
             {attributes['error'] && (
@@ -68,6 +71,7 @@ export default class TextInputField extends Component {
               height: 40,
               border: '1px solid #979797',
               borderRadius: 5,
+              padding: 5,
               fontSize: 20,
               outline: 'none',
             }}
