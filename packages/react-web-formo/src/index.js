@@ -6,6 +6,7 @@ import PickerField from './fields/picker/index';
 import StatusPicker from './fields/statusPicker/index';
 import { autoValidate, getDefaultValue, getResetValue } from './utils/helper';
 import styles from './styles.css';
+import DateTimePicker from './fields/dateTimePicker/index.js';
 
 const DefaultErrorComponent = props => {
   const attributes = props.attributes;
@@ -156,17 +157,6 @@ export default class FormO extends Component {
     }
   };
 
-  onSummitTextInput = name => {
-    const index = Object.keys(this.state).indexOf(name);
-    if (
-      index !== -1 &&
-      this[Object.keys(this.state)[index + 1]] &&
-      this[Object.keys(this.state)[index + 1]].textInput
-    ) {
-      this[Object.keys(this.state)[index + 1]].textInput._root.focus();
-    }
-  };
-
   getValues = () => {
     this.onValidateFields();
     const values = {};
@@ -261,7 +251,6 @@ export default class FormO extends Component {
                   this[field.name] = c;
                 }}
                 {...commonProps}
-                onSummitTextInput={this.onSummitTextInput}
               />
             );
 
@@ -278,6 +267,16 @@ export default class FormO extends Component {
           case 'status_picker':
             return (
               <StatusPicker
+                ref={c => {
+                  this[field.name] = c;
+                }}
+                {...commonProps}
+              />
+            );
+
+          case 'date':
+            return (
+              <DateTimePicker
                 ref={c => {
                   this[field.name] = c;
                 }}
