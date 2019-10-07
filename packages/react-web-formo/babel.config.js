@@ -1,20 +1,20 @@
 module.exports = {
-    plugins: [
-        '@babel/plugin-syntax-dynamic-import',
-        '@babel/transform-runtime',
-        '@babel/plugin-proposal-class-properties',
+  plugins: [
+    '@babel/plugin-syntax-dynamic-import',
+    '@babel/transform-runtime',
+    '@babel/plugin-proposal-class-properties',
+  ],
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        modules: false,
+      },
     ],
-    presets: [
-        [
-            '@babel/preset-env',
-            {
-                modules: false,
-            },
-        ],
-    ],
-    env: {
-        test: {
-            presets: ['@babel/preset-env', '@babel/preset-react'],
-        },
+  ],
+  env: {
+    test: {
+      presets: ['@babel/preset-env', '@babel/preset-react'],
     },
+  },
 };
