@@ -131,7 +131,7 @@
     "hidden": false,
     "mode": "datetime",
     "minDate": "today",
-    "defaultDate": "tomorrow"
+    "defaultValue": "tomorrow"
   },
   {
     "type": "sub-form",

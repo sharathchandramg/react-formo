@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import _ from 'lodash';
 import TextInputField from './fields/textInput/index.js';
 import PickerField from './fields/picker/index';
@@ -10,9 +9,8 @@ import DateTimePicker from './fields/dateTimePicker/index.js';
 
 const DefaultErrorComponent = props => {
   const attributes = props.attributes;
-  const theme = props.theme;
   if (attributes.error) {
-    return <p style={{ color: theme.errorMsgColor }}>{attributes.errorMsg}</p>;
+    return <p>{attributes.errorMsg}</p>;
   }
   return null;
 };
@@ -46,7 +44,7 @@ export default class FormO extends Component {
       fieldObj.error = false;
       fieldObj.errorMsg = '';
       if (field && field.type) {
-        fieldObj.value = '';
+        fieldObj.value = getDefaultValue(field);
         state[field.name] = fieldObj;
       }
     });
@@ -231,9 +229,7 @@ export default class FormO extends Component {
           attributes: this.state[field.name],
           updateValue: this.onValueChange,
           onAddNewFields: this.onAddNewFields,
-          getValue: this.getValue,
           ErrorComponent: errorComponent || DefaultErrorComponent,
-          navigation: this.props['navigation'] || null,
         };
 
         switch (field.type) {

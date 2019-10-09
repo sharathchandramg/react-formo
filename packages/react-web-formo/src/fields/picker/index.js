@@ -1,14 +1,6 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 export default class PickerField extends Component {
-  static propTypes = {
-    attributes: PropTypes.object,
-    theme: PropTypes.object,
-    updateValue: PropTypes.func,
-    ErrorComponent: PropTypes.func,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -25,7 +17,7 @@ export default class PickerField extends Component {
   };
 
   renderWebPicker = pickerValue => {
-    const { theme, attributes } = this.props;
+    const { attributes } = this.props;
     return (
       <div>
         <div style={{ flex: 5 }}>
@@ -48,7 +40,7 @@ export default class PickerField extends Component {
   };
 
   render() {
-    const { theme, attributes, ErrorComponent } = this.props;
+    const { attributes, ErrorComponent } = this.props;
     const pickerValue =
       this.state.value !== null
         ? this.state.value
@@ -60,7 +52,7 @@ export default class PickerField extends Component {
       <div>
         {this.renderWebPicker(pickerValue)}
         <div style={{ padding: '0 15 15 0' }}>
-          <ErrorComponent {...{ attributes, theme }} />
+          <ErrorComponent {...{ attributes }} />
         </div>
       </div>
     );

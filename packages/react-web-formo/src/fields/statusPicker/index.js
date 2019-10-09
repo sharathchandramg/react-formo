@@ -1,14 +1,6 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 export default class StatusPickerField extends Component {
-  static propTypes = {
-    attributes: PropTypes.object,
-    theme: PropTypes.object,
-    updateValue: PropTypes.func,
-    ErrorComponent: PropTypes.func,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -67,7 +59,7 @@ export default class StatusPickerField extends Component {
   };
 
   render() {
-    const { theme, attributes, ErrorComponent } = this.props;
+    const { attributes, ErrorComponent } = this.props;
     const pickerValue =
       this.state.value !== null
         ? this.state.value
@@ -79,7 +71,7 @@ export default class StatusPickerField extends Component {
       <div>
         {this.renderWebPicker(pickerValue)}
         <div style={{ paddingHorizontal: 15 }}>
-          <ErrorComponent {...{ attributes, theme }} />
+          <ErrorComponent {...{ attributes }} />
         </div>
       </div>
     );

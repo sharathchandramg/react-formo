@@ -60,7 +60,7 @@
     "type": "number",
     "name": "number_of_flats",
     "label": "Number Of Flats",
-    "required": false,
+    "required": true,
     "editable": true,
     "hidden": false
   },
@@ -107,7 +107,7 @@
     "hidden": false,
     "mode": "date",
     "minDate": "today",
-    "defaultDate": "tomorrow"
+    "defaultValue": "tomorrow"
   },
   {
     "type": "date",

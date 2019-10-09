@@ -39,7 +39,7 @@ export function isEmail(value) {
 
 export const isValidNumber = num => {
   console.log(num);
-  const req = /^[0-9](\.[0-9]+)?$/;
+  const req = /^\s*[+-]?(\d+|\.\d+|\d+\.\d+|\d+\.)(e[+-]?\d+)?\s*$/;
   return req.test(num);
 };
 

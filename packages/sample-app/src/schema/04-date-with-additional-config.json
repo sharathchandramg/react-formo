@@ -8,6 +8,6 @@
     "hidden": false,
     "mode": "datetime",
     "minDate": "today",
-    "defaultDate": "120"
+    "defaultValue": "120"
   }
 ]

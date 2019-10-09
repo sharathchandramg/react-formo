@@ -1,67 +1,90 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import _ from 'lodash';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import './style.css';
 
-const CustomInput = ({ value, onClick, onChange }) => (
-  <input
-    style={{
-      width: '100%',
-      height: 40,
-      border: '1px solid #979797',
-      borderRadius: 5,
-      padding: 5,
-      fontSize: 20,
-      outline: 'none',
-    }}
-    value={value}
-    onClick={onClick}
-    onChange={onChange}
-  />
-);
+class CustomInput extends Component {
+  render() {
+    return (
+      <input
+        style={{
+          width: '100%',
+          height: 40,
+          border: '1px solid #979797',
+          borderRadius: 5,
+          padding: 5,
+          fontSize: 20,
+          outline: 'none',
+        }}
+        value={this.props.value}
+        onClick={this.props.onClick}
+        onChange={this.props.onChange}
+      />
+    );
+  }
+}
 
 export default class DateTimePicker extends Component {
   state = {
     value: null,
   };
 
-  handleChange = event => {
-    let val = event.target.value;
-    this.setState({ value: val });
-    this.props.updateValue(this.props.attributes.name, val);
+  componentDidMount() {
+    this.setDateValue();
+  }
+
+  componentDidUpdate() {
+    if (this.state.value !== this.props.attributes.value) {
+      this.setDateValue();
+    }
+  }
+
+  setDateValue = () => {
+    const value = this.props.attributes.value
+      ? new Date(this.props.attributes.value)
+      : null;
+
+    this.handleChange(value);
   };
 
-  showDatePicker = dateValue => {
+  handleChange = date => {
+    this.setState({ value: date });
+    this.props.updateValue(this.props.attributes.name, date);
+  };
+
+  showDatePicker = () => {
     return (
       <DatePicker
-        customInput={<CustomInput value={dateValue} />}
-        selected={new Date()}
+        customInput={<CustomInput />}
+        selected={this.state.value}
         onChange={date => this.handleChange(date)}
         dateFormat="do MMM yyyy"
       />
     );
   };
 
-  showTimePicker = dateValue => {
+  showTimePicker = () => {
     return (
       <DatePicker
-        customInput={<CustomInput value={dateValue} />}
-        selected={new Date()}
+        customInput={<CustomInput />}
+        selected={this.state.value}
         onChange={date => this.handleChange(date)}
         showTimeSelect
         showTimeSelectOnly
         timeIntervals={15}
         timeCaption="Time"
-        timeFormat="hh:mm a"
+        dateFormat="hh:mm a"
       />
     );
   };
 
-  showDateTimePicker = dateValue => {
+  showDateTimePicker = () => {
     return (
       <DatePicker
-        customInput={<CustomInput value={dateValue} />}
-        selected={new Date()}
+        customInput={<CustomInput />}
+        selected={this.state.value}
         onChange={date => this.handleChange(date)}
         showTimeSelect
         timeFormat="hh:mm a"
@@ -74,29 +97,20 @@ export default class DateTimePicker extends Component {
 
   renderDateTimePicker = () => {
     const { attributes } = this.props;
-    const value = (attributes.value && moment(attributes.value)) || null;
-    let dateValue, openPicker;
+    let openPicker;
 
     switch (attributes.mode) {
       case 'datetime':
-        dateValue = 'Select Date Time';
-        dateValue = value && moment(value).format('do MMM yyyy hh:mm a');
-        openPicker = this.showDateTimePicker(dateValue);
+        openPicker = this.showDateTimePicker();
         break;
       case 'date':
-        dateValue = 'Select Date';
-        dateValue = value && moment(value).format('do MMM yyyy');
-        openPicker = this.showDatePicker(dateValue);
+        openPicker = this.showDatePicker();
         break;
       case 'time':
-        dateValue = 'Select Time';
-        dateValue = value && moment(value).format('hh:mm a');
-        openPicker = this.showTimePicker(dateValue);
+        openPicker = this.showTimePicker();
         break;
       default:
-        dateValue = 'Select Date Time';
-        dateValue = value && moment(value).format('do MMM yyyy hh:mm a');
-        openPicker = this.showDateTimePicker(dateValue);
+        openPicker = this.showDateTimePicker();
         break;
     }
 
