@@ -6,6 +6,7 @@ import StatusPicker from './fields/statusPicker/index';
 import { autoValidate, getDefaultValue, getResetValue } from './utils/helper';
 import styles from './styles.css';
 import DateTimePicker from './fields/dateTimePicker/index.js';
+import Lookup from './fields/lookup/index.js';
 
 const DefaultErrorComponent = props => {
   const attributes = props.attributes;
@@ -273,6 +274,16 @@ export default class FormO extends Component {
           case 'date':
             return (
               <DateTimePicker
+                ref={c => {
+                  this[field.name] = c;
+                }}
+                {...commonProps}
+              />
+            );
+
+          case 'lookup':
+            return (
+              <Lookup
                 ref={c => {
                   this[field.name] = c;
                 }}
