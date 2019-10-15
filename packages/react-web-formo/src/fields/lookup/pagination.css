@@ -7,6 +7,7 @@
 }
 
 .page-icons-wrapper i {
+  cursor: pointer;
   font-size: 20px;
 }
 

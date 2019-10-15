@@ -17,9 +17,35 @@ export default class Pagination extends Component {
     );
   };
 
+  paginationStartNumber = () => {
+    if (this.props.totalRecords == 0) {
+      return 0;
+    } else if (this.props.page === 0) {
+      return 1;
+    } else {
+      return this.props.page * this.props.rowsPerPage + 1;
+    }
+  };
+
+  paginationEndNumber = () => {
+    if (this.props.totalRecords == 0) {
+      return 0;
+    } else if (this.props.page === 0) {
+      return this.props.pageRecords;
+    } else {
+      return (
+        this.props.totalRecords -
+        this.props.page * this.props.rowsPerPage +
+        this.props.rowsPerPage
+      );
+    }
+  };
+
   numberOfRecords = () => {
     return (
-      <div className="padding-r20">{`1 - ${this.props.pageRecords} of ${this.props.totalRecords}`}</div>
+      <div className="padding-r20">{`${this.paginationStartNumber()} - ${this.paginationEndNumber()} of ${
+        this.props.totalRecords
+      }`}</div>
     );
   };
 
@@ -34,7 +60,13 @@ export default class Pagination extends Component {
         ></i>
         <i
           className={`far fa-angle-right ${
-            this.props.totalRecords === this.props.pageRecords ? 'disabled' : ''
+            this.props.totalRecords -
+              this.props.page * this.props.rowsPerPage +
+              this.props.rowsPerPage ===
+              this.props.totalRecords ||
+            this.props.rowsPerPage > this.props.totalRecords
+              ? 'disabled'
+              : ''
           }`}
           onClick={() => this.props.handleChangePage('inc')}
         ></i>

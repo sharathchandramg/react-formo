@@ -66,15 +66,21 @@ export default class Lookup extends Component {
   };
 
   handleChangeRowsPerPage = data => {
-    this.setState({ rowsPerPage: data });
+    this.setState({ rowsPerPage: Number(data) });
   };
 
   handleChangePage = text => {
+    const { attributes } = this.props;
     if (text === 'dec') {
       if (this.state.page !== 0) this.setState({ page: this.state.page - 1 });
     } else if (text === 'inc') {
-      if (this.state.totalRecords !== this.state.pageRecords)
+      const pageRecords =
+        this.state.rowsPerPage < attributes.options.length
+          ? this.state.rowsPerPage
+          : attributes.options.length;
+      if (this.state.totalRecords !== pageRecords) {
         this.setState({ page: this.state.page + 1 });
+      }
     }
   };
 
@@ -91,7 +97,7 @@ export default class Lookup extends Component {
         <div className="modal-title-wrapper">
           <p>{`${attributes['label']} data`}</p>
         </div>
-        <div className="modal-content">
+        <div className="modal-content-wrapper ">
           <div className="search-box-wrapper">
             <div className="search-box">
               <input
@@ -105,22 +111,35 @@ export default class Lookup extends Component {
               </div>
             </div>
           </div>
-          {attributes.options.length > 0 &&
-            attributes.options.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className="lookup-options-value"
-                  onClick={() => this.handleChange(item)}
-                >
-                  {item[attributes.labelKey]}
-                </div>
-              );
-            })}
+          <div className="modal-content">
+            {attributes.options.length > 0 &&
+              attributes.options
+                .slice(
+                  this.state.page * this.state.rowsPerPage,
+                  this.state.page * this.state.rowsPerPage +
+                    this.state.rowsPerPage
+                )
+                .map((item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="lookup-options-value"
+                      onClick={() => this.handleChange(item)}
+                    >
+                      {item[attributes.labelKey]}
+                    </div>
+                  );
+                })}
+          </div>
           <Pagination
+            rowsPerPage={this.state.rowsPerPage}
             totalRecords={attributes.options.length}
             page={this.state.page}
-            pageRecords={attributes.options.length}
+            pageRecords={
+              this.state.rowsPerPage < attributes.options.length
+                ? this.state.rowsPerPage
+                : attributes.options.length
+            }
             handleChangePage={this.handleChangePage}
             handleChangeRowsPerPage={this.handleChangeRowsPerPage}
           />
