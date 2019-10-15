@@ -191,11 +191,9 @@ export default class Lookup extends Component {
       <div className="lookup-wrapper">
         <div className="label-wrapper">
           <div className="label-text">
-            {attributes['required'] && (
-              <p>
-                {attributes['label']} {attributes['required'] ? `*` : ''} :
-              </p>
-            )}
+            <p>
+              {attributes['label']} {attributes['required'] ? `*` : ''} :
+            </p>
           </div>
           <div className="error-text">
             {attributes['error'] && <p id="error">{attributes['errorMsg']}</p>}
