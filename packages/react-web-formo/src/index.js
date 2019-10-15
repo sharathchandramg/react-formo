@@ -288,6 +288,7 @@ export default class FormO extends Component {
                   this[field.name] = c;
                 }}
                 {...commonProps}
+                {...this.props}
               />
             );
 

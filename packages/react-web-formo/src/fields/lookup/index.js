@@ -8,10 +8,8 @@ export default class Lookup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rowsPerPage: 25,
+      rowsPerPage: 50,
       page: 0,
-      openLookupOptions: false,
-      attributes: this.props.attributes,
       modalIsOpen: false,
     };
   }
@@ -29,7 +27,7 @@ export default class Lookup extends Component {
     this.setState({ modalIsOpen: false });
   };
 
-  getValue = () => {
+  getSelectedValue = () => {
     const { attributes } = this.props;
     let value = 'None';
     if (!isEmpty(attributes['value'])) {
@@ -52,13 +50,13 @@ export default class Lookup extends Component {
     return value;
   };
 
-  renderLookupData = () => {
+  renderLookupUI = () => {
     const { attributes } = this.props;
     return (
       <div className="lookup-data-wrapper" onClick={this.openModal}>
         <p style={{ paddingStart: 5 }}>{attributes.label}</p>
         <div className="value-icon-wrapper">
-          <h6>{this.getValue()}</h6>
+          <h6>{this.getSelectedValue()}</h6>
           <i className="fal fa-angle-right"></i>
         </div>
       </div>
@@ -69,22 +67,71 @@ export default class Lookup extends Component {
     this.setState({ rowsPerPage: Number(data) });
   };
 
-  handleChangePage = text => {
+  paginationStartNumber = page => {
     const { attributes } = this.props;
-    if (text === 'dec') {
-      if (this.state.page !== 0) this.setState({ page: this.state.page - 1 });
-    } else if (text === 'inc') {
-      const pageRecords =
-        this.state.rowsPerPage < attributes.options.length
-          ? this.state.rowsPerPage
-          : attributes.options.length;
-      if (this.state.totalRecords !== pageRecords) {
-        this.setState({ page: this.state.page + 1 });
-      }
+    if (attributes.total_records == 0) {
+      return 0;
+    } else if (page === 0) {
+      return 1;
+    } else {
+      return page * this.state.rowsPerPage + 1;
     }
   };
 
-  renderOptions = () => {
+  endRecordNumber = page => {
+    const { attributes } = this.props;
+    const endNumber = page * this.state.rowsPerPage + this.state.rowsPerPage;
+    if (attributes.total_records < endNumber) return attributes.total_records;
+    else return endNumber;
+  };
+
+  paginationEndNumber = page => {
+    const { attributes } = this.props;
+    if (attributes.total_records === 0) {
+      return 0;
+    } else if (page === 0) {
+      return attributes.options.length;
+    } else {
+      return this.endRecordNumber(page);
+    }
+  };
+
+  handleChangePage = text => {
+    const { attributes } = this.props;
+    if (text === 'dec') {
+      if (this.state.page !== 0) {
+        if (
+          attributes.data_source &&
+          attributes.data_source.referenceId.trim() !== ''
+        ) {
+          this.props.getLookupData(
+            attributes.data_source.referenceId,
+            this.paginationStartNumber(this.state.page - 1) - 1,
+            this.paginationEndNumber(this.state.page - 1)
+          );
+        }
+        this.setState({ page: this.state.page - 1 });
+      }
+    } else if (text === 'inc') {
+      if (attributes.total_records !== attributes.options.length) {
+        if (
+          attributes.data_source &&
+          attributes.data_source.referenceId.trim() !== ''
+        ) {
+          this.props.getLookupData(
+            attributes.data_source.referenceId,
+            this.paginationStartNumber(this.state.page + 1) - 1,
+            this.paginationEndNumber(this.state.page + 1)
+          );
+        }
+        this.setState({ page: this.state.page + 1 });
+      }
+    }
+    const element = document.getElementById('modal-title-wrapper');
+    element.scrollIntoView(true);
+  };
+
+  renderOptionsModal = () => {
     const { attributes } = this.props;
     return (
       <Modal
@@ -94,11 +141,11 @@ export default class Lookup extends Component {
         overlayClassName="overlay"
         ariaHideApp={false}
       >
-        <div className="modal-title-wrapper">
+        <div id="modal-title-wrapper" style={{ marginBottom: '20px' }}>
           <p>{`${attributes['label']} data`}</p>
         </div>
         <div className="modal-content-wrapper ">
-          <div className="search-box-wrapper">
+          {/* <div className="search-box-wrapper">
             <div className="search-box">
               <input
                 className="search-text"
@@ -110,38 +157,28 @@ export default class Lookup extends Component {
                 <i className="fas fa-search" />
               </div>
             </div>
-          </div>
-          <div className="modal-content">
-            {attributes.options.length > 0 &&
-              attributes.options
-                .slice(
-                  this.state.page * this.state.rowsPerPage,
-                  this.state.page * this.state.rowsPerPage +
-                    this.state.rowsPerPage
-                )
-                .map((item, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="lookup-options-value"
-                      onClick={() => this.handleChange(item)}
-                    >
-                      {item[attributes.labelKey]}
-                    </div>
-                  );
-                })}
-          </div>
+          </div> */}
+          {attributes.options.length > 0 &&
+            attributes.options.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className="lookup-options-value"
+                  onClick={() => this.handleChange(item)}
+                >
+                  {item[attributes.labelKey]}
+                </div>
+              );
+            })}
           <Pagination
             rowsPerPage={this.state.rowsPerPage}
-            totalRecords={attributes.options.length}
+            totalRecords={attributes.total_records}
             page={this.state.page}
-            pageRecords={
-              this.state.rowsPerPage < attributes.options.length
-                ? this.state.rowsPerPage
-                : attributes.options.length
-            }
             handleChangePage={this.handleChangePage}
             handleChangeRowsPerPage={this.handleChangeRowsPerPage}
+            paginationStartNumber={this.paginationStartNumber}
+            endRecordNumber={this.endRecordNumber}
+            paginationEndNumber={this.paginationEndNumber}
           />
         </div>
       </Modal>
@@ -165,8 +202,8 @@ export default class Lookup extends Component {
           </div>
         </div>
         <div className="lookup-content-wrapper">
-          {this.renderLookupData()}
-          {this.state.modalIsOpen ? this.renderOptions() : ''}
+          {this.renderLookupUI()}
+          {this.state.modalIsOpen ? this.renderOptionsModal() : ''}
         </div>
       </div>
     );

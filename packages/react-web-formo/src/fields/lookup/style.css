@@ -105,7 +105,7 @@
   border-radius: 3px;
 }
 
-.modal-title-wrapper {
+#modal-title-wrapper {
   height: 40px;
   width: 170px;
   margin-top: 30px;
@@ -116,7 +116,7 @@
   padding-left: 30px;
 }
 
-.modal-title-wrapper p {
+#modal-title-wrapper p {
   width: 160px;
   font-size: 24px;
   color: #ffffff;

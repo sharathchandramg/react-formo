@@ -1,14 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './pagination.css';
 
-export default class Pagination extends Component {
-  selectPageOptions = () => {
+const Pagination = props => {
+  const selectRowsPerPageOptions = () => {
     return (
       <select
-        value={this.props.rowsPerPage}
-        onChange={event =>
-          this.props.handleChangeRowsPerPage(event.target.value)
-        }
+        value={props.rowsPerPage}
+        onChange={event => props.handleChangeRowsPerPage(event.target.value)}
+        disabled={true}
       >
         <option value={25}>25</option>
         <option value={50}>50</option>
@@ -17,72 +16,46 @@ export default class Pagination extends Component {
     );
   };
 
-  paginationStartNumber = () => {
-    if (this.props.totalRecords == 0) {
-      return 0;
-    } else if (this.props.page === 0) {
-      return 1;
-    } else {
-      return this.props.page * this.props.rowsPerPage + 1;
-    }
-  };
-
-  paginationEndNumber = () => {
-    if (this.props.totalRecords == 0) {
-      return 0;
-    } else if (this.props.page === 0) {
-      return this.props.pageRecords;
-    } else {
-      return (
-        this.props.totalRecords -
-        this.props.page * this.props.rowsPerPage +
-        this.props.rowsPerPage
-      );
-    }
-  };
-
-  numberOfRecords = () => {
+  const numberOfRecordsSelected = () => {
     return (
-      <div className="padding-r20">{`${this.paginationStartNumber()} - ${this.paginationEndNumber()} of ${
-        this.props.totalRecords
+      <div className="padding-r20">{`${props.paginationStartNumber(
+        props.page
+      )} - ${props.paginationEndNumber(props.page)} of ${
+        props.totalRecords
       }`}</div>
     );
   };
 
-  pageIcons = () => {
+  const pageIcons = () => {
     return (
       <div className="page-icons-wrapper">
         <i
           className={`far fa-angle-left padding-r20 ${
-            this.props.page === 0 ? 'disabled' : ''
+            props.page === 0 ? 'disabled' : ''
           }`}
-          onClick={() => this.props.handleChangePage('dec')}
+          onClick={() => props.handleChangePage('dec')}
         ></i>
         <i
           className={`far fa-angle-right ${
-            this.props.totalRecords -
-              this.props.page * this.props.rowsPerPage +
-              this.props.rowsPerPage ===
-              this.props.totalRecords ||
-            this.props.rowsPerPage > this.props.totalRecords
+            props.totalRecords === props.endRecordNumber(props.page)
               ? 'disabled'
               : ''
           }`}
-          onClick={() => this.props.handleChangePage('inc')}
+          onClick={() => props.handleChangePage('inc')}
         ></i>
       </div>
     );
   };
 
-  render() {
-    return (
-      <div className="pagination-root">
-        <div className="padding-r20">
-          Rows per page : {this.selectPageOptions()}
-        </div>
-        {this.numberOfRecords()}
-        {this.pageIcons()}
+  return (
+    <div className="pagination-root">
+      <div className="padding-r20">
+        Rows per page : {selectRowsPerPageOptions()}
       </div>
-    );
-  }
-}
+      {numberOfRecordsSelected()}
+      {pageIcons()}
+    </div>
+  );
+};
+
+export default Pagination;
