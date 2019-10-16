@@ -52,6 +52,18 @@ export default class FormO extends Component {
     return state;
   };
 
+  getLookupSubsciberFields = name => {
+    const lookupSubscriberFields = _.filter(this.props.fields, field => {
+      if (
+        typeof field['data-pub'] !== 'undefined' &&
+        field['data-pub'] === name
+      ) {
+        return field;
+      }
+    });
+    return lookupSubscriberFields;
+  };
+
   onValidateFields = () => {
     const newFields = {};
     Object.keys(this.state).forEach(fieldName => {
@@ -123,35 +135,60 @@ export default class FormO extends Component {
     this.setState({ ...newFields });
   };
 
+  handleOnValueChange = (valueObj, value) => {
+    if (valueObj) {
+      valueObj.value = value;
+      //autovalidate the fields
+      if (
+        this.props.autoValidation === undefined ||
+        this.props.autoValidation
+      ) {
+        Object.assign(valueObj, autoValidate(valueObj));
+      }
+      // apply some custom logic for validation
+      if (
+        this.props.customValidation &&
+        typeof this.props.customValidation === 'function'
+      ) {
+        Object.assign(valueObj, this.props.customValidation(valueObj));
+      }
+      const newField = {};
+      newField[valueObj.name] = valueObj;
+      if (
+        this.props.onValueChange &&
+        typeof this.props.onValueChange === 'function'
+      ) {
+        this.setState({ ...newField }, () => this.props.onValueChange());
+      } else {
+        this.setState({ ...newField });
+      }
+    }
+  };
+
   onValueChange = (name, value) => {
     const valueObj = this.state[name];
     if (valueObj) {
-      if (valueObj.type !== 'sub-form') {
-        valueObj.value = value;
-        //autovalidate the fields
-        if (
-          this.props.autoValidation === undefined ||
-          this.props.autoValidation
-        ) {
-          Object.assign(valueObj, autoValidate(valueObj));
-        }
-        // apply some custom logic for validation
-        if (
-          this.props.customValidation &&
-          typeof this.props.customValidation === 'function'
-        ) {
-          Object.assign(valueObj, this.props.customValidation(valueObj));
-        }
-        const newField = {};
-        newField[valueObj.name] = valueObj;
-        if (
-          this.props.onValueChange &&
-          typeof this.props.onValueChange === 'function'
-        ) {
-          this.setState({ ...newField }, () => this.props.onValueChange());
-        } else {
-          this.setState({ ...newField });
-        }
+      const type = valueObj['type'];
+      switch (type) {
+        case 'sub-form':
+          break;
+        case 'lookup':
+          const lookupSubscriberFields = this.getLookupSubsciberFields(name);
+          const pk = valueObj['primaryKey'];
+          const lk = valueObj['labelKey'];
+          if (lookupSubscriberFields.length) {
+            _.forEach(lookupSubscriberFields, field => {
+              const key = field['name'];
+              const val = value[key] || '';
+              this.handleOnValueChange(field, val);
+            });
+          }
+          const lookupValue = _.pick(value, [pk, lk, 'instance_id']);
+          this.handleOnValueChange(valueObj, lookupValue);
+          break;
+
+        default:
+          this.handleOnValueChange(valueObj, value);
       }
     }
   };
