@@ -268,6 +268,7 @@ export default class FormO extends Component {
           updateValue: this.onValueChange,
           onAddNewFields: this.onAddNewFields,
           ErrorComponent: errorComponent || DefaultErrorComponent,
+          formSubmissionType: this.props.formSubmissionType,
         };
 
         switch (field.type) {

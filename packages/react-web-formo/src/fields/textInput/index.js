@@ -7,6 +7,8 @@ export default class TextInputField extends Component {
 
   render() {
     const { attributes } = this.props;
+    const disableCondition =
+      this.props.formSubmissionType === 'update' && !attributes.editable;
     return (
       <div
         style={{
@@ -45,6 +47,7 @@ export default class TextInputField extends Component {
             type={attributes['type']}
             value={attributes['value']}
             id={attributes['name']}
+            disabled={disableCondition}
             style={{
               width: '100%',
               border: '1px solid #979797',
@@ -52,6 +55,7 @@ export default class TextInputField extends Component {
               padding: 5,
               fontSize: 20,
               outline: 'none',
+              opacity: disableCondition ? 0.5 : 1,
             }}
             onChange={this.handleChange}
           />

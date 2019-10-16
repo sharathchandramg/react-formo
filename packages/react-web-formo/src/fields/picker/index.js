@@ -7,6 +7,8 @@ export default class PickerField extends Component {
 
   renderWebPicker = () => {
     const { attributes } = this.props;
+    const disableCondition =
+      this.props.formSubmissionType === 'update' && !attributes.editable;
     return (
       <select
         style={{
@@ -17,6 +19,7 @@ export default class PickerField extends Component {
         }}
         value={attributes.value}
         onChange={this.handleChange}
+        disabled={disableCondition}
       >
         {attributes.options.map((item, index) => (
           <option key={index} value={item}>

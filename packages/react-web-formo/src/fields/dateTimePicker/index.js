@@ -16,7 +16,9 @@ class CustomInput extends Component {
           borderRadius: 5,
           fontSize: 20,
           outline: 'none',
+          opacity: this.props.disabled ? 0.5 : 1,
         }}
+        disabled={this.props.disabled}
         value={this.props.value}
         onClick={this.props.onClick}
         onChange={this.props.onChange}
@@ -49,6 +51,8 @@ export default class DateTimePicker extends Component {
 
   showDatePicker = () => {
     const { attributes } = this.props;
+    const disableCondition =
+      this.props.formSubmissionType === 'update' && !attributes.editable;
     return (
       <DatePicker
         customInput={<CustomInput />}
@@ -57,6 +61,7 @@ export default class DateTimePicker extends Component {
             ? new Date(attributes.value)
             : this.handleChange(new Date())
         }
+        disabled={disableCondition}
         minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
         maxDate={attributes.maxDate && this.dateFormatter(attributes.maxDate)}
         onChange={date => this.handleChange(date)}
@@ -67,6 +72,8 @@ export default class DateTimePicker extends Component {
 
   showTimePicker = () => {
     const { attributes } = this.props;
+    const disableCondition =
+      this.props.formSubmissionType === 'update' && !attributes.editable;
     return (
       <DatePicker
         customInput={<CustomInput />}
@@ -76,6 +83,7 @@ export default class DateTimePicker extends Component {
             : this.handleChange(new Date())
         }
         onChange={date => this.handleChange(date)}
+        disabled={disableCondition}
         minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
         maxDate={attributes.maxDate && this.dateFormatter(attributes.maxDate)}
         showTimeSelect
@@ -89,6 +97,8 @@ export default class DateTimePicker extends Component {
 
   showDateTimePicker = () => {
     const { attributes } = this.props;
+    const disableCondition =
+      this.props.formSubmissionType === 'update' && !attributes.editable;
     return (
       <DatePicker
         customInput={<CustomInput />}
@@ -98,6 +108,7 @@ export default class DateTimePicker extends Component {
             : this.handleChange(new Date())
         }
         onChange={date => this.handleChange(date)}
+        disabled={disableCondition}
         minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
         maxDate={attributes.maxDate && this.dateFormatter(attributes.maxDate)}
         showTimeSelect

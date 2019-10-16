@@ -52,8 +52,13 @@ export default class Lookup extends Component {
 
   renderLookupUI = () => {
     const { attributes } = this.props;
+    const disableCondition =
+      this.props.formSubmissionType === 'update' && !attributes.editable;
     return (
-      <div className="lookup-data-wrapper" onClick={this.openModal}>
+      <div
+        className={`lookup-data-wrapper ${disableCondition ? 'disabled' : ''}`}
+        onClick={this.openModal}
+      >
         <p style={{ paddingStart: 5 }}>{attributes.label}</p>
         <div className="value-icon-wrapper">
           <h6>{this.getSelectedValue()}</h6>
