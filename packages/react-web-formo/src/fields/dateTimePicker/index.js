@@ -26,38 +26,39 @@ class CustomInput extends Component {
 }
 
 export default class DateTimePicker extends Component {
-  state = {
-    value: null,
-  };
-
-  componentDidMount() {
-    this.setDateValue();
-  }
-
-  componentDidUpdate() {
-    if (this.state.value !== this.props.attributes.value) {
-      this.setDateValue();
-    }
-  }
-
-  setDateValue = () => {
-    const value = this.props.attributes.value
-      ? new Date(this.props.attributes.value)
-      : null;
-
-    this.handleChange(value);
-  };
-
   handleChange = date => {
-    this.setState({ value: date });
-    this.props.updateValue(this.props.attributes.name, date);
+    this.props.updateValue(this.props.attributes.name, new Date(date));
+  };
+
+  dateFormatter = date => {
+    switch (date) {
+      case 'today':
+        return new Date();
+      case 'tomorrow':
+        return new Date(moment().add(1, 'days'));
+      case 'yesterday':
+        return new Date(moment().subtract(1, 'days'));
+      default:
+        if (!isNaN(date)) {
+          return new Date(parseInt(date) * 1000);
+        } else {
+          return new Date();
+        }
+    }
   };
 
   showDatePicker = () => {
+    const { attributes } = this.props;
     return (
       <DatePicker
         customInput={<CustomInput />}
-        selected={this.state.value}
+        selected={
+          attributes.value
+            ? new Date(attributes.value)
+            : this.handleChange(new Date())
+        }
+        minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
+        maxDate={attributes.maxDate && this.dateFormatter(attributes.maxDate)}
         onChange={date => this.handleChange(date)}
         dateFormat="do MMM yyyy"
       />
@@ -65,11 +66,18 @@ export default class DateTimePicker extends Component {
   };
 
   showTimePicker = () => {
+    const { attributes } = this.props;
     return (
       <DatePicker
         customInput={<CustomInput />}
-        selected={this.state.value}
+        selected={
+          attributes.value
+            ? new Date(attributes.value)
+            : this.handleChange(new Date())
+        }
         onChange={date => this.handleChange(date)}
+        minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
+        maxDate={attributes.maxDate && this.dateFormatter(attributes.maxDate)}
         showTimeSelect
         showTimeSelectOnly
         timeIntervals={15}
@@ -80,11 +88,18 @@ export default class DateTimePicker extends Component {
   };
 
   showDateTimePicker = () => {
+    const { attributes } = this.props;
     return (
       <DatePicker
         customInput={<CustomInput />}
-        selected={this.state.value}
+        selected={
+          attributes.value
+            ? new Date(attributes.value)
+            : this.handleChange(new Date())
+        }
         onChange={date => this.handleChange(date)}
+        minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
+        maxDate={attributes.maxDate && this.dateFormatter(attributes.maxDate)}
         showTimeSelect
         timeFormat="hh:mm a"
         timeIntervals={15}
