@@ -1,78 +1,71 @@
 import React, { Component } from 'react';
 
 export default class StatusPickerField extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      modalVisible: false,
-      value: null,
-    };
-  }
-
   handleChange = event => {
-    let val = event.target.value;
-    console.log(val);
-    this.setState({ value: val });
-    this.props.updateValue(this.props.attributes.name, val);
+    this.props.updateValue(this.props.attributes.name, event.target.value);
   };
 
-  renderWebPicker = pickerValue => {
+  renderWebPicker = () => {
+    const { attributes } = this.props;
+    const disableCondition =
+      this.props.formSubmissionType === 'update' && !attributes.editable;
+    return (
+      <select
+        style={{
+          width: '100%',
+          height: 45,
+          fontSize: 20,
+          backgroundColor: '#ffffff',
+        }}
+        value={attributes.value}
+        onChange={this.handleChange}
+        disabled={disableCondition}
+      >
+        {attributes.options.map((item, index) => (
+          <option key={index} value={item}>
+            {item}
+          </option>
+        ))}
+      </select>
+    );
+  };
+
+  render() {
     const { attributes } = this.props;
     return (
       <div
         style={{
           display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-start',
-          alignItems: 'start',
-          fontSize: '20px',
+          flexDirection: 'column',
+          margin: 10,
         }}
       >
-        <p
+        <div
           style={{
-            margin: 0,
-            justifySelf: 'flexStart',
-            marginRight: '20px',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 8,
           }}
         >
-          {attributes.label}
-          {attributes.required && '*'}
-        </p>
-        <div style={{ flex: 5 }}>
-          <select
-            style={{
-              width: '400px',
-              height: '25px',
-              backgroundColor: 'white',
-            }}
-            mode={attributes.mode}
-            value={pickerValue}
-            onChange={this.handleChange}
-          >
-            {attributes.options.map((item, index) => (
-              <option key={index} label={item} value={item} />
-            ))}
-          </select>
+          <p style={{ fontSize: 16, margin: 0 }}>
+            {attributes['label']} {attributes['required'] ? `*` : ''} :
+          </p>
+          {attributes['error'] && (
+            <p
+              id="error"
+              style={{
+                color: 'red',
+                fontSize: 12,
+                margin: 0,
+              }}
+            >
+              {attributes['errorMsg']}
+            </p>
+          )}
         </div>
-      </div>
-    );
-  };
-
-  render() {
-    const { attributes, ErrorComponent } = this.props;
-    const pickerValue =
-      this.state.value !== null
-        ? this.state.value
-        : typeof attributes.value !== 'undefined' && attributes.value !== null
-        ? attributes.value
-        : '';
-
-    return (
-      <div>
-        {this.renderWebPicker(pickerValue)}
-        <div style={{ paddingHorizontal: 15 }}>
-          <ErrorComponent {...{ attributes }} />
-        </div>
+        <div>{this.renderWebPicker()}</div>
       </div>
     );
   }

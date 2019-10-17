@@ -7,6 +7,8 @@ export default class TextInputField extends Component {
 
   render() {
     const { attributes } = this.props;
+    const disableCondition =
+      this.props.formSubmissionType === 'update' && !attributes.editable;
     return (
       <div
         style={{
@@ -24,56 +26,36 @@ export default class TextInputField extends Component {
             marginBottom: 8,
           }}
         >
-          <div
-            style={{
-              width: '30%',
-              display: 'flex',
-              justifyContent: 'flex-start',
-            }}
-          >
-            {attributes['required'] && (
-              <p style={{ fontSize: 16, margin: 0 }}>
-                {attributes['label']} * :
-              </p>
-            )}
-            {!attributes['required'] && (
-              <p style={{ fontSize: 16, margin: 0 }}>{attributes['label']}:</p>
-            )}
-          </div>
-          <div
-            style={{
-              width: '70%',
-              display: 'flex',
-              justifyContent: 'flex-end',
-            }}
-          >
-            {attributes['error'] && (
-              <p
-                id="error"
-                style={{
-                  color: 'red',
-                  fontSize: 12,
-                  margin: 0,
-                }}
-              >
-                {attributes['errorMsg']}
-              </p>
-            )}
-          </div>
+          <p style={{ fontSize: 16, margin: 0 }}>
+            {attributes['label']} {attributes['required'] ? `*` : ''} :
+          </p>
+          {attributes['error'] && (
+            <p
+              id="error"
+              style={{
+                color: 'red',
+                fontSize: 12,
+                margin: 0,
+              }}
+            >
+              {attributes['errorMsg']}
+            </p>
+          )}
         </div>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', height: 45 }}>
           <input
             type={attributes['type']}
             value={attributes['value']}
             id={attributes['name']}
+            disabled={disableCondition}
             style={{
               width: '100%',
-              height: 40,
               border: '1px solid #979797',
               borderRadius: 5,
               padding: 5,
               fontSize: 20,
               outline: 'none',
+              opacity: disableCondition ? 0.5 : 1,
             }}
             onChange={this.handleChange}
           />

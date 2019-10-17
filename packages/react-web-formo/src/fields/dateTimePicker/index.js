@@ -14,10 +14,11 @@ class CustomInput extends Component {
           height: 40,
           border: '1px solid #979797',
           borderRadius: 5,
-          padding: 5,
           fontSize: 20,
           outline: 'none',
+          opacity: this.props.disabled ? 0.5 : 1,
         }}
+        disabled={this.props.disabled}
         value={this.props.value}
         onClick={this.props.onClick}
         onChange={this.props.onChange}
@@ -27,38 +28,42 @@ class CustomInput extends Component {
 }
 
 export default class DateTimePicker extends Component {
-  state = {
-    value: null,
-  };
-
-  componentDidMount() {
-    this.setDateValue();
-  }
-
-  componentDidUpdate() {
-    if (this.state.value !== this.props.attributes.value) {
-      this.setDateValue();
-    }
-  }
-
-  setDateValue = () => {
-    const value = this.props.attributes.value
-      ? new Date(this.props.attributes.value)
-      : null;
-
-    this.handleChange(value);
-  };
-
   handleChange = date => {
-    this.setState({ value: date });
-    this.props.updateValue(this.props.attributes.name, date);
+    this.props.updateValue(this.props.attributes.name, new Date(date));
+  };
+
+  dateFormatter = date => {
+    switch (date) {
+      case 'today':
+        return new Date();
+      case 'tomorrow':
+        return new Date(moment().add(1, 'days'));
+      case 'yesterday':
+        return new Date(moment().subtract(1, 'days'));
+      default:
+        if (!isNaN(date)) {
+          return new Date(parseInt(date) * 1000);
+        } else {
+          return new Date();
+        }
+    }
   };
 
   showDatePicker = () => {
+    const { attributes } = this.props;
+    const disableCondition =
+      this.props.formSubmissionType === 'update' && !attributes.editable;
     return (
       <DatePicker
         customInput={<CustomInput />}
-        selected={this.state.value}
+        selected={
+          attributes.value
+            ? new Date(attributes.value)
+            : this.handleChange(new Date())
+        }
+        disabled={disableCondition}
+        minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
+        maxDate={attributes.maxDate && this.dateFormatter(attributes.maxDate)}
         onChange={date => this.handleChange(date)}
         dateFormat="do MMM yyyy"
       />
@@ -66,11 +71,21 @@ export default class DateTimePicker extends Component {
   };
 
   showTimePicker = () => {
+    const { attributes } = this.props;
+    const disableCondition =
+      this.props.formSubmissionType === 'update' && !attributes.editable;
     return (
       <DatePicker
         customInput={<CustomInput />}
-        selected={this.state.value}
+        selected={
+          attributes.value
+            ? new Date(attributes.value)
+            : this.handleChange(new Date())
+        }
         onChange={date => this.handleChange(date)}
+        disabled={disableCondition}
+        minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
+        maxDate={attributes.maxDate && this.dateFormatter(attributes.maxDate)}
         showTimeSelect
         showTimeSelectOnly
         timeIntervals={15}
@@ -81,11 +96,21 @@ export default class DateTimePicker extends Component {
   };
 
   showDateTimePicker = () => {
+    const { attributes } = this.props;
+    const disableCondition =
+      this.props.formSubmissionType === 'update' && !attributes.editable;
     return (
       <DatePicker
         customInput={<CustomInput />}
-        selected={this.state.value}
+        selected={
+          attributes.value
+            ? new Date(attributes.value)
+            : this.handleChange(new Date())
+        }
         onChange={date => this.handleChange(date)}
+        disabled={disableCondition}
+        minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
+        maxDate={attributes.maxDate && this.dateFormatter(attributes.maxDate)}
         showTimeSelect
         timeFormat="hh:mm a"
         timeIntervals={15}
@@ -136,42 +161,21 @@ export default class DateTimePicker extends Component {
             marginBottom: 8,
           }}
         >
-          <div
-            style={{
-              width: '30%',
-              display: 'flex',
-              justifyContent: 'flex-start',
-            }}
-          >
-            {attributes['required'] && (
-              <p style={{ fontSize: 16, margin: 0 }}>
-                {attributes['label']} * :
-              </p>
-            )}
-            {!attributes['required'] && (
-              <p style={{ fontSize: 16, margin: 0 }}>{attributes['label']}:</p>
-            )}
-          </div>
-          <div
-            style={{
-              width: '70%',
-              display: 'flex',
-              justifyContent: 'flex-end',
-            }}
-          >
-            {attributes['error'] && (
-              <p
-                id="error"
-                style={{
-                  color: 'red',
-                  fontSize: 12,
-                  margin: 0,
-                }}
-              >
-                {attributes['errorMsg']}
-              </p>
-            )}
-          </div>
+          <p style={{ fontSize: 16, margin: 0 }}>
+            {attributes['label']} {attributes['required'] ? `*` : ''} :
+          </p>
+          {attributes['error'] && (
+            <p
+              id="error"
+              style={{
+                color: 'red',
+                fontSize: 12,
+                margin: 0,
+              }}
+            >
+              {attributes['errorMsg']}
+            </p>
+          )}
         </div>
         <div style={{ display: 'flex' }}>{this.renderDateTimePicker()}</div>
       </div>

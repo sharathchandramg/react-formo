@@ -1,59 +1,71 @@
 import React, { Component } from 'react';
 
 export default class PickerField extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      modalVisible: false,
-      value: null,
-    };
-  }
-
   handleChange = event => {
-    let val = event.target.value;
-    console.log(val);
-    this.setState({ value: val });
-    this.props.updateValue(this.props.attributes.name, val);
+    this.props.updateValue(this.props.attributes.name, event.target.value);
   };
 
-  renderWebPicker = pickerValue => {
+  renderWebPicker = () => {
     const { attributes } = this.props;
+    const disableCondition =
+      this.props.formSubmissionType === 'update' && !attributes.editable;
     return (
-      <div>
-        <div style={{ flex: 5 }}>
-          <p style={{ paddingStart: 5 }}>{attributes.label}</p>
-        </div>
-        <div style={{ flex: 5 }}>
-          <select
-            style={{ padding: 2 }}
-            mode={attributes.mode}
-            value={pickerValue}
-            onChange={this.handleChange}
-          >
-            {attributes.options.map((item, index) => (
-              <option key={index} label={item} value={item} />
-            ))}
-          </select>
-        </div>
-      </div>
+      <select
+        style={{
+          width: '100%',
+          height: 45,
+          fontSize: 20,
+          backgroundColor: '#ffffff',
+        }}
+        value={attributes.value}
+        onChange={this.handleChange}
+        disabled={disableCondition}
+      >
+        {attributes.options.map((item, index) => (
+          <option key={index} value={item}>
+            {item}
+          </option>
+        ))}
+      </select>
     );
   };
 
   render() {
-    const { attributes, ErrorComponent } = this.props;
-    const pickerValue =
-      this.state.value !== null
-        ? this.state.value
-        : typeof attributes.value !== 'undefined' && attributes.value !== null
-        ? attributes.value
-        : '';
-
+    const { attributes } = this.props;
     return (
-      <div>
-        {this.renderWebPicker(pickerValue)}
-        <div style={{ padding: '0 15 15 0' }}>
-          <ErrorComponent {...{ attributes }} />
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          margin: 10,
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 8,
+          }}
+        >
+          <p style={{ fontSize: 16, margin: 0 }}>
+            {attributes['label']} {attributes['required'] ? `*` : ''} :
+          </p>
+          {attributes['error'] && (
+            <p
+              id="error"
+              style={{
+                color: 'red',
+                fontSize: 12,
+                margin: 0,
+              }}
+            >
+              {attributes['errorMsg']}
+            </p>
+          )}
         </div>
+        <div>{this.renderWebPicker()}</div>
       </div>
     );
   }
