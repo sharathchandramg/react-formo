@@ -46,7 +46,9 @@
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "enzyme-to-json": "^3.4.0",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "24.7.1",
+    "jest-transform-css": "^2.0.0",
     "lint-staged": "^9.2.1",
     "lodash-webpack-plugin": "^0.11.5",
     "node-sass": "^4.12.0",
@@ -55,5 +57,9 @@
     "style-loader": "^0.23.1",
     "webpack": "4.29.6",
     "webpack-cli": "3.3.0"
+  },
+  "np": {
+    "yarn": false,
+    "contents": "build"
   }
 }
