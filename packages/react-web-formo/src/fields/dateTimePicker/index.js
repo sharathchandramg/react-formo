@@ -56,11 +56,7 @@ export default class DateTimePicker extends Component {
     return (
       <DatePicker
         customInput={<CustomInput />}
-        selected={
-          attributes.value
-            ? new Date(attributes.value)
-            : this.handleChange(new Date())
-        }
+        selected={attributes.value ? new Date(attributes.value) : null}
         disabled={disableCondition}
         minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
         maxDate={attributes.maxDate && this.dateFormatter(attributes.maxDate)}
@@ -77,11 +73,7 @@ export default class DateTimePicker extends Component {
     return (
       <DatePicker
         customInput={<CustomInput />}
-        selected={
-          attributes.value
-            ? new Date(attributes.value)
-            : this.handleChange(new Date())
-        }
+        selected={attributes.value ? new Date(attributes.value) : null}
         onChange={date => this.handleChange(date)}
         disabled={disableCondition}
         minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
@@ -102,11 +94,7 @@ export default class DateTimePicker extends Component {
     return (
       <DatePicker
         customInput={<CustomInput />}
-        selected={
-          attributes.value
-            ? new Date(attributes.value)
-            : this.handleChange(new Date())
-        }
+        selected={attributes.value ? new Date(attributes.value) : null}
         onChange={date => this.handleChange(date)}
         disabled={disableCondition}
         minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
