@@ -1,0 +1,70 @@
+.catalog-root {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.catalog-label-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.catalog-label-wrapper .catalog-label-text {
+  width: 50%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.catalog-label-wrapper .catalog-label-text p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.catalog-label-wrapper .error-text {
+  width: 50%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.catalog-label-wrapper .error-text p {
+  color: red;
+  font-size: 12px;
+  margin: 0px;
+}
+
+.catalog-content-wrapper {
+  display: flex;
+  height: 45px;
+}
+
+.catalog-data-wrapper {
+  width: 100%;
+  padding: 0 10px;
+  border: 1px solid #979797;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.catalog-data-wrapper p {
+  margin: 0;
+}
+.catalog-data-wrapper .value-icon-wrapper {
+  display: flex;
+  align-items: center;
+}
+.catalog-data-wrapper .value-icon-wrapper h6 {
+  font-size: 16px;
+  margin: 0;
+  font-weight: initial;
+}
+
+.catalog-data-wrapper .value-icon-wrapper i {
+  font-size: 16px;
+  padding-left: 10px;
+}
