@@ -98,8 +98,11 @@ export function getDefaultValue(field) {
             return moment()
               .add(1, 'day')
               .format('YYYY-MM-DD');
+          else if (field.defaultValue === 'yesterday')
+            return moment()
+              .subtract(1, 'day')
+              .format('YYYY-MM-DD');
           else return null;
-
         case 'time':
           const dateDefaultValue =
             field.defaultValue && new Date(field.defaultValue);
@@ -119,6 +122,10 @@ export function getDefaultValue(field) {
           else if (field.defaultValue === 'tomorrow')
             return moment()
               .add(1, 'day')
+              .format('YYYY-MM-DD HH:mm');
+          else if (field.defaultValue === 'yesterday')
+            return moment()
+              .subtract(1, 'day')
               .format('YYYY-MM-DD HH:mm');
           else if (
             typeof field.defaultValue !== 'undefined' &&
