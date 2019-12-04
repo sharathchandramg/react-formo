@@ -4,9 +4,11 @@ import TextInputField from './fields/textInput/index.js';
 import PickerField from './fields/picker/index';
 import StatusPicker from './fields/statusPicker/index';
 import { autoValidate, getDefaultValue, getResetValue } from './utils/helper';
-import styles from './styles.css';
 import DateTimePicker from './fields/dateTimePicker/index.js';
 import Lookup from './fields/lookup/index.js';
+import CustomDataComponent from './fields/customDataView';
+
+import './styles.css';
 
 const DefaultErrorComponent = props => {
   const attributes = props.attributes;
@@ -20,7 +22,6 @@ export default class FormO extends Component {
   constructor(props) {
     super(props);
     const initialState = this.getInitialState(props.fields);
-
     this.state = {
       ...initialState,
     };
@@ -33,7 +34,7 @@ export default class FormO extends Component {
 
   componentDidUpdate(prevProps) {
     const { formData } = this.props;
-    if (prevProps !== this.props) {
+    if (!_.isEqual(prevProps, this.props)) {
       this.setValues(formData);
     }
   }
@@ -136,32 +137,27 @@ export default class FormO extends Component {
   };
 
   handleOnValueChange = (valueObj, value) => {
-    if (valueObj) {
-      valueObj.value = value;
-      //autovalidate the fields
-      if (
-        this.props.autoValidation === undefined ||
-        this.props.autoValidation
-      ) {
-        Object.assign(valueObj, autoValidate(valueObj));
-      }
-      // apply some custom logic for validation
-      if (
-        this.props.customValidation &&
-        typeof this.props.customValidation === 'function'
-      ) {
-        Object.assign(valueObj, this.props.customValidation(valueObj));
-      }
-      const newField = {};
-      newField[valueObj.name] = valueObj;
-      if (
-        this.props.onValueChange &&
-        typeof this.props.onValueChange === 'function'
-      ) {
-        this.setState({ ...newField }, () => this.props.onValueChange());
-      } else {
-        this.setState({ ...newField });
-      }
+    valueObj.value = value;
+    //autovalidate the fields
+    if (this.props.autoValidation === undefined || this.props.autoValidation) {
+      Object.assign(valueObj, autoValidate(valueObj));
+    }
+    // apply some custom logic for validation
+    if (
+      this.props.customValidation &&
+      typeof this.props.customValidation === 'function'
+    ) {
+      Object.assign(valueObj, this.props.customValidation(valueObj));
+    }
+    const newField = {};
+    newField[valueObj.name] = valueObj;
+    if (
+      this.props.onValueChange &&
+      typeof this.props.onValueChange === 'function'
+    ) {
+      this.setState({ ...newField }, () => this.props.onValueChange());
+    } else {
+      this.setState({ ...newField });
     }
   };
 
@@ -322,6 +318,17 @@ export default class FormO extends Component {
           case 'lookup':
             return (
               <Lookup
+                ref={c => {
+                  this[field.name] = c;
+                }}
+                {...commonProps}
+                {...this.props}
+              />
+            );
+
+          case 'customDataView':
+            return (
+              <CustomDataComponent
                 ref={c => {
                   this[field.name] = c;
                 }}
