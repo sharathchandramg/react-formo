@@ -29,7 +29,10 @@ class CustomInput extends Component {
 
 export default class DateTimePicker extends Component {
   handleChange = date => {
-    this.props.updateValue(this.props.attributes.name, new Date(date));
+    const data = moment(date)
+      .utc()
+      .valueOf();
+    this.props.updateValue(this.props.attributes.name, data);
   };
 
   dateFormatter = date => {
