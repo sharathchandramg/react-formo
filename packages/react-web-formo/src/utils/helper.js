@@ -92,37 +92,7 @@ export function getDefaultValue(field) {
     case 'date': {
       switch (field.mode) {
         case 'date':
-          if (field.defaultValue === 'today')
-            return moment()
-              .utc()
-              .valueOf();
-          else if (field.defaultValue === 'tomorrow')
-            return moment()
-              .add(1, 'day')
-              .utc()
-              .valueOf();
-          else if (field.defaultValue === 'yesterday')
-            return moment()
-              .subtract(1, 'day')
-              .utc()
-              .valueOf();
-          else return null;
         case 'time':
-          const dateDefaultValue =
-            field.defaultValue && new Date(field.defaultValue);
-          if (dateDefaultValue && !_.isNaN(dateDefaultValue.getTime()))
-            return dateDefaultValue;
-          else if (field.defaultValue === 'today')
-            return moment()
-              .utc()
-              .valueOf();
-          else if (field.defaultValue === 'tomorrow')
-            return moment()
-              .add(1, 'day')
-              .utc()
-              .valueOf();
-          else return null;
-
         case 'datetime':
           if (field.defaultValue === 'today')
             return moment()
@@ -147,7 +117,6 @@ export function getDefaultValue(field) {
               .utc()
               .valueOf();
           } else if (field.defaultValue === '') {
-            console.log('Enter for ' + field.defaultValue);
             return 'Select';
           } else return null;
       }
