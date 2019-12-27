@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import moment from 'moment';
 import TextInputField from './fields/textInput/index.js';
 import PickerField from './fields/picker/index';
 import StatusPicker from './fields/statusPicker/index';
@@ -199,10 +200,15 @@ export default class FormO extends Component {
         if (field.error !== undefined && field.error) {
           isValidFields = false;
         }
-        values[field.name] =
-          field.type && field.type.match(/number/i)
-            ? parseFloat(field.value)
-            : field.value;
+        if (field.type && field.type.match(/number/i)) {
+          values[field.name] = parseFloat(field.value);
+        } else if (field.type && field.type.match(/date/i)) {
+          values[field.name] = moment(field.value)
+            .utc()
+            .valueOf();
+        } else {
+          values[field.name] = field.value;
+        }
       }
     });
     if (isValidFields) {
