@@ -203,9 +203,11 @@ export default class FormO extends Component {
         if (field.type && field.type.match(/number/i)) {
           values[field.name] = parseFloat(field.value);
         } else if (field.type && field.type.match(/date/i)) {
-          values[field.name] = moment(field.value)
-            .utc()
-            .valueOf();
+          values[field.name] =
+            field.value &&
+            moment(field.value)
+              .utc()
+              .valueOf();
         } else {
           values[field.name] = field.value;
         }
