@@ -5,18 +5,14 @@ import './style.css';
 const Checklist = React.memo(props => {
   const { attributes } = props;
 
-  console.log('=============== props=====================');
-  console.log(props);
-  console.log('====================================');
-
-  handleOnclick = () => {
+  const handleOnclick = () => {
     if (typeof props.renderComponent === 'function') {
       props.renderComponent(props);
     }
     return;
   };
 
-  getLabel = () => {
+  const getLabel = () => {
     let label = 'None';
     if (!isEmpty(attributes['value']) && Array.isArray(attributes['value'])) {
       label = attributes['value'].length;
@@ -24,7 +20,7 @@ const Checklist = React.memo(props => {
     return label;
   };
 
-  renderLabel = () => {
+  const renderLabel = () => {
     const disableCondition =
       props.formSubmissionType === 'update' && !attributes.editable;
     return (

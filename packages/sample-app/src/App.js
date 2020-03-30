@@ -18,10 +18,6 @@ const testData = [
 class App extends Component {
   constructor(props) {
     super(props);
-
-    console.log('============ data ========================');
-    console.log(data);
-    console.log('====================================');
     this.state = {
       fields: data,
       formData: {},
