@@ -4,6 +4,11 @@ import './style.css';
 
 const Checklist = React.memo(props => {
   const { attributes } = props;
+
+  console.log('=============== props=====================');
+  console.log(props);
+  console.log('====================================');
+
   handleOnclick = () => {
     if (typeof props.renderComponent === 'function') {
       props.renderComponent(props);

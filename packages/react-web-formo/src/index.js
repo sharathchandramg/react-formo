@@ -345,7 +345,6 @@ export default class FormO extends Component {
                 {...this.props}
               />
             );
-
           case 'checklist':
             return (
               <Checklist
