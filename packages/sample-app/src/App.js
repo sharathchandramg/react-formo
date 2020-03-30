@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Form from 'react-web-formo';
 
-const data = require('./schema/22-checklist.json');
+const data = require('./schema/form0.json');
 
 const testData = [
   {

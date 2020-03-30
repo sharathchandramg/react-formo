@@ -1,16 +1,16 @@
 {
-    "name": "react-web-formo",
-    "version": "0.0.4",
-    "main": "index.js",
-    "license": "MIT",
-    "private": false,
-    "devDependencies": {
-        "husky": "^3.0.3",
-        "lerna": "^3.16.4"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lerna run --concurrency 1 --stream precommit"
-        }
+  "name": "react-web-formo",
+  "version": "0.0.20",
+  "main": "index.js",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "husky": "^3.0.3",
+    "lerna": "^3.16.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lerna run --concurrency 1 --stream precommit"
     }
+  }
 }
