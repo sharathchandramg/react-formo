@@ -9,8 +9,8 @@ export default class Lookup extends Component {
   }
 
   handleOnclick = () => {
-    if (typeof this.props.onClickLookup === 'function') {
-      this.props.onClickLookup(this.props);
+    if (typeof this.props.renderComponent === 'function') {
+      this.props.renderComponent(this.props);
     }
     return;
   };

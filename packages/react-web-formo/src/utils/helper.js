@@ -135,6 +135,9 @@ export function getDefaultValue(field) {
       return {};
     }
 
+    case 'checklist':
+      return null;
+
     default:
       return null;
   }
@@ -177,6 +180,10 @@ export function getResetValue(field) {
       }
       return {};
     }
+
+    case 'checklist':
+      return null;
+
     default:
       return null;
   }
@@ -287,6 +294,7 @@ export function autoValidate(field) {
 
       case 'lookup':
       case 'select':
+      case 'checklist':
         if (
           typeof field.value === 'undefined' ||
           !field.value ||

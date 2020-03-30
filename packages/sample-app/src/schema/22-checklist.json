@@ -1,0 +1,23 @@
+[
+  {
+    "type": "checklist",
+    "name": "todo",
+    "label": "To Do",
+    "required": true,
+    "editable": true,
+    "hidden": false,
+    "labelKey": "label",
+    "primaryKey": "id",
+    "objectType": true,
+    "options": [
+      {
+        "id": "123456",
+        "label": "Complete"
+      },
+      {
+        "id": "654321",
+        "label": "Done"
+      }
+    ]
+  }
+]

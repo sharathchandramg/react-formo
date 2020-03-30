@@ -8,6 +8,7 @@ import { autoValidate, getDefaultValue, getResetValue } from './utils/helper';
 import DateTimePicker from './fields/dateTimePicker/index.js';
 import Lookup from './fields/lookup/index.js';
 import CustomDataComponent from './fields/customDataView';
+import Checklist from './fields/checklist';
 
 import './styles.css';
 
@@ -337,6 +338,17 @@ export default class FormO extends Component {
           case 'customDataView':
             return (
               <CustomDataComponent
+                ref={c => {
+                  this[field.name] = c;
+                }}
+                {...commonProps}
+                {...this.props}
+              />
+            );
+
+          case 'checklist':
+            return (
+              <Checklist
                 ref={c => {
                   this[field.name] = c;
                 }}
