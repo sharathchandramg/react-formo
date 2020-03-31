@@ -346,15 +346,7 @@ export default class FormO extends Component {
               />
             );
           case 'checklist':
-            return (
-              <Checklist
-                ref={c => {
-                  this[field.name] = c;
-                }}
-                {...commonProps}
-                {...this.props}
-              />
-            );
+            return <Checklist {...commonProps} {...this.props} />;
 
           default:
             return null;
