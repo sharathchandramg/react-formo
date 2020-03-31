@@ -2,7 +2,7 @@ import React from 'react';
 import { isEmpty } from './../../utils/validators';
 import './style.css';
 
-const Checklist = React.memo(props => {
+const Checklist = props => {
   const { attributes } = props;
 
   const handleOnclick = () => {
@@ -52,6 +52,6 @@ const Checklist = React.memo(props => {
       <div className="lookup-content-wrapper">{renderLabel()}</div>
     </div>
   );
-});
+};
 
 export default Checklist;
