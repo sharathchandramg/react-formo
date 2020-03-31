@@ -7,8 +7,8 @@ export default class CustomDataComponent extends Component {
   }
 
   handleOnclick = () => {
-    if (typeof this.props.onCustomDataView === 'function') {
-      this.props.onCustomDataView(this.props);
+    if (typeof this.props.renderComponent === 'function') {
+      this.props.renderComponent(this.props);
     }
     return;
   };
