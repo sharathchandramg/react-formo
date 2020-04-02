@@ -1,14 +1,23 @@
 import React, { Component } from 'react';
 
 export default class Location extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      locationValue: '',
+    };
+  }
   componentDidMount() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         position => {
-          this.props.updateValue(
-            this.props.attributes.name,
-            `http://maps.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`
-          );
+          this.props.updateValue(this.props.attributes.name, {
+            lat: position.coords.latitude,
+            long: position.coords.longitude,
+          });
+          this.setState({
+            locationValue: `http://maps.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`,
+          });
         },
         error => {
           this.props.updateValue(
@@ -60,7 +69,7 @@ export default class Location extends Component {
         <div style={{ display: 'flex', height: 45 }}>
           <input
             type={attributes['type']}
-            value={attributes['value']}
+            value={locationValue}
             id={attributes['name']}
             disabled={disableCondition}
             style={{
@@ -72,7 +81,7 @@ export default class Location extends Component {
               outline: 'none',
               opacity: disableCondition ? 0.5 : 1,
             }}
-            onChange={() => console.log(attributes['value'])}
+            onChange={() => console.log(locationValue)}
           />
         </div>
       </div>
