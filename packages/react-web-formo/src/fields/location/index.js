@@ -4,30 +4,45 @@ export default class Location extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      locationValue: '',
+      locationValue: 'Fetching ...',
     };
   }
   componentDidMount() {
-    if (navigator.geolocation) {
+    this.getLocation();
+  }
+
+  getLocation = () => {
+    if (!(navigator.geolocation == 'undefined')) {
       navigator.geolocation.getCurrentPosition(
-        position => {
-          this.props.updateValue(this.props.attributes.name, {
-            lat: position.coords.latitude,
-            long: position.coords.longitude,
-          });
-          this.setState({
-            locationValue: `http://maps.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`,
-          });
-        },
-        error => {
-          this.props.updateValue(
-            this.props.attributes.name,
-            `Unable to fetch location`
-          );
+        this.getCoordinates,
+        this.error,
+        {
+          timeout: 5000,
         }
       );
+    } else {
+      console.log(`Unable to fetch location`);
     }
-  }
+  };
+
+  getCoordinates = position => {
+    var cords = position.coords;
+    this.props.updateValue(this.props.attributes.name, {
+      lat: cords.latitude,
+      long: cords.longitude,
+    });
+    this.setState({
+      locationValue: `http://maps.google.com/maps?q=${cords.latitude},${cords.longitude}`,
+    });
+  };
+
+  error = err => {
+    if (err.code == err.PERMISSION_DENIED) {
+      console.log(`User permission denied`);
+      this.setState({ locationValue: '' });
+      this.props.goBack();
+    }
+  };
 
   render() {
     const { attributes } = this.props;
@@ -69,7 +84,7 @@ export default class Location extends Component {
         <div style={{ display: 'flex', height: 45 }}>
           <input
             type={attributes['type']}
-            value={locationValue}
+            value={this.state.locationValue}
             id={attributes['name']}
             disabled={disableCondition}
             style={{
@@ -81,7 +96,7 @@ export default class Location extends Component {
               outline: 'none',
               opacity: disableCondition ? 0.5 : 1,
             }}
-            onChange={() => console.log(locationValue)}
+            onChange={() => console.log(this.state.locationValue)}
           />
         </div>
       </div>
