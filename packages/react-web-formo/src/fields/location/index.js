@@ -9,25 +9,32 @@ export default class Location extends Component {
     };
   }
   componentDidMount() {
-    getGeoLocation({ highAccuracy: true, timeout: 10000 }, (position, err) => {
-      if (err) {
-        this.error(err);
-      } else {
-        this.getCoordinates(position);
-      }
-    });
+    this.getLocation();
   }
 
-  getCoordinates = position => {
-    if (typeof position !== 'undefined' && position !== null) {
-      this.props.updateValue(this.props.attributes.name, {
-        lat: position.latitude,
-        long: position.longitude,
-      });
-      this.setState({
-        locationValue: `http://maps.google.com/maps?q=${position.latitude},${position.longitude}`,
-      });
+  getLocation = () => {
+    if (!(navigator.geolocation == 'undefined')) {
+      navigator.geolocation.getCurrentPosition(
+        this.getCoordinates,
+        this.error,
+        {
+          timeout: 5000,
+        }
+      );
+    } else {
+      console.log(`Unable to fetch location`);
     }
+  };
+
+  getCoordinates = position => {
+    var coords = position.coords;
+    this.props.updateValue(this.props.attributes.name, {
+      lat: coords.latitude,
+      long: coords.longitude,
+    });
+    this.setState({
+      locationValue: `http://maps.google.com/maps?q=${coords.latitude},${coords.longitude}`,
+    });
   };
 
   error = err => {
