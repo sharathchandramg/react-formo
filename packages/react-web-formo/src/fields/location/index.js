@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { getGeoLocation } from './../../utils/helper';
 
 export default class Location extends Component {
   constructor(props) {
@@ -8,40 +9,29 @@ export default class Location extends Component {
     };
   }
   componentDidMount() {
-    this.getLocation();
+    getGeoLocation({ highAccuracy: true, timeout: 10000 }, (position, err) => {
+      if (err) {
+        this.error(err);
+      } else {
+        this.getCoordinates(position);
+      }
+    });
   }
 
-  getLocation = () => {
-    if (!(navigator.geolocation == 'undefined')) {
-      navigator.geolocation.getCurrentPosition(
-        this.getCoordinates,
-        this.error,
-        {
-          timeout: 5000,
-        }
-      );
-    } else {
-      console.log(`Unable to fetch location`);
-    }
-  };
-
   getCoordinates = position => {
-    var cords = position.coords;
-    this.props.updateValue(this.props.attributes.name, {
-      lat: cords.latitude,
-      long: cords.longitude,
-    });
-    this.setState({
-      locationValue: `http://maps.google.com/maps?q=${cords.latitude},${cords.longitude}`,
-    });
+    if (typeof position !== 'undefined' && position !== null) {
+      this.props.updateValue(this.props.attributes.name, {
+        lat: position.latitude,
+        long: position.longitude,
+      });
+      this.setState({
+        locationValue: `http://maps.google.com/maps?q=${position.latitude},${position.longitude}`,
+      });
+    }
   };
 
   error = err => {
-    if (err.code == err.PERMISSION_DENIED) {
-      console.log(`User permission denied`);
-      this.setState({ locationValue: '' });
-      this.props.goBack();
-    }
+    this.setState({ locationValue: '' });
   };
 
   render() {
