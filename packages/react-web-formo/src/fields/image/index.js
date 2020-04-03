@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './style.css';
 import { isEmpty } from '../../utils/validators';
@@ -6,13 +5,6 @@ import _ from 'lodash';
 import imageCompression from 'browser-image-compression';
 
 export default class ImageField extends Component {
-  static propTypes = {
-    attributes: PropTypes.object,
-    theme: PropTypes.object,
-    updateValue: PropTypes.func,
-    ErrorComponent: PropTypes.func,
-  };
-
   constructor(props) {
     super(props);
     this.isLocal = false;
@@ -43,10 +35,6 @@ export default class ImageField extends Component {
         this.isFirstTime = false;
       }
     }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return true;
   }
 
   setImageData = images => {
@@ -119,13 +107,9 @@ export default class ImageField extends Component {
     const files = event.target.files;
     const config = this.getImageConfiguration();
     const { maxFiles } = config;
-    console.log('config');
-    console.log(config);
     if (files.length <= maxFiles) {
       let promises = _.map(files, async file => {
         const output = await this.compressImage(file, config);
-        console.log('output');
-        console.log((output.size / 1024 / 1024).toFixed(2));
         const imageobj = {};
         imageobj['file_path'] = URL.createObjectURL(output);
         imageobj['mime_type'] = output['type'];
@@ -136,8 +120,6 @@ export default class ImageField extends Component {
         imageobj['blob'] = output;
         return imageobj;
       });
-      console.log('promises');
-      console.log(promises);
 
       promises = _.filter(
         promises,
@@ -153,14 +135,8 @@ export default class ImageField extends Component {
 
   renderImageItem = item => {
     return (
-      <div
-        style={{
-          height: 150,
-          width: 200,
-        }}
-        key={item['uri']}
-      >
-        <img style={{ height: '100%', width: '100%' }} src={item['uri']} />
+      <div className="img-wrapper" key={item['uri']}>
+        <img src={item['uri']} alt="image" />
       </div>
     );
   };
@@ -176,18 +152,14 @@ export default class ImageField extends Component {
     return (
       <div className="image-data-wrapper">
         <div className="image-input-wrapper">
-          <input
-            type="file"
-            className="file-input"
-            accept="image/*"
-            ref={e => {
-              this.fileInput = e;
-            }}
-            multiple={true}
-            onChange={e => this.handleImagePicker(e)}
-            id="file-input-id"
-          />
-          <label htmlFor="file-input-id">
+          <label>
+            <input
+              type="file"
+              className="file-input"
+              accept="image/*"
+              multiple={true}
+              onChange={e => this.handleImagePicker(e)}
+            />
             <span className="file-custom">
               <h6>Choose file</h6>
               <h6>Browse</h6>
@@ -223,7 +195,7 @@ export default class ImageField extends Component {
       <React.Fragment>
         <div className="lookup-content-wrapper"> {this.renderLabel()} </div>
         {data && data.length ? (
-          <div className="img-wrapper">{this.renderImageList(data)} </div>
+          <div className="img-list-wrapper">{this.renderImageList(data)} </div>
         ) : null}
       </React.Fragment>
     );
