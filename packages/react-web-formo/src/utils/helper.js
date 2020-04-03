@@ -33,6 +33,7 @@ export function getDefaultValue(field) {
     case 'url':
     case 'phone':
     case 'location':
+    case 'image':
       return field.defaultValue || '';
 
     case 'currency':
@@ -153,6 +154,7 @@ export function getResetValue(field) {
     case 'phone':
     case 'currency':
     case 'location':
+    case 'image':
       return null;
 
     case 'picker':
@@ -222,6 +224,7 @@ export function autoValidate(field) {
       case 'location':
       case 'image':
       case 'password':
+      case 'image':
         if (isEmpty(field.value)) {
           error = true;
           errorMsg = `${field.label} is required`;

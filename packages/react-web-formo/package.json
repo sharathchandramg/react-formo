@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/sharathchandramg/react-formo#readme",
   "dependencies": {
+    "browser-image-compression": "^1.0.9",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "react": "^16.8.6",

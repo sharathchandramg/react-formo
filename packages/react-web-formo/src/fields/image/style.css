@@ -1,0 +1,157 @@
+.container-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.label-wrapper .label-text {
+  width: 50%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.label-wrapper .error-text {
+  width: 50%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.topContainer {
+  overflow: 'hidden';
+  margin-bottom: 12px;
+  height: 150px;
+  width: '90%';
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: '#E0E0E0';
+  padding: 2px;
+}
+
+.container {
+  display: flex;
+  align-items: 'center';
+  justify-content: 'center';
+  height: 100px;
+  border-radius: 4px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-width: 1px;
+  border-color: 'grey';
+}
+
+.image {
+  height: 100px;
+}
+
+.valueContainer {
+  align-items: 'center';
+  justify-content: 'center';
+  display: flex;
+  width: 100%;
+  background-color: red;
+  flex-direction: row;
+}
+
+.iconStyle {
+  font-family: 'roboto';
+  align-self: 'flex-end';
+  margin-right: 5px;
+}
+
+.moreIconContainer {
+  position: 'absolute';
+  width: 55px;
+  height: 40px;
+  align-items: 'center';
+  justify-content: 'center';
+  right: 0px;
+  top: 30px;
+  border-radius: 20px;
+  background-color: 'transparent';
+}
+
+.lookup-data-wrapper {
+  width: 100%;
+  padding: 0 10px;
+  border: 1px solid #979797;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.lookup-data-wrapper p {
+  margin: 0;
+  padding-left: 5px;
+}
+
+.lookup-data-wrapper .value-icon-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.lookup-data-wrapper .value-icon-wrapper h6 {
+  font-size: 16px;
+  margin: 0;
+  font-weight: initial;
+}
+
+.lookup-data-wrapper .value-icon-wrapper i {
+  font-size: 16px;
+  padding-left: 10px;
+  align-items: flex-end;
+  margin-right: 5px;
+}
+
+.controls-stacked {
+  margin: 1rem 0;
+}
+
+.lookup-data-wrapper .file {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  height: 40px;
+  width: 100%;
+  background-color: #fff;
+  align-self: center;
+}
+
+.file-custom {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 5;
+  height: 20px;
+  padding-bottom: 5px;
+  padding-top: 10px;
+  color: #555;
+  background-color: #fff;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  align-self: center;
+  text-align: left;
+}
+
+.file-custom:before {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: 6;
+  display: block;
+  content: "Browse";
+  height: 20px;
+  padding-bottom: 5px;
+  padding-top: 10px;
+  color: #555;
+}
+
+.file-custom:after {
+  content: "Choose file";
+}
