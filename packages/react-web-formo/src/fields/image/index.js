@@ -55,14 +55,13 @@ export default class ImageField extends Component {
       updateValue,
       handleDocumentUpdateAndDownload,
     } = this.props;
-
     this.setState(
       {
         imageArray: images,
       },
       () => {
         this.isLocal = true;
-        updateValue(attributes.name, imageArray);
+        updateValue(attributes.name, images);
       }
     );
 
@@ -120,9 +119,13 @@ export default class ImageField extends Component {
     const files = event.target.files;
     const config = this.getImageConfiguration();
     const { maxFiles } = config;
+    console.log('config');
+    console.log(config);
     if (files.length <= maxFiles) {
       let promises = _.map(files, async file => {
         const output = await this.compressImage(file, config);
+        console.log('output');
+        console.log((output.size / 1024 / 1024).toFixed(2));
         const imageobj = {};
         imageobj['file_path'] = URL.createObjectURL(output);
         imageobj['mime_type'] = output['type'];
@@ -133,6 +136,8 @@ export default class ImageField extends Component {
         imageobj['blob'] = output;
         return imageobj;
       });
+      console.log('promises');
+      console.log(promises);
 
       promises = _.filter(
         promises,
@@ -151,49 +156,42 @@ export default class ImageField extends Component {
       <div
         style={{
           height: 150,
-          width: parseInt(DEVICE_WIDTH - 20),
-          paddingEnd: 5,
+          width: 200,
         }}
         key={item['uri']}
       >
-        <img
-          style={{ height: '100px', width: '100px' }}
-          resizeMode={'cover'}
-          src={{
-            uri: item['uri'],
-            headers: item['headers'] || {},
-            priority: item['priority'],
-          }}
-        />
+        <img style={{ height: '100%', width: '100%' }} src={item['uri']} />
       </div>
     );
   };
 
   renderImageList = images => {
     if (!isEmpty(images)) {
-      return (
-        <div style={{ height: '100px', width: '100%' }}>
-          {images.map(image => this.renderImageItem(image))}
-        </div>
-      );
+      return images.map(image => this.renderImageItem(image));
     }
     return null;
   };
 
   renderLabel = () => {
     return (
-      <div className={`lookup-data-wrapper`}>
-        <div className="value-icon-wrapper">
-          <label className="file">
-            <input
-              type="file"
-              id="file"
-              aria-label="File browser example"
-              accept="image/*"
-              multiple={true}
-              onChange={e => this.handleImagePicker(e)}
-            />
-            <span className="file-custom"></span>
+      <div className="image-data-wrapper">
+        <div className="image-input-wrapper">
+          <input
+            type="file"
+            className="file-input"
+            accept="image/*"
+            ref={e => {
+              this.fileInput = e;
+            }}
+            multiple={true}
+            onChange={e => this.handleImagePicker(e)}
+            id="file-input-id"
+          />
+          <label htmlFor="file-input-id">
+            <span className="file-custom">
+              <h6>Choose file</h6>
+              <h6>Browse</h6>
+            </span>
           </label>
         </div>
       </div>
@@ -222,12 +220,12 @@ export default class ImageField extends Component {
     }
 
     return (
-      <div>
+      <React.Fragment>
         <div className="lookup-content-wrapper"> {this.renderLabel()} </div>
         {data && data.length ? (
-          <div className="topContainer">{this.renderImageList(data)} </div>
+          <div className="img-wrapper">{this.renderImageList(data)} </div>
         ) : null}
-      </div>
+      </React.Fragment>
     );
   };
 
@@ -245,7 +243,7 @@ export default class ImageField extends Component {
             {attributes['error'] && <p id="error">{attributes['errorMsg']}</p>}
           </div>
         </div>
-        <div>{this.renderPreview(attributes)}</div>
+        {this.renderPreview(attributes)}
       </div>
     );
   }
