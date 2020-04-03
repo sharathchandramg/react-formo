@@ -330,7 +330,7 @@ export const getGeoLocation = (options, cb) => {
       ? true
       : options.highAccuracy;
   let timeout =
-    !options || options.timeout === undefined ? 10000 : options.timeout;
+    !options || options.timeout === undefined ? 20000 : options.timeout;
 
   let getLowAccuracyPosition = () => {
     console.log('REQUESTING POSITION', 'HIGH ACCURACY FALSE');
@@ -371,7 +371,6 @@ export const getGeoLocation = (options, cb) => {
         enableHighAccuracy: true,
         timeout: 20000,
         maxAge: 0,
-        distanceFilter: 1,
       }
     );
 

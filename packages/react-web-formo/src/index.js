@@ -9,6 +9,7 @@ import DateTimePicker from './fields/dateTimePicker/index.js';
 import Lookup from './fields/lookup/index.js';
 import CustomDataComponent from './fields/customDataView';
 import Checklist from './fields/checklist';
+import Location from './fields/location';
 
 import './styles.css';
 
@@ -348,6 +349,17 @@ export default class FormO extends Component {
           case 'checklist':
             return (
               <Checklist
+                ref={c => {
+                  this[field.name] = c;
+                }}
+                {...commonProps}
+                {...this.props}
+              />
+            );
+
+          case 'location':
+            return (
+              <Location
                 ref={c => {
                   this[field.name] = c;
                 }}
