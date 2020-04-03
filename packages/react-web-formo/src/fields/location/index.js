@@ -9,7 +9,7 @@ export default class Location extends Component {
     };
   }
   componentDidMount() {
-    getGeoLocation({ highAccuracy: true, timeout: 10000 }, (position, err) => {
+    getGeoLocation({ highAccuracy: true, timeout: 20000 }, (position, err) => {
       if (err) {
         this.error(err);
       } else {
