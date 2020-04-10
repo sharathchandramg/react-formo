@@ -202,7 +202,10 @@ export default class FormO extends Component {
         if (field.error !== undefined && field.error) {
           isValidFields = false;
         }
-        if (field.type && field.type.match(/number/i)) {
+        if (
+          field.type &&
+          (field.type.match(/number/i) || field.type.match(/auto-incr-number/i))
+        ) {
           values[field.name] = parseFloat(field.value);
         } else if (field.type && field.type.match(/date/i)) {
           values[field.name] = field.value
@@ -286,6 +289,7 @@ export default class FormO extends Component {
           case 'password':
           case 'phone':
           case 'calculated':
+          case 'auto-incr-number':
             return (
               <TextInputField
                 ref={c => {
