@@ -9,21 +9,6 @@ import {
 } from './validators';
 import moment from 'moment';
 
-export function getKeyboardType(textType) {
-  switch (textType) {
-    case 'email':
-      return 'email-address';
-
-    case 'number':
-    case 'phone':
-    case 'currency':
-      return 'numeric';
-
-    default:
-      return 'default';
-  }
-}
-
 export function getDefaultValue(field) {
   switch (field.type) {
     case 'text':
@@ -33,6 +18,7 @@ export function getDefaultValue(field) {
     case 'url':
     case 'phone':
     case 'location':
+    case 'auto-incr-number':
       return field.defaultValue || '';
 
     case 'currency':
@@ -153,6 +139,7 @@ export function getResetValue(field) {
     case 'phone':
     case 'currency':
     case 'location':
+    case 'auto-incr-number':
       return null;
 
     case 'picker':
@@ -236,6 +223,7 @@ export function autoValidate(field) {
         break;
 
       case 'number':
+      case 'auto-incr-number':
         if (isEmpty(field.value)) {
           error = true;
           errorMsg = `${field.label} is required`;
