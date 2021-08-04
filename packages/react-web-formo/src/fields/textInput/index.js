@@ -10,7 +10,7 @@ export default class TextInputField extends Component {
     const disableCondition =
       (this.props.formSubmissionType === 'update' && !attributes.editable) ||
       (attributes['type'] === 'auto-incr-number' && !attributes.editable) ||
-      (attributes && attributes['expression'] && !attributes.editable);
+      (attributes && attributes['expression']);
     const value = attributes['value'] || '';
     return (
       <div
