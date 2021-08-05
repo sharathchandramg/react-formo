@@ -4,7 +4,12 @@ import moment from 'moment';
 import TextInputField from './fields/textInput/index.js';
 import PickerField from './fields/picker/index';
 import StatusPicker from './fields/statusPicker/index';
-import { autoValidate, getDefaultValue, getResetValue } from './utils/helper';
+import {
+  autoValidate,
+  getDefaultValue,
+  getResetValue,
+  customFieldCalculations,
+} from './utils/helper';
 import DateTimePicker from './fields/dateTimePicker/index.js';
 import Lookup from './fields/lookup/index.js';
 import CustomDataComponent from './fields/customDataView';
@@ -154,6 +159,20 @@ export default class FormO extends Component {
     }
     const newField = {};
     newField[valueObj.name] = valueObj;
+
+    if (
+      valueObj &&
+      valueObj['expr_field'] &&
+      valueObj['expr_field'].length > 0
+    ) {
+      const res = customFieldCalculations(valueObj, value, this.state);
+      if (res && res.length > 0) {
+        res.forEach(item => {
+          newField[item.name] = item;
+        });
+      }
+    }
+
     if (
       this.props.onValueChange &&
       typeof this.props.onValueChange === 'function'

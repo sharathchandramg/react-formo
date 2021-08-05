@@ -9,7 +9,9 @@ export default class TextInputField extends Component {
     const { attributes } = this.props;
     const disableCondition =
       (this.props.formSubmissionType === 'update' && !attributes.editable) ||
-      (attributes['type'] === 'auto-incr-number' && !attributes.editable);
+      (attributes['type'] === 'auto-incr-number' && !attributes.editable) ||
+      (attributes && attributes['expression']);
+    const value = attributes['value'] || '';
     return (
       <div
         style={{
@@ -46,7 +48,7 @@ export default class TextInputField extends Component {
         <div style={{ display: 'flex', height: 45 }}>
           <input
             type={attributes['type']}
-            value={attributes['value']}
+            value={value}
             id={attributes['name']}
             disabled={disableCondition}
             style={{

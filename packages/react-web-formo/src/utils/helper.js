@@ -8,6 +8,7 @@ import {
   isValidUrl,
 } from './validators';
 import moment from 'moment';
+import { compileExpression } from 'filtrex';
 
 export function getDefaultValue(field) {
   switch (field.type) {
@@ -368,4 +369,101 @@ export const getGeoLocation = (options, cb) => {
       }
     }, timeout);
   }
+};
+
+/**
+ * Compile the expression, if result is false then return the default value
+ * else return the compiled expression value
+ */
+const calculateConditionalMatch = (expressions, values, defaultValue) => {
+  for (const expr of expressions) {
+    const fn = compileExpression(expr);
+    const result = fn(values);
+    if (result !== 'false') {
+      return result;
+    }
+  }
+  return !isEmpty(values) ? defaultValue : null;
+};
+
+const calculateExpr = (type, expressions, values, defaultValue) => {
+  switch (type) {
+    case 'conditional_match':
+      return calculateConditionalMatch(expressions, values, defaultValue);
+    default:
+      return null;
+  }
+};
+
+/**
+ * Check field has expr_field key, else return empty array
+ * Expr field should have stmt, expr_type and dependant_fields, if any is not there then throw empty array
+ * otherwise calculate expression
+ */
+export const customFieldCalculations = (field, fieldValue, allFields) => {
+  const exprFieldNames =
+    !isEmpty(field) && !isEmpty(field['expr_field']) ? field['expr_field'] : [];
+  const res = [];
+
+  for (let i = 0; i < exprFieldNames.length; i++) {
+    const exprField = allFields[exprFieldNames[i]];
+
+    const additionalConfig =
+      !isEmpty(exprField) && !isEmpty(exprField['additional_config'])
+        ? exprField['additional_config']
+        : null;
+
+    if (isEmpty(additionalConfig)) return res;
+
+    const acExpr =
+      !isEmpty(additionalConfig) && !isEmpty(additionalConfig['expr'])
+        ? additionalConfig['expr']
+        : null;
+
+    if (isEmpty(acExpr)) return res;
+
+    const acExprDF =
+      !isEmpty(acExpr) && !isEmpty(acExpr['dependant_fields'])
+        ? acExpr['dependant_fields']
+        : [];
+
+    const acExprStmt =
+      !isEmpty(acExpr) && !isEmpty(acExpr['stmt']) ? acExpr['stmt'] : [];
+
+    const acExprType =
+      !isEmpty(acExpr) && !isEmpty(acExpr['expr_type'])
+        ? acExpr['expr_type']
+        : '';
+
+    const defaultValue =
+      !isEmpty(acExpr) && !isEmpty(acExpr['defaultValue'])
+        ? acExpr['defaultValue']
+        : null;
+
+    if (isEmpty(acExprDF) || isEmpty(acExprStmt)) return res;
+
+    let dfValues = {};
+
+    for (const fieldName of acExprDF) {
+      const dfObj = allFields[fieldName];
+      const dfObjValue =
+        !isEmpty(dfObj) && !isEmpty(dfObj['value']) ? dfObj['value'] : null;
+      const value =
+        field['name'] === fieldName
+          ? fieldValue
+          : !isEmpty(dfObjValue)
+          ? dfObjValue
+          : null;
+      if (!isEmpty(value)) dfValues[fieldName] = value;
+    }
+
+    const updatedValue = calculateExpr(
+      acExprType,
+      acExprStmt,
+      dfValues,
+      defaultValue
+    );
+    res.push({ ...exprField, value: updatedValue });
+  }
+  return res;
 };
