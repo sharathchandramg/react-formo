@@ -397,8 +397,8 @@ const calculateExpr = (type, expressions, values, defaultValue) => {
 
 /**
  * Check field has expr_field key, else return empty array
- * Expr field shoudl have stmt, expr_type and dependant_fields, if any is not there then throw empty,
- * otherwise calculate the values
+ * Expr field should have stmt, expr_type and dependant_fields, if any is not there then throw empty array
+ * otherwise calculate expression
  */
 export const customFieldCalculations = (field, fieldValue, allFields) => {
   const exprFieldNames =
