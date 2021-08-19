@@ -32,7 +32,9 @@
     "react-modal": "^3.10.1",
     "react-picky": "^4.7.0",
     "react-scripts": "^3.0.1",
-    "react-test-renderer": "^16.8.6"
+    "react-signature-canvas": "^1.0.3",
+    "react-test-renderer": "^16.8.6",
+    "react-transition-group": "^4.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",

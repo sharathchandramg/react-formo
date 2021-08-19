@@ -15,6 +15,7 @@ import Lookup from './fields/lookup/index.js';
 import CustomDataComponent from './fields/customDataView';
 import Checklist from './fields/checklist';
 import Location from './fields/location';
+import Signature from './fields/signature';
 
 import './styles.css';
 
@@ -390,6 +391,17 @@ export default class FormO extends Component {
                 {...this.props}
               />
             );
+
+            case 'signature':
+              return (
+                <Signature
+                  ref={c => {
+                    this[field.name] = c;
+                  }}
+                  {...commonProps}
+                  {...this.props}
+                />
+              );
 
           default:
             return null;
