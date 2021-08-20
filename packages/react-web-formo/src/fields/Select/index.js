@@ -14,8 +14,10 @@ const SelectField = props => {
 
   const getLabel = () => {
     let label = 'None';
-    if (!isEmpty(attributes['value']) && Array.isArray(attributes['value'])) {
-      label = attributes['value'].length;
+    if (!isEmpty(attributes['value'])) {
+      label = attributes['multiple']
+        ? attributes['value'].length
+        : attributes['value'];
     }
     return label;
   };
