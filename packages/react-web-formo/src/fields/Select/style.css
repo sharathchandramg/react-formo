@@ -1,15 +1,15 @@
-.lookup-wrapper {
+.select-field-wrapper {
   display: flex;
   flex-direction: column;
   margin: 10px;
 }
 
-.lookup-content-wrapper {
+.select-content-wrapper {
   display: flex;
   height: 45px;
 }
 
-.lookup-data-wrapper {
+.select-data-wrapper {
   width: 100%;
   padding: 0 10px;
   border: 1px solid #979797;
@@ -20,27 +20,27 @@
   cursor: pointer;
 }
 
-.lookup-data-wrapper p {
+.select-data-wrapper p {
   margin: 0;
 }
 
-.lookup-data-wrapper .value-icon-wrapper {
+.select-data-wrapper .value-icon-wrapper {
   display: flex;
   align-items: center;
 }
 
-.lookup-data-wrapper .value-icon-wrapper h6 {
+.select-data-wrapper .value-icon-wrapper h6 {
   font-size: 16px;
   margin: 0;
   font-weight: initial;
 }
 
-.lookup-data-wrapper .value-icon-wrapper i {
+.select-data-wrapper .value-icon-wrapper i {
   font-size: 16px;
   padding-left: 10px;
 }
 
-.label-wrapper {
+.select-label-wrapper {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -48,24 +48,24 @@
   margin-bottom: 8px;
 }
 
-.label-wrapper .label-text {
+.select-label-wrapper .label-text {
   width: 50%;
   display: flex;
   justify-content: flex-start;
 }
 
-.label-wrapper .label-text p {
+.select-label-wrapper .label-text p {
   font-size: 16px;
   margin: 0;
 }
 
-.label-wrapper .error-text {
+.select-label-wrapper .error-text {
   width: 50%;
   display: flex;
   justify-content: flex-end;
 }
 
-.label-wrapper .error-text p {
+.select-label-wrapper .error-text p {
   color: red;
   font-size: 12px;
   margin: 0px;

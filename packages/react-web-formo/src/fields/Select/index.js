@@ -27,7 +27,7 @@ const SelectField = props => {
       props.formSubmissionType === 'update' && !attributes.editable;
     return (
       <div
-        className={`lookup-data-wrapper ${disableCondition ? 'disabled' : ''}`}
+        className={`select-data-wrapper ${disableCondition ? 'disabled' : ''}`}
         onClick={() => handleOnclick()}
       >
         <p style={{ paddingStart: 5 }}>{attributes.label}</p>
@@ -40,8 +40,8 @@ const SelectField = props => {
   };
 
   return (
-    <div className="lookup-wrapper">
-      <div className="label-wrapper">
+    <div className="select-field-wrapper">
+      <div className="select-label-wrapper">
         <div className="label-text">
           <p>
             {attributes['label']} {attributes['required'] ? `*` : ''} :
@@ -51,7 +51,7 @@ const SelectField = props => {
           {attributes['error'] && <p id="error">{attributes['errorMsg']}</p>}
         </div>
       </div>
-      <div className="lookup-content-wrapper">{renderLabel()}</div>
+      <div className="select-content-wrapper">{renderLabel()}</div>
     </div>
   );
 };
