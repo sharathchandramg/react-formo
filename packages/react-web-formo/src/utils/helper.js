@@ -41,8 +41,7 @@ export function getDefaultValue(field) {
       }
       return field.options[0];
     }
-    case 'lookup':
-    case 'select': {
+    case 'lookup': {
       if (Array.isArray(field.defaultValue)) {
         const selected = [];
         if (!field.objectType) {
@@ -69,6 +68,33 @@ export function getDefaultValue(field) {
       }
       return [];
     }
+
+    case 'select':
+      if (Array.isArray(field.defaultValue)) {
+        const selected = [];
+        if (!field.objectType) {
+          field.defaultValue.forEach(item => {
+            if (field.options.indexOf(item) !== -1) {
+              selected.push(item);
+            }
+          });
+        } else {
+          field.defaultValue.forEach(item => {
+            if (
+              field.options.findIndex(
+                option => option[field.primaryKey] === item[field.primaryKey]
+              ) !== -1
+            ) {
+              selected.push(item);
+            }
+          });
+        }
+        return field.multiple ? selected : field.defaultValue[0];
+      }
+      if (!field.multiple) {
+        return field.defaultValue || null;
+      }
+      return [];
 
     case 'switch':
       if (typeof field.defaultValue === 'boolean') {

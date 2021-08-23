@@ -1,0 +1,77 @@
+.select-field-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.select-content-wrapper {
+  display: flex;
+  height: 45px;
+}
+
+.select-data-wrapper {
+  width: 100%;
+  padding: 0 10px;
+  border: 1px solid #979797;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.select-data-wrapper p {
+  margin: 0;
+}
+
+.select-data-wrapper .value-icon-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.select-data-wrapper .value-icon-wrapper h6 {
+  font-size: 16px;
+  margin: 0;
+  font-weight: initial;
+}
+
+.select-data-wrapper .value-icon-wrapper i {
+  font-size: 16px;
+  padding-left: 10px;
+}
+
+.select-label-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.select-label-wrapper .label-text {
+  width: 50%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.select-label-wrapper .label-text p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.select-label-wrapper .error-text {
+  width: 50%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.select-label-wrapper .error-text p {
+  color: red;
+  font-size: 12px;
+  margin: 0px;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
