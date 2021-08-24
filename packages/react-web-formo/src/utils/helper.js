@@ -308,13 +308,19 @@ export function autoValidate(field) {
         break;
 
       case 'lookup':
-      case 'select':
       case 'checklist':
         if (
           typeof field.value === 'undefined' ||
           !field.value ||
           field.value[0] === '{}'
         ) {
+          error = true;
+          errorMsg = `${field.label} is required`;
+        }
+        break;
+        
+      case 'select':
+        if (isEmpty(field.value)) {
           error = true;
           errorMsg = `${field.label} is required`;
         }
