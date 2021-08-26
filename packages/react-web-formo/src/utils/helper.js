@@ -41,6 +41,7 @@ export function getDefaultValue(field) {
       }
       return field.options[0];
     }
+    case "user_directory":
     case 'lookup': {
       if (Array.isArray(field.defaultValue)) {
         const selected = [];
@@ -177,6 +178,7 @@ export function getResetValue(field) {
       return field.options[0];
     }
 
+    case "user_directory":
     case 'select':
     case 'lookup':
       return field.multiple ? [] : null;
@@ -318,7 +320,8 @@ export function autoValidate(field) {
           errorMsg = `${field.label} is required`;
         }
         break;
-        
+
+      case "user_directory":
       case 'select':
         if (isEmpty(field.value)) {
           error = true;
