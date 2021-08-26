@@ -17,11 +17,10 @@ const UserDirectoryField = props => {
     const value = attributes['value'];
     if (!isEmpty(value)) {
       const lk = attributes['labelKey'];
-      const obType = attributes['objectType'];
       if (attributes.multiple) {
         label = value.length;
       } else {
-        label = obType ? value && value[lk] : value;
+        label = lk && value[lk] ? value[lk] : 'None';
       }
     }
     return label;
