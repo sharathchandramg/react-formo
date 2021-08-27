@@ -16,6 +16,7 @@ import CustomDataComponent from './fields/customDataView';
 import Checklist from './fields/checklist';
 import Location from './fields/location';
 import SelectField from './fields/Select';
+import UserDirectoryField from './fields/userDirectory';
 
 import './styles.css';
 
@@ -395,6 +396,17 @@ export default class FormO extends Component {
           case 'select':
             return (
               <SelectField
+                ref={c => {
+                  this[field.name] = c;
+                }}
+                {...commonProps}
+                {...this.props}
+              />
+            );
+
+          case 'user_directory':
+            return (
+              <UserDirectoryField
                 ref={c => {
                   this[field.name] = c;
                 }}
