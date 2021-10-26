@@ -20,6 +20,7 @@ export function getDefaultValue(field) {
     case 'phone':
     case 'location':
     case 'auto-incr-number':
+    case 'longtext':
       return field.defaultValue || '';
 
     case 'currency':
@@ -168,6 +169,7 @@ export function getResetValue(field) {
     case 'currency':
     case 'location':
     case 'auto-incr-number':
+    case 'longtext':
       return null;
 
     case 'picker':
@@ -241,6 +243,24 @@ export function autoValidate(field) {
         if (isEmpty(field.value)) {
           error = true;
           errorMsg = `${field.label} is required`;
+        }
+        break;
+
+      case 'longtext':
+        const additionalConfig = field['additional_config'];
+        if (isEmpty(field.value)) {
+          error = true;
+          errorMsg = `${field.label} is required`;
+        } else if (
+          !isEmpty(additionalConfig) &&
+          !isEmpty(additionalConfig['max_length'])
+        ) {
+          if (
+            field.value.trim().length > Number(additionalConfig['max_length'])
+          ) {
+            error = true;
+            errorMsg = `Maximum characters allowed is ${additionalConfig['max_length']}`;
+          }
         }
         break;
 
@@ -321,7 +341,7 @@ export function autoValidate(field) {
         }
         break;
 
-      case "user_directory":
+      case 'user_directory':
       case 'select':
         if (isEmpty(field.value)) {
           error = true;
