@@ -17,6 +17,7 @@ import Checklist from './fields/checklist';
 import Location from './fields/location';
 import SelectField from './fields/Select';
 import UserDirectoryField from './fields/userDirectory';
+import LongTextField from './fields/longtext';
 
 import './styles.css';
 
@@ -313,6 +314,16 @@ export default class FormO extends Component {
           case 'auto-incr-number':
             return (
               <TextInputField
+                ref={c => {
+                  this[field.name] = c;
+                }}
+                {...commonProps}
+              />
+            );
+
+          case 'longtext':
+            return (
+              <LongTextField
                 ref={c => {
                   this[field.name] = c;
                 }}
