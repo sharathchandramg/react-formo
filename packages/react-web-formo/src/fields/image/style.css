@@ -1,0 +1,75 @@
+.image-root {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.image-label-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.image-label-wrapper .image-label-text {
+  width: 50%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.image-label-wrapper .image-label-text p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.image-label-wrapper .error-text {
+  width: 50%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.image-label-wrapper .error-text p {
+  color: red;
+  font-size: 12px;
+  margin: 0px;
+}
+
+.image-content-wrapper {
+  display: flex;
+  height: 45px;
+}
+
+.image-data-wrapper {
+  width: 100%;
+  padding: 0 10px;
+  border: 1px solid #979797;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.image-data-wrapper p {
+  margin: 0;
+}
+
+.image-data-wrapper i {
+  font-size: 16px;
+  padding-left: 10px;
+}
+
+.image-data-wrapper .input-label-wrapper {
+  margin-bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.image-data-wrapper .file-input {
+  display: none;
+  position: absolute;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
