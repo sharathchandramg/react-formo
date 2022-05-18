@@ -56,7 +56,7 @@ export default class ImageField extends Component {
       const imgValue = [];
 
       await Promise.all(
-        Object.keys(images).map(async key=>{
+        Object.keys(images).map(async key => {
           const base64 = await blobToBase64(images[key]);
           imgValue.push({
             url: base64,
@@ -111,10 +111,35 @@ export default class ImageField extends Component {
     );
   };
 
-  renderImages = () => {
+  getImgurl = item => {
+    return !isEmpty(item['base64Data']) ? item['base64Data'] : item['url'];
+  };
+
+  renderImages = attributes => {
+    const value = attributes.value;
+    const images = this.state.images;
+
+    let data = [];
+    if (!isEmpty(images) && _.some(images, 'url')) {
+      _.forEach(images, image => {
+        data.push({
+          url: image['url'],
+        });
+      });
+    } else if (
+      !isEmpty(value) &&
+      (_.some(value, 'url') || _.some(value, 'base64Data'))
+    ) {
+      _.forEach(value, image => {
+        data.push({
+          url: this.getImgurl(image),
+        });
+      });
+    }
+
     return (
       <div>
-        {this.state.images.map((item, index) => {
+        {data.map((item, index) => {
           return (
             <img
               key={index}
@@ -126,7 +151,12 @@ export default class ImageField extends Component {
                 margin: '0 5px 5px 0',
                 cursor: 'pointer',
               }}
-              onClick={() => {}}
+              onClick={() =>
+                this.props.handleOpenImageModal({
+                  label: attributes['label'],
+                  url: item.url,
+                })
+              }
             />
           );
         })}
@@ -149,7 +179,7 @@ export default class ImageField extends Component {
           </div>
         </div>
         <div className="image-content-wrapper">{this.renderImageUI()}</div>
-        {this.renderImages()}
+        {this.renderImages(attributes)}
       </div>
     );
   }
