@@ -86,7 +86,7 @@ export default class Location extends Component {
               outline: 'none',
               opacity: disableCondition ? 0.5 : 1,
             }}
-            onChange={() => console.log(this.state.locationValue)}
+            onChange={() => {}}
           />
         </div>
       </div>

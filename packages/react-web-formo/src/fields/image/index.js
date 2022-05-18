@@ -1,14 +1,30 @@
 import React, { Component } from 'react';
 import { isEmpty } from '../../utils/validators';
-import { blobToBase64 } from '../../utils/helper';
+import { fileToBase64 } from '../../utils/helper';
 import './style.css';
 
 export default class ImageField extends Component {
   constructor(props) {
     super(props);
+    this.isFirstTime = true;
     this.state = {
       images: [],
     };
+  }
+
+  componentDidMount() {
+    this.isFirstTime = true;
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.isFirstTime) {
+      const { handleDocumentUpdateAndDownload, attributes } = this.props;
+      const { value } = attributes;
+      if (!isEmpty(value)) {
+        handleDocumentUpdateAndDownload(attributes, value, 'read');
+        this.isFirstTime = false;
+      }
+    }
   }
 
   handleOnclick = () => {
@@ -57,7 +73,7 @@ export default class ImageField extends Component {
 
       await Promise.all(
         Object.keys(images).map(async key => {
-          const base64 = await blobToBase64(images[key]);
+          const base64 = await fileToBase64(images[key]);
           imgValue.push({
             url: base64,
             file_name: images[key].name,
