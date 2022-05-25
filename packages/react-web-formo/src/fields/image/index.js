@@ -27,13 +27,6 @@ export default class ImageField extends Component {
     }
   }
 
-  handleOnclick = () => {
-    if (typeof this.props.renderComponent === 'function') {
-      this.props.renderComponent(this.props);
-    }
-    return;
-  };
-
   getLabel = value => {
     let label = 'None';
     if (typeof value !== 'undefined' && value && Object.keys(value).length) {
@@ -42,29 +35,29 @@ export default class ImageField extends Component {
     return label;
   };
 
-  handleFile = async (name, config, images) => {
+  handleFile = async (config, images) => {
     if (!isEmpty(images)) {
-      if (config['multiple'] && images.length > config['maxFiles']) {
-        this.handleCloseDialog(
-          `Please note maximum files allowed is ${config['maxFiles']}`
+      if (config['multiple'] && images.length > config['max_files']) {
+        this.props.openAlertModal(
+          `Please note maximum files allowed is ${config['max_files']}`
         );
         return;
       }
 
       for (const img of images) {
         if (!['image/jpeg', 'image/png', 'image/jpg'].includes(img['type'])) {
-          this.handleCloseDialog(`${img['name']} file type is not allowed`);
+          this.props.openAlertModal(`${img['name']} file type is not allowed`);
           return;
         } else if (isEmpty(img['size'])) {
-          this.handleCloseDialog(
+          this.props.openAlertModal(
             `${img['name']} file size is empty. Please choose proper file`
           );
           return;
-        } else if (img['size'] > 528384) {
-          this.handleCloseDialog(
+        } else if (img['size'] > 1048576) {
+          this.props.openAlertModal(
             `${
               img['name']
-            } file size is greater than 512kb. Please select file size less than 512kb`
+            } file size is greater than 1MB. Please select file size less than 1MB`
           );
           return;
         }
@@ -92,7 +85,7 @@ export default class ImageField extends Component {
     }
   };
 
-  renderImageUI = () => {
+  renderImageInput = () => {
     const { attributes } = this.props;
     const disableCondition =
       this.props.formSubmissionType === 'update' && !attributes.editable;
@@ -103,7 +96,6 @@ export default class ImageField extends Component {
     return (
       <div
         className={`image-data-wrapper ${disableCondition ? 'disabled' : ''}`}
-        onClick={() => this.handleOnclick()}
       >
         <input
           type="file"
@@ -111,7 +103,6 @@ export default class ImageField extends Component {
           accept="image/jpeg,image/png,image/jpg"
           onChange={event =>
             this.handleFile(
-              attributes.name,
               additionalConfig,
               event.target.files
             )
@@ -131,7 +122,7 @@ export default class ImageField extends Component {
     return !isEmpty(item['base64Data']) ? item['base64Data'] : item['url'];
   };
 
-  renderImages = attributes => {
+  renderSelectedImages = attributes => {
     const value = attributes.value;
     const images = this.state.images;
 
@@ -194,8 +185,8 @@ export default class ImageField extends Component {
             {attributes['error'] && <p id="error">{attributes['errorMsg']}</p>}
           </div>
         </div>
-        <div className="image-content-wrapper">{this.renderImageUI()}</div>
-        {this.renderImages(attributes)}
+        <div className="image-content-wrapper">{this.renderImageInput()}</div>
+        {this.renderSelectedImages(attributes)}
       </div>
     );
   }
