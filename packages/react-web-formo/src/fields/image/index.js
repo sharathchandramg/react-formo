@@ -102,10 +102,7 @@ export default class ImageField extends Component {
           className="file-input"
           accept="image/jpeg,image/png,image/jpg"
           onChange={event =>
-            this.handleFile(
-              additionalConfig,
-              event.target.files
-            )
+            this.handleFile(additionalConfig, event.target.files)
           }
           id={attributes.name}
           multiple={additionalConfig['multiple']}
@@ -158,12 +155,18 @@ export default class ImageField extends Component {
                 margin: '0 5px 5px 0',
                 cursor: 'pointer',
               }}
-              onClick={() =>
+              onClick={() => {
+                const imageList = [];
+                data.forEach(ele => {
+                  imageList.push({
+                    original: ele.url,
+                  });
+                });
                 this.props.handleOpenImageModal({
                   label: attributes['label'],
-                  url: item.url,
-                })
-              }
+                  imageList,
+                });
+              }}
             />
           );
         })}
