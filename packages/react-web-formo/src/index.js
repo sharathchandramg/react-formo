@@ -18,6 +18,7 @@ import Location from './fields/location';
 import SelectField from './fields/Select';
 import UserDirectoryField from './fields/userDirectory';
 import LongTextField from './fields/longtext';
+import ImageField from './fields/image';
 
 import './styles.css';
 
@@ -425,6 +426,17 @@ export default class FormO extends Component {
                 {...this.props}
               />
             );
+
+            case 'image':
+              return (
+                <ImageField
+                  ref={c => {
+                    this[field.name] = c;
+                  }}
+                  {...commonProps}
+                  {...this.props}
+                />
+              );
 
           default:
             return null;

@@ -377,10 +377,8 @@ export const getGeoLocation = (options, cb) => {
     !options || options.timeout === undefined ? 20000 : options.timeout;
 
   let getLowAccuracyPosition = () => {
-    console.log('REQUESTING POSITION', 'HIGH ACCURACY FALSE');
     navigator.geolocation.getCurrentPosition(
       position => {
-        console.log('POSITION NETWORK OK', position);
         cb(position.coords);
       },
       error => {
@@ -396,12 +394,10 @@ export const getGeoLocation = (options, cb) => {
   };
 
   if (highAccuracy) {
-    console.log('REQUESTING POSITION', 'HIGH ACCURACY TRUE');
     const watchId = navigator.geolocation.watchPosition(
       position => {
         // location retrieved
         highAccuracySuccess = true;
-        console.log('POSITION GPS OK', position);
         navigator.geolocation.clearWatch(watchId);
         cb(position.coords);
       },
@@ -522,3 +518,10 @@ export const customFieldCalculations = (field, fieldValue, allFields) => {
   }
   return res;
 };
+
+export const fileToBase64 = file => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = error => reject(error);
+});
