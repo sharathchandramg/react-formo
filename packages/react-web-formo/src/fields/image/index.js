@@ -6,25 +6,9 @@ import './style.css';
 export default class ImageField extends Component {
   constructor(props) {
     super(props);
-    this.isFirstTime = true;
     this.state = {
       images: [],
     };
-  }
-
-  componentDidMount() {
-    this.isFirstTime = true;
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.isFirstTime) {
-      const { handleDocumentUpdateAndDownload, attributes } = this.props;
-      const { value } = attributes;
-      if (!isEmpty(value)) {
-        handleDocumentUpdateAndDownload(attributes, value, 'read');
-        this.isFirstTime = false;
-      }
-    }
   }
 
   getLabel = value => {
