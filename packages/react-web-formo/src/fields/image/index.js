@@ -165,6 +165,7 @@ export default class ImageField extends Component {
                 this.props.handleOpenImageModal({
                   label: attributes['label'],
                   imageList,
+                  startIndex: index,
                 });
               }}
             />
