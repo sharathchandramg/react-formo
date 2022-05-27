@@ -34,20 +34,23 @@ export default class FormO extends Component {
   constructor(props) {
     super(props);
     const initialState = this.getInitialState(props.fields);
+    this.isFirstTime = false;
     this.state = {
       ...initialState,
     };
   }
 
   componentDidMount() {
+    this.isFirstTime = true;
     const { formData } = this.props;
     this.setValues(formData);
   }
 
   componentDidUpdate(prevProps) {
     const { formData } = this.props;
-    if (!_.isEqual(prevProps, this.props)) {
+    if (!_.isEqual(prevProps, this.props) && this.isFirstTime) {
       this.setValues(formData);
+      this.isFirstTime = false;
     }
   }
 
@@ -88,7 +91,7 @@ export default class FormO extends Component {
           field.errorMsg = validate.errorMsg;
         }
 
-        newFields[field.name] = field;
+        newFields[field.name] = Object.assign({}, field);
       }
     });
     this.setState({ ...newFields });
@@ -162,7 +165,7 @@ export default class FormO extends Component {
       Object.assign(valueObj, this.props.customValidation(valueObj));
     }
     const newField = {};
-    newField[valueObj.name] = valueObj;
+    newField[valueObj.name] = Object.assign({}, valueObj);
 
     if (
       valueObj &&
