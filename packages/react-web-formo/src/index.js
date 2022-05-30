@@ -19,6 +19,7 @@ import SelectField from './fields/Select';
 import UserDirectoryField from './fields/userDirectory';
 import LongTextField from './fields/longtext';
 import ImageField from './fields/image';
+import DocumentField from './fields/document';
 
 import './styles.css';
 
@@ -433,6 +434,17 @@ export default class FormO extends Component {
           case 'image':
             return (
               <ImageField
+                ref={c => {
+                  this[field.name] = c;
+                }}
+                {...commonProps}
+                {...this.props}
+              />
+            );
+
+          case 'document':
+            return (
+              <DocumentField
                 ref={c => {
                   this[field.name] = c;
                 }}
