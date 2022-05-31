@@ -47,16 +47,59 @@ export default class DocumentField extends Component {
     return contentTypes;
   };
 
+  isFileExists = (res, allFiles) => {
+    if (!isEmpty(allFiles)) {
+      const fileIndex = allFiles.findIndex(ele => ele && ele['name'] === res);
+      if (fileIndex >= 0) return true;
+    }
+    return false;
+  };
+
+  removeDuplicateFiles = (results, existsFiles) => {
+    const updatedResults = [];
+    if (!isEmpty(results)) {
+      results.forEach(ele => {
+        if (!existsFiles.includes(ele['name'])) {
+          updatedResults.push(ele);
+        }
+      });
+    }
+    return updatedResults;
+  };
+
+  getAllFiles = results => {
+    const { attributes } = this.props;
+    const value =
+      !isEmpty(attributes) && !isEmpty(attributes.value)
+        ? attributes.value
+        : [];
+    return [...results, ...value];
+  };
+
   handleFile = async (config, docs) => {
     if (!isEmpty(docs)) {
-      if (config['multiple'] && docs.length > config['max_files']) {
+      const value =
+        !isEmpty(this.props.attributes) && !isEmpty(this.props.attributes.value)
+          ? this.props.attributes.value
+          : [];
+      const existsFiles = [];
+      const updatedDocs = [];
+
+      await Promise.all(
+        Object.keys(docs).map(async key => {
+          updatedDocs.push(docs[key]);
+        })
+      );
+      const allFiles = this.getAllFiles(updatedDocs);
+
+      if (allFiles.length > config['max_files']) {
         this.props.openAlertModal(
           `Please note maximum files allowed is ${config['max_files']}`
         );
         return;
       }
 
-      for (const doc of docs) {
+      for (const doc of updatedDocs) {
         if (!this.getAcceptContentTypes(config).includes(doc['type'])) {
           this.props.openAlertModal(`${doc['name']} file type is not allowed`);
           return;
@@ -72,24 +115,21 @@ export default class DocumentField extends Component {
             )} MB`
           );
           return;
+        } else if (this.isFileExists(doc['name'], value)) {
+          existsFiles.push(doc['name']);
         }
       }
-      const updatedDocs = [];
 
-      await Promise.all(
-        Object.keys(docs).map(async key => {
-          updatedDocs.push(docs[key]);
-        })
-      );
-      console.log(updatedDocs);
-      this.setState({ docs: updatedDocs });
-      // this.setState({ docs: updatedDocs }, () => {
-      //   this.props.handleDocumentUpdateAndDownload(
-      //     this.props.attributes,
-      //     updatedDocs,
-      //     'write'
-      //   );
-      // });
+      const updatedResults = !isEmpty(existsFiles)
+        ? this.removeDuplicateFiles(updatedDocs, existsFiles)
+        : updatedDocs;
+
+      this.setState({ docs: updatedResults }, () => {
+        this.props.handleDocumentUpdateAndDownload(
+          this.props.attributes,
+          updatedResults
+        );
+      });
     }
   };
 
@@ -127,15 +167,29 @@ export default class DocumentField extends Component {
 
   renderSelectedDocument = attributes => {
     const value = attributes.value;
-    const docs = this.state.docs;
+    const data = !isEmpty(value) ? value : [];
 
     return (
       <div style={{ paddingTop: '10px' }}>
-        {docs.map((item, index) => {
+        {data.map((item, index) => {
           return (
-            <div className="doc-item-wrapper">
-              <p>{item.name}</p>
-              <i className="fas fa-trash" />
+            <div className="doc-item-wrapper" key={`doc-${index}`}>
+              <p
+                onClick={() => {
+                  this.props.handlePreviewDocument(item);
+                }}
+              >
+                {item.name}
+              </p>
+              <i
+                className="fas fa-trash"
+                onClick={() => {
+                  this.props.handleOpenDeleteDocDailog({
+                    attributes: attributes,
+                    doc: item,
+                  });
+                }}
+              />
             </div>
           );
         })}
