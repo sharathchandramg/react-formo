@@ -110,7 +110,9 @@ export default class DocumentField extends Component {
           return;
         } else if (doc['size'] > config['max_size']) {
           this.props.openAlertModal(
-            `Please select file size less than ${this.getBytesToMB(
+            `${doc['name']} file size is greater than ${this.getBytesToMB(
+              config['max_size']
+            )} MB. Please select file size less than ${this.getBytesToMB(
               config['max_size']
             )} MB`
           );
