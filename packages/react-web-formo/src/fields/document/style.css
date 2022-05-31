@@ -89,6 +89,9 @@
   width: calc(100% - 20px);
   margin-bottom: 0;
   cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .doc-root .doc-item-wrapper i {
