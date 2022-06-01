@@ -19,6 +19,8 @@ import SelectField from './fields/Select';
 import UserDirectoryField from './fields/userDirectory';
 import LongTextField from './fields/longtext';
 import ImageField from './fields/image';
+import DocumentField from './fields/document';
+import { isEmpty } from './utils/validators';
 
 import './styles.css';
 
@@ -239,6 +241,18 @@ export default class FormO extends Component {
                 .utc()
                 .valueOf()
             : '';
+        } else if (field.type && field.type.match(/document/i)) {
+          values[field.name] = !isEmpty(field.value)
+            ? field.value.map(item => {
+                return {
+                  name: item['name'],
+                  file_path: item['file_path'] ? item['file_path'] : '',
+                  content_type: item['content_type']
+                    ? item['content_type']
+                    : '',
+                };
+              })
+            : [];
         } else {
           values[field.name] = field.value;
         }
@@ -433,6 +447,17 @@ export default class FormO extends Component {
           case 'image':
             return (
               <ImageField
+                ref={c => {
+                  this[field.name] = c;
+                }}
+                {...commonProps}
+                {...this.props}
+              />
+            );
+
+          case 'document':
+            return (
+              <DocumentField
                 ref={c => {
                   this[field.name] = c;
                 }}
