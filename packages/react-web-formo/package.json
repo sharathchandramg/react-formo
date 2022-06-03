@@ -1,6 +1,6 @@
 {
   "name": "react-web-formo",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "description": "Build model based simple forms for React",
   "main": "build/bundles.js",
   "scripts": {
