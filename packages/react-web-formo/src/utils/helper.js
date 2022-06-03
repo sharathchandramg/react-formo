@@ -42,7 +42,7 @@ export function getDefaultValue(field) {
       }
       return field.options[0];
     }
-    case "user_directory":
+    case 'user_directory':
     case 'lookup': {
       if (Array.isArray(field.defaultValue)) {
         const selected = [];
@@ -180,7 +180,7 @@ export function getResetValue(field) {
       return field.options[0];
     }
 
-    case "user_directory":
+    case 'user_directory':
     case 'select':
     case 'lookup':
       return field.multiple ? [] : null;
@@ -240,6 +240,7 @@ export function autoValidate(field) {
       case 'location':
       case 'image':
       case 'password':
+      case 'document':
         if (isEmpty(field.value)) {
           error = true;
           errorMsg = `${field.label} is required`;
@@ -259,7 +260,9 @@ export function autoValidate(field) {
             field.value.trim().length > Number(additionalConfig['max_length'])
           ) {
             error = true;
-            errorMsg = `Maximum characters allowed is ${additionalConfig['max_length']}`;
+            errorMsg = `Maximum characters allowed is ${
+              additionalConfig['max_length']
+            }`;
           }
         }
         break;
@@ -519,9 +522,10 @@ export const customFieldCalculations = (field, fieldValue, allFields) => {
   return res;
 };
 
-export const fileToBase64 = file => new Promise((resolve, reject) => {
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-  reader.onload = () => resolve(reader.result);
-  reader.onerror = error => reject(error);
-});
+export const fileToBase64 = file =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
