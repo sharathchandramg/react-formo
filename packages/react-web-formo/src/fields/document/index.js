@@ -36,15 +36,15 @@ export default class DocumentField extends Component {
   };
 
   getAcceptContentTypes = config => {
-    let contentTypes = [];
-
     if (!isEmpty(config) && !isEmpty(config['file_type'])) {
+      let contentTypes = [];
       config['file_type'].forEach(item => {
         contentTypes = [...contentTypes, ...allowedContentTypes[item]];
       });
+      return contentTypes;
     }
 
-    return contentTypes;
+    return ['application/pdf'];
   };
 
   isFileExists = (res, allFiles) => {
@@ -82,6 +82,9 @@ export default class DocumentField extends Component {
         !isEmpty(this.props.attributes) && !isEmpty(this.props.attributes.value)
           ? this.props.attributes.value
           : [];
+      const maxFiles = config && config['max_files'] ? config['max_files'] : 1;
+      const maxSize =
+        config && config['max_size'] ? config['max_size'] : 1048576;
       const existsFiles = [];
       const updatedDocs = [];
 
@@ -92,9 +95,9 @@ export default class DocumentField extends Component {
       );
       const allFiles = this.getAllFiles(updatedDocs);
 
-      if (allFiles.length > config['max_files']) {
+      if (allFiles.length > maxFiles) {
         this.props.openAlertModal(
-          `Please note maximum files allowed is ${config['max_files']}`
+          `Please note maximum files allowed is ${maxFiles}`
         );
         return;
       }
@@ -108,12 +111,12 @@ export default class DocumentField extends Component {
             `${doc['name']} file size is empty. Please choose proper file`
           );
           return;
-        } else if (doc['size'] > config['max_size']) {
+        } else if (doc['size'] > maxSize) {
           this.props.openAlertModal(
             `${doc['name']} file size is greater than ${this.getBytesToMB(
-              config['max_size']
+              maxSize
             )} MB. Please select file size less than ${this.getBytesToMB(
-              config['max_size']
+              maxSize
             )} MB`
           );
           return;
@@ -142,7 +145,7 @@ export default class DocumentField extends Component {
     const additionalConfig =
       !isEmpty(attributes) && !isEmpty(attributes['additional_config'])
         ? attributes['additional_config']
-        : null;
+        : {};
     return (
       <div className={`doc-data-wrapper ${disableCondition ? 'disabled' : ''}`}>
         <input
@@ -153,7 +156,9 @@ export default class DocumentField extends Component {
             this.handleFile(additionalConfig, event.target.files)
           }
           id={attributes.name}
-          multiple={additionalConfig['multiple']}
+          multiple={
+            additionalConfig && additionalConfig['multiple'] ? true : false
+          }
         />
         <label htmlFor={attributes.name} className="input-label-wrapper">
           <p style={{ paddingStart: 5 }}>{attributes.label}</p>

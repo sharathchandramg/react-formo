@@ -21,9 +21,12 @@ export default class ImageField extends Component {
 
   handleFile = async (config, images) => {
     if (!isEmpty(images)) {
-      if (config['multiple'] && images.length > config['max_files']) {
+      const maxFiles = config && config['max_files'] ? config['max_files'] : 1;
+      const multiple = config && config['multiple'] ? true : false;
+
+      if (multiple && images.length > maxFiles) {
         this.props.openAlertModal(
-          `Please note maximum files allowed is ${config['max_files']}`
+          `Please note maximum files allowed is ${maxFiles}`
         );
         return;
       }
@@ -76,7 +79,7 @@ export default class ImageField extends Component {
     const additionalConfig =
       !isEmpty(attributes) && !isEmpty(attributes['additional_config'])
         ? attributes['additional_config']
-        : null;
+        : {};
     return (
       <div
         className={`image-data-wrapper ${disableCondition ? 'disabled' : ''}`}
@@ -89,7 +92,9 @@ export default class ImageField extends Component {
             this.handleFile(additionalConfig, event.target.files)
           }
           id={attributes.name}
-          multiple={additionalConfig['multiple']}
+          multiple={
+            additionalConfig && additionalConfig['multiple'] ? true : false
+          }
         />
         <label htmlFor={attributes.name} className="input-label-wrapper">
           <p style={{ paddingStart: 5 }}>{attributes.label}</p>
