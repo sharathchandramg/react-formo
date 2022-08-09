@@ -20,6 +20,7 @@ import UserDirectoryField from './fields/userDirectory';
 import LongTextField from './fields/longtext';
 import ImageField from './fields/image';
 import DocumentField from './fields/document';
+import CascadingDropdownField from './fields/cascadingDropdown';
 import { isEmpty } from './utils/validators';
 
 import './styles.css';
@@ -88,7 +89,7 @@ export default class FormO extends Component {
       const field = this.state[fieldName];
       if (field) {
         if (field.required !== undefined && field.required) {
-          let validate = autoValidate(field);
+          let validate = autoValidate(field, this.state);
           field.error = validate.error;
           field.errorMsg = validate.errorMsg;
         }
@@ -463,6 +464,18 @@ export default class FormO extends Component {
                 }}
                 {...commonProps}
                 {...this.props}
+              />
+            );
+
+          case 'cascading-dropdown':
+            return (
+              <CascadingDropdownField
+                ref={c => {
+                  this[field.name] = c;
+                }}
+                {...commonProps}
+                {...this.props}
+                state={this.state}
               />
             );
 

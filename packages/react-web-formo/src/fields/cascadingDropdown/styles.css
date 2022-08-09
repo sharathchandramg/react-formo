@@ -1,0 +1,47 @@
+.cascading-root {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.cascading-root .cascading-label-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.cascading-root .cascading-label-wrapper p {
+  font-size: 16px;
+  margin: 0px;
+}
+
+.cascading-input {
+  width: 100%;
+  border: 1px solid rgb(151, 151, 151);
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 20px;
+  outline: none;
+  opacity: 1;
+}
+
+.list-wrapper {
+  max-height: 180px;
+  overflow-y: auto;
+  border: 1px solid rgb(151, 151, 151);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.list-item {
+  height: 45px;
+  font-size: 16px;
+  padding-left: 5px;
+  border-bottom: 1px solid #979797;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden;
+}
