@@ -22,6 +22,8 @@ export function getDefaultValue(field) {
     case 'auto-incr-number':
     case 'longtext':
       return field.defaultValue || '';
+    case 'cascading-dropdown':
+      return '';
 
     case 'currency':
       let curr_type = field.defaultCurrency
@@ -172,6 +174,9 @@ export function getResetValue(field) {
     case 'longtext':
       return null;
 
+    case 'cascading-dropdown':
+      return '';
+
     case 'picker':
     case 'status_picker': {
       if (field.options.indexOf(field.defaultValue) !== -1) {
@@ -221,7 +226,7 @@ export function getInitialState(fields) {
   return state;
 }
 
-export function autoValidate(field) {
+export function autoValidate(field, data = {}) {
   let error = false;
   let errorMsg = '';
 
@@ -318,6 +323,49 @@ export function autoValidate(field) {
         if (isEmpty(field.value) || field.value === '-Select-') {
           error = true;
           errorMsg = `${field.label} is required`;
+        }
+        break;
+
+      case 'cascading-dropdown':
+        if (isEmpty(field.value)) {
+          error = true;
+          errorMsg = `${field.label} is required`;
+        } else if (!isEmpty(field) && !isEmpty(field['value'])) {
+          if (
+            field.ref_field_name &&
+            data &&
+            data[field.ref_field_name] &&
+            data[field.ref_field_name]['value']
+          ) {
+            const refField = data[field.ref_field_name];
+            const refValue = refField['value'];
+            const refFieldOption =
+              refField.options && refField.options.length > 0 && refValue
+                ? _.find(refField.options, { label: refValue })
+                : null;
+            const valueOption =
+              field.options.length > 0 && field['value']
+                ? _.find(field.options, { label: field['value'] })
+                : null;
+            const isValidOption =
+              refFieldOption &&
+              refFieldOption.id &&
+              valueOption &&
+              valueOption.ref_id.length > 0
+                ? valueOption.ref_id.includes(refFieldOption.id)
+                : false;
+            if (!isValidOption) {
+              error = true;
+              errorMsg = `${field.label} value is not a valid option`;
+            }
+          } else if (
+            field['options'].length > 0 &&
+            !isEmpty(field['value']) &&
+            isEmpty(_.find(field['options'], { label: field['value'] }))
+          ) {
+            error = true;
+            errorMsg = `${field.label} is required`;
+          }
         }
         break;
 
