@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './styles.css';
 
 export default class SearchableDropDown extends Component {
+  wrapperRef;
   constructor(props) {
     super(props);
     this.state = {
@@ -16,6 +17,7 @@ export default class SearchableDropDown extends Component {
     this.setState({
       listItems: this.props.items,
     });
+    document.addEventListener('mousedown', this.handleClickOutside);
   }
 
   componentDidUpdate(prevProps) {
@@ -23,6 +25,16 @@ export default class SearchableDropDown extends Component {
       this.setState({ item: this.props.selectedValue });
     }
   }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  handleClickOutside = event => {
+    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+      this.setState({ focus: false, item: this.props.selectedValue });
+    }
+  };
 
   renderList = () => {
     return (
@@ -34,6 +46,7 @@ export default class SearchableDropDown extends Component {
               ? '1px solid rgb(151, 151, 151)'
               : 'unset',
         }}
+        ref={node => (this.wrapperRef = node)}
       >
         {this.state.listItems.map((item, index) => {
           return (
@@ -49,6 +62,7 @@ export default class SearchableDropDown extends Component {
                     ? 'unset'
                     : '1px solid #979797',
               }}
+              key={`cascading-${index}`}
             >
               {item.label}
             </div>
@@ -74,18 +88,12 @@ export default class SearchableDropDown extends Component {
 
   renderInput = () => {
     const { attributes } = this.props;
-    const disableCondition =
-      this.props.formSubmissionType === 'update' && !attributes.editable;
     return (
       <div style={{ display: 'flex', height: 45 }}>
         <input
           type={'text'}
           value={this.state.item}
           id={attributes['name']}
-          disabled={disableCondition}
-          style={{
-            opacity: disableCondition ? 0.5 : 1,
-          }}
           className="cascading-input"
           onFocus={() =>
             this.setState({
@@ -95,9 +103,6 @@ export default class SearchableDropDown extends Component {
           }
           placeholder={'-Select-'}
           onChange={this.searchedItems}
-          // onBlur={() =>
-          //   this.setState({ focus: false, item: this.props.selectedValue })
-          // }
         />
       </div>
     );
