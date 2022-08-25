@@ -155,6 +155,9 @@ export function getDefaultValue(field) {
     case 'checklist':
       return null;
 
+    case 'signature':
+      return [];
+
     default:
       return null;
   }
@@ -172,6 +175,7 @@ export function getResetValue(field) {
     case 'location':
     case 'auto-incr-number':
     case 'longtext':
+    case 'signature':
       return null;
 
     case 'cascading-dropdown':
@@ -246,6 +250,7 @@ export function autoValidate(field, data = {}) {
       case 'image':
       case 'password':
       case 'document':
+      case 'signature':
         if (isEmpty(field.value)) {
           error = true;
           errorMsg = `${field.label} is required`;

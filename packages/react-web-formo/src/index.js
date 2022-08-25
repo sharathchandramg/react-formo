@@ -21,6 +21,7 @@ import LongTextField from './fields/longtext';
 import ImageField from './fields/image';
 import DocumentField from './fields/document';
 import CascadingDropdownField from './fields/cascadingDropdown';
+import SignatureField from './fields/signature';
 import { isEmpty } from './utils/validators';
 
 import './styles.css';
@@ -476,6 +477,17 @@ export default class FormO extends Component {
                 {...commonProps}
                 {...this.props}
                 state={this.state}
+              />
+            );
+
+          case 'signature':
+            return (
+              <SignatureField
+                ref={c => {
+                  this[field.name] = c;
+                }}
+                {...commonProps}
+                {...this.props}
               />
             );
 
