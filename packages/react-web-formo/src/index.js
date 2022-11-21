@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import moment from 'moment';
+import jsonStringTemplater from 'json-templater/string';
+import { evaluate } from 'mathjs';
+
 import TextInputField from './fields/textInput/index.js';
 import PickerField from './fields/picker/index';
 import StatusPicker from './fields/statusPicker/index';
@@ -9,6 +12,7 @@ import {
   getDefaultValue,
   getResetValue,
   customFieldCalculations,
+  getCalculatedFields,
 } from './utils/helper';
 import DateTimePicker from './fields/dateTimePicker/index.js';
 import Lookup from './fields/lookup/index.js';
@@ -37,9 +41,11 @@ export default class FormO extends Component {
   constructor(props) {
     super(props);
     const initialState = this.getInitialState(props.fields);
+    const calcFields = getCalculatedFields(initialState);
     this.isFirstTime = false;
     this.state = {
       ...initialState,
+      calcFields,
     };
   }
 
@@ -154,6 +160,44 @@ export default class FormO extends Component {
     this.setState({ ...newFields });
   };
 
+  getFieldReturnValue = field => {
+    if (
+      field.type &&
+      (field.type.match(/number/i) || field.type.match(/auto-incr-number/i))
+    ) {
+      return parseFloat(field.value);
+    } else if (field.type && field.type.match(/date/i)) {
+      return field.value
+        ? moment(field.value)
+            .utc()
+            .valueOf()
+        : '';
+    } else if (field.type && field.type.match(/document/i)) {
+      return !isEmpty(field.value)
+        ? field.value.map(item => {
+            return {
+              name: item['name'],
+              file_path: item['file_path'] ? item['file_path'] : '',
+              content_type: item['content_type'] ? item['content_type'] : '',
+            };
+          })
+        : [];
+    } else {
+      return field.value;
+    }
+  };
+
+  getFormatedValues = () => {
+    const values = {};
+    Object.keys(this.state).forEach(fieldName => {
+      const field = this.state[fieldName];
+      if (field) {
+        values[field.name] = this.getFieldReturnValue(field);
+      }
+    });
+    return values;
+  };
+
   handleOnValueChange = (valueObj, value) => {
     valueObj.value = value;
     //autovalidate the fields
@@ -190,6 +234,36 @@ export default class FormO extends Component {
       this.setState({ ...newField }, () => this.props.onValueChange());
     } else {
       this.setState({ ...newField });
+    }
+
+    if (
+      ['number', 'customDataView', 'product-catalog-sale'].includes(
+        valueObj.type
+      ) &&
+      !isEmpty(this.state.calcFields)
+    ) {
+      this.state.calcFields.forEach(ele => {
+        if (
+          ele.additional_config &&
+          ele.additional_config.calc &&
+          ele.additional_config.calc.expr
+        ) {
+          const query = ele.additional_config.calc.expr;
+          const data = this.getFormatedValues();
+          const calculationExpression = jsonStringTemplater(query, data);
+          try {
+            const value = evaluate(calculationExpression, data);
+            const updatevalue = value ? Number(Number(value).toFixed(2)) : null;
+            if (!isEmpty(updatevalue) && !isNaN(updatevalue)) {
+              const updatedField = {};
+              const obj = this.state[ele.name];
+              obj.value = updatevalue;
+              updatedField[obj.name] = obj;
+              this.setState({ ...updatedField });
+            }
+          } catch (err) {}
+        }
+      });
     }
   };
 

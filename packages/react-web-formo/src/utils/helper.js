@@ -577,3 +577,19 @@ export const fileToBase64 = file =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = error => reject(error);
   });
+
+export function getCalculatedFields(fields) {
+  const calcFields = [];
+  _.forEach(fields, field => {
+    if (
+      field.type &&
+      field.type === 'number' &&
+      field.additional_config &&
+      field.additional_config.calc &&
+      field.additional_config.calc.expr
+    ) {
+      calcFields.push(field);
+    }
+  });
+  return calcFields;
+}

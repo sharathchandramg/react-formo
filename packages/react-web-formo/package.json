@@ -23,7 +23,9 @@
   "homepage": "https://github.com/sharathchandramg/react-formo#readme",
   "dependencies": {
     "filtrex": "2.2.3",
+    "json-templater": "1.2.0",
     "lodash": "^4.17.15",
+    "mathjs": "11.4.0",
     "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-datepicker": "^2.9.6",
