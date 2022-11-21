@@ -32,7 +32,7 @@
     "react-dom": "^16.8.6",
     "react-modal": "^3.10.1",
     "react-picky": "^4.7.0",
-    "react-scripts": "^3.0.1",
+    "react-scripts": "^5.0.1",
     "react-test-renderer": "^16.8.6"
   },
   "devDependencies": {
