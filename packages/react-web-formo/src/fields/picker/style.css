@@ -1,0 +1,12 @@
+.options-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.options-wrapper .value-wrapper {
+  padding-right: 10px;
+}
+
+.options-wrapper .value-wrapper .option-label {
+  padding-left: 5px;
+}
