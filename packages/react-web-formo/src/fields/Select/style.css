@@ -7,6 +7,7 @@
 .select-content-wrapper {
   display: flex;
   height: 45px;
+  width: 100%;
 }
 
 .select-data-wrapper {
@@ -22,6 +23,7 @@
 
 .select-data-wrapper p {
   margin: 0;
+  font-size: 16px;
 }
 
 .select-data-wrapper .value-icon-wrapper {
@@ -55,7 +57,7 @@
 }
 
 .select-label-wrapper .label-text p {
-  font-size: 16px;
+  font-size: 20px;
   margin: 0;
 }
 

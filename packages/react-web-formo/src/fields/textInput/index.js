@@ -28,7 +28,7 @@ export default class TextInputField extends Component {
             marginBottom: 8,
           }}
         >
-          <p style={{ fontSize: 16, margin: 0 }}>
+          <p style={{ fontSize: 20, margin: 0 }}>
             {attributes['label']} {attributes['required'] ? `*` : ''} :
           </p>
           {attributes['error'] && (
@@ -55,7 +55,7 @@ export default class TextInputField extends Component {
               border: '1px solid #979797',
               borderRadius: 5,
               padding: 5,
-              fontSize: 20,
+              fontSize: 16,
               outline: 'none',
               opacity: disableCondition ? 0.5 : 1,
             }}

@@ -16,8 +16,8 @@ export default class PickerField extends Component {
         style={{
           width: '100%',
           height: 45,
-          fontSize: 20,
-          backgroundColor: '#ffffff',
+          fontSize: 16,
+          borderRadius: '5px',
         }}
         value={attributes.value}
         onChange={this.handleChange}
@@ -84,7 +84,7 @@ export default class PickerField extends Component {
             marginBottom: 8,
           }}
         >
-          <p style={{ fontSize: 16, margin: 0 }}>
+          <p style={{ fontSize: 20, margin: 0 }}>
             {attributes['label']} {attributes['required'] ? `*` : ''} :
           </p>
           {attributes['error'] && (
