@@ -14,7 +14,7 @@ class CustomInput extends Component {
           height: 40,
           border: '1px solid #979797',
           borderRadius: 5,
-          fontSize: 20,
+          fontSize: 16,
           outline: 'none',
           opacity: this.props.disabled ? 0.5 : 1,
         }}
@@ -152,7 +152,7 @@ export default class DateTimePicker extends Component {
             marginBottom: 8,
           }}
         >
-          <p style={{ fontSize: 16, margin: 0 }}>
+          <p style={{ fontSize: 20, margin: 0 }}>
             {attributes['label']} {attributes['required'] ? `*` : ''} :
           </p>
           {attributes['error'] && (

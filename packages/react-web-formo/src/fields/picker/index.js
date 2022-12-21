@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import './style.css';
+
 export default class PickerField extends Component {
   handleChange = event => {
     this.props.updateValue(this.props.attributes.name, event.target.value);
@@ -14,8 +16,8 @@ export default class PickerField extends Component {
         style={{
           width: '100%',
           height: 45,
-          fontSize: 20,
-          backgroundColor: '#ffffff',
+          fontSize: 16,
+          borderRadius: '5px',
         }}
         value={attributes.value}
         onChange={this.handleChange}
@@ -27,6 +29,39 @@ export default class PickerField extends Component {
           </option>
         ))}
       </select>
+    );
+  };
+
+  renderOptionsAsList = () => {
+    const { attributes } = this.props;
+    return (
+      <div className="options-wrapper">
+        {attributes.options.length > 0 &&
+          attributes.options
+            .slice(1, attributes.options.length)
+            .map((item, index) => {
+              return (
+                <div className="value-wrapper" key={`picker-${index}`}>
+                  <input
+                    type="radio"
+                    id={`${this.props.attributes.name}-${item}`}
+                    name={attributes.name}
+                    value={item}
+                    checked={attributes.value === item}
+                    onChange={() =>
+                      this.props.updateValue(this.props.attributes.name, item)
+                    }
+                  />
+                  <label
+                    htmlFor={`${this.props.attributes.name}-${item}`}
+                    className="option-label"
+                  >
+                    {item}
+                  </label>
+                </div>
+              );
+            })}
+      </div>
     );
   };
 
@@ -49,7 +84,7 @@ export default class PickerField extends Component {
             marginBottom: 8,
           }}
         >
-          <p style={{ fontSize: 16, margin: 0 }}>
+          <p style={{ fontSize: 20, margin: 0 }}>
             {attributes['label']} {attributes['required'] ? `*` : ''} :
           </p>
           {attributes['error'] && (
@@ -65,7 +100,13 @@ export default class PickerField extends Component {
             </p>
           )}
         </div>
-        <div>{this.renderWebPicker()}</div>
+        <div>
+          {attributes &&
+          attributes['additional_config'] &&
+          attributes['additional_config']['show_inline']
+            ? this.renderOptionsAsList()
+            : this.renderWebPicker()}
+        </div>
       </div>
     );
   }

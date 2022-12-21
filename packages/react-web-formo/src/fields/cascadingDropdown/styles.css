@@ -12,7 +12,7 @@
   margin-bottom: 8px;
 }
 .cascading-root .cascading-label-wrapper p {
-  font-size: 16px;
+  font-size: 20px;
   margin: 0px;
 }
 
@@ -21,7 +21,7 @@
   border: 1px solid rgb(151, 151, 151);
   border-radius: 5px;
   padding: 5px;
-  font-size: 20px;
+  font-size: 16px;
   outline: none;
   opacity: 1;
 }
