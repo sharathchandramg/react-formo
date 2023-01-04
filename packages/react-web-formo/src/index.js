@@ -300,41 +300,52 @@ export default class FormO extends Component {
     const values = {};
     let isValidFields = true;
     Object.keys(this.state).forEach(fieldName => {
-      const field = fieldName !== 'calcFields' && this.state[fieldName];
-      if (field) {
-        if (field.error !== undefined && field.error) {
-          isValidFields = false;
-        }
-        if (
-          field.type &&
-          (field.type.match(/number/i) || field.type.match(/auto-incr-number/i))
-        ) {
-          values[field.name] = parseFloat(field.value);
-        } else if (field.type && field.type.match(/date/i)) {
-          values[field.name] = field.value
-            ? moment(field.value)
-                .utc()
-                .valueOf()
-            : '';
-        } else if (field.type && field.type.match(/document/i)) {
-          values[field.name] = !isEmpty(field.value)
-            ? field.value.map(item => {
-                return {
-                  name: item['name'],
-                  file_path: item['file_path'] ? item['file_path'] : '',
-                  content_type: item['content_type']
-                    ? item['content_type']
-                    : '',
-                };
-              })
-            : [];
-        } else {
-          values[field.name] = field.value;
+      if (!['calcFields'].includes(fieldName)) {
+        const field = this.state[fieldName];
+        if (field) {
+          if (field.error !== undefined && field.error) {
+            isValidFields = false;
+          }
+          if (
+            field.type &&
+            (field.type.match(/number/i) ||
+              field.type.match(/auto-incr-number/i))
+          ) {
+            values[field.name] = parseFloat(field.value);
+          } else if (field.type && field.type.match(/date/i)) {
+            values[field.name] = field.value
+              ? moment(field.value)
+                  .utc()
+                  .valueOf()
+              : '';
+          } else if (field.type && field.type.match(/document/i)) {
+            values[field.name] = !isEmpty(field.value)
+              ? field.value.map(item => {
+                  return {
+                    name: item['name'],
+                    file_path: item['file_path'] ? item['file_path'] : '',
+                    content_type: item['content_type']
+                      ? item['content_type']
+                      : '',
+                  };
+                })
+              : [];
+          } else {
+            values[field.name] = field.value;
+          }
         }
       }
     });
+
     if (isValidFields) {
-      return values;
+      const updatedValues = Object.keys(values).reduce((accumulator, key) => {
+        if (key !== 'undefined') {
+          accumulator[key] = values[key];
+        }
+
+        return accumulator;
+      }, {});
+      return updatedValues;
     } else {
       return null;
     }
