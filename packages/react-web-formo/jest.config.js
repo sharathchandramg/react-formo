@@ -17,6 +17,5 @@ module.exports = {
     'jsx',
     'node',
   ],
-  snapshotSerializers: ['enzyme-to-json/serializer'],
   setupFiles: ['./setupTests.js'],
 };
