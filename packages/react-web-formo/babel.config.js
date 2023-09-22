@@ -2,7 +2,7 @@ module.exports = {
   plugins: [
     '@babel/plugin-syntax-dynamic-import',
     '@babel/transform-runtime',
-    '@babel/plugin-proposal-class-properties',
+    '@babel/plugin-transform-class-properties',
   ],
   presets: [
     [
