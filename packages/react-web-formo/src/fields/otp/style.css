@@ -1,33 +1,5 @@
-.otp-root {
-  display: flex;
-  flex-direction: column;
-  margin: 10px;
-}
-
-.otp-label-wrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.otp-label-wrapper p {
-  font-size: 20px;
-  margin: 0;
-  width: 50%;
-}
-
-.otp-content-wrapper {
-  display: flex;
-  height: 45px;
-  align-items: center;
-  margin-top: 8px;
-}
-
 .otp-input {
   flex-grow: 1;
-  /* padding: 0 10px; */
   border: 1px solid #979797;
   border-radius: 5px;
   margin-right: 8px;
@@ -36,33 +8,6 @@
   height: 100%;
 }
 
-.send-button {
-  background-color: #00B0FF;
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.error-message {
-  color: red;
-  font-size: 12px;
-  margin: 0px;
-  width: 50%;
-  display: flex;
-  justify-content: flex-end;
-}
-
-/* Additional styles if you want to have a disabled state */
-.otp-root.disabled {
-  pointer-events: none;
-  opacity: 0.5;
-}
 input{
 width: '100%';
 border: '1px solid #979797';
@@ -71,3 +16,9 @@ padding: 5;
 font-size: 16;
 outline: 'none';
 }
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
