@@ -13,6 +13,7 @@ import {
   getResetValue,
   customFieldCalculations,
   getCalculatedFields,
+  customValidateOTP
 } from './utils/helper';
 import DateTimePicker from './fields/dateTimePicker/index.js';
 import Lookup from './fields/lookup/index.js';
@@ -25,6 +26,7 @@ import LongTextField from './fields/longtext';
 import ImageField from './fields/image';
 import DocumentField from './fields/document';
 import CascadingDropdownField from './fields/cascadingDropdown';
+import OtpInput from './fields/otp/index.js';
 import { isEmpty } from './utils/validators';
 
 import './styles.css';
@@ -51,7 +53,7 @@ export default class FormO extends Component {
 
   componentDidMount() {
     this.isFirstTime = true;
-    const { formData } = this.props;
+    const { formData,refData } = this.props;
     this.setValues(formData);
   }
 
@@ -89,6 +91,8 @@ export default class FormO extends Component {
     return lookupSubscriberFields;
   };
 
+
+
   onValidateFields = () => {
     const newFields = {};
     Object.keys(this.state).forEach(fieldName => {
@@ -99,13 +103,22 @@ export default class FormO extends Component {
           field.error = validate.error;
           field.errorMsg = validate.errorMsg;
         }
+        if (field.type === "otp") {
+          let validate = customValidateOTP(field);
+          field.error = validate.error;
+          field.errorMsg = validate.errorMsg;
+        }
 
         newFields[field.name] = Object.assign({}, field);
       }
     });
     this.setState({ ...newFields });
   };
+       
 
+      
+
+  
   onAddNewFields = (name, newObj) => {
     let fieldObj = this.state[name];
     if (fieldObj) {
@@ -161,32 +174,55 @@ export default class FormO extends Component {
   };
 
   getFieldReturnValue = field => {
-    if (
-      field.type &&
-      (field.type.match(/number/i) || field.type.match(/auto-incr-number/i))
-    ) {
+    if (field.type && (field.type.match(/number/i) || field.type.match(/auto-incr-number/i))) {
       return parseFloat(field.value);
-    } else if (field.type && field.type.match(/date/i)) {
-      return field.value
-        ? moment(field.value)
-            .utc()
-            .valueOf()
-        : '';
-    } else if (field.type && field.type.match(/document/i)) {
-      return !isEmpty(field.value)
-        ? field.value.map(item => {
-            return {
-              name: item['name'],
-              file_path: item['file_path'] ? item['file_path'] : '',
-              content_type: item['content_type'] ? item['content_type'] : '',
-            };
-          })
-        : [];
-    } else {
+    } 
+    else if (field.type && field.type.match(/date/i)) {
+      return field.value ? moment(field.value).utc().valueOf() : '';
+    } 
+    else if (field.type && field.type.match(/document/i)) {
+      return !isEmpty(field.value) ? field.value.map(item => {
+        return {
+          name: item['name'],
+          file_path: item['file_path'] ? item['file_path'] : '',
+          content_type: item['content_type'] ? item['content_type'] : '',
+        };
+      }) : [];
+    } 
+    else if (field.type === 'otp') {
+      const { error, success, invalidRef } = customValidateOTP(field);
+      if (!error && success && !invalidRef && !isEmpty(field.value)) {
+        return Number(field.value);
+      } else {
+        return null;
+      }
+    } 
+    else {
       return field.value;
     }
   };
 
+  getOtpByRefData = (field, cb) => {
+    const validatedRes = customValidateOTP(field, "otp");
+    console.log("Validated",validatedRes,
+    "fields in validation",field
+    )
+    Object.assign(field, validatedRes);
+    const newField = {};
+    newField[field.name] = field;
+    this.setState({ ...newField });
+    if (!validatedRes.invalidRef) {
+      const refFieldData =
+        field["ref_value_type"] === "PHONE"
+          ? field["ref_value"].length === 10
+            ? `91${field["ref_value"]}`
+            : field["ref_value"]
+          : field["ref_value"];
+      this.props.getOtp(field, refFieldData, field["ref_value_type"]);
+      cb();
+    }
+  };
+  
   getFormatedValues = () => {
     const values = {};
     Object.keys(this.state).forEach(fieldName => {
@@ -203,6 +239,10 @@ export default class FormO extends Component {
     //autovalidate the fields
     if (this.props.autoValidation === undefined || this.props.autoValidation) {
       Object.assign(valueObj, autoValidate(valueObj));
+    }
+
+    if (valueObj.type === "otp" && value.length === 4) {
+      Object.assign(valueObj, customValidateOTP(valueObj));
     }
     // apply some custom logic for validation
     if (
@@ -351,32 +391,30 @@ export default class FormO extends Component {
     }
   };
 
-  getFieldValue = (fieldObj, value) => {
-    const field = fieldObj;
-    if (field.type === 'group') {
-      const subFields = {};
-      Object.keys(value).forEach(fieldName => {
-        subFields[fieldName] = value[fieldName];
-      });
-      this[field.name].group.setValues(subFields);
-      field.value = this[field.name].group.getValues();
-    } else {
-      field.value = value;
-      if (
-        this.props.autoValidation === undefined ||
-        this.props.autoValidation
-      ) {
-        Object.assign(field, autoValidate(field));
-      }
-      if (
-        this.props.customValidation &&
-        typeof this.props.customValidation === 'function'
-      ) {
-        Object.assign(field, this.props.customValidation(field));
-      }
+getFieldValue = (fieldObj, value) => {
+  const field = fieldObj;
+  if (field.type === 'group') {
+    const subFields = {};
+    Object.keys(value).forEach(fieldName => {
+      subFields[fieldName] = value[fieldName];
+    });
+    this[field.name].group.setValues(subFields);
+    field.value = this[field.name].group.getValues();
+  } else {
+    field.value = value;
+    if (this.props.autoValidation === undefined || this.props.autoValidation) {
+      Object.assign(field, autoValidate(field)); 
     }
-    return field;
-  };
+    if (field.type === 'otp') {
+      const otpValidationResult = customValidateOTP(field);
+      Object.assign(field, otpValidationResult); 
+    } 
+    if (this.props.customValidation && typeof this.props.customValidation === 'function') {
+      Object.assign(field, this.props.customValidation(field));
+    }
+  }
+  return field;
+};
 
   setValues = (...args) => {
     if (args && args.length && args[0]) {
@@ -563,7 +601,19 @@ export default class FormO extends Component {
                 state={this.state}
               />
             );
-
+          case 'otp':
+            return (
+              <OtpInput
+                ref={c => {
+                    this[field.name] = c;
+                  }}
+                  {...commonProps}
+                  {...this.props}
+                  state={this.state}
+                  getOtpByRefData={this.getOtpByRefData}
+                  refData={this.props.refData}
+            />
+             );
           default:
             return null;
         }
