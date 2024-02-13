@@ -21,6 +21,7 @@ export function getDefaultValue(field) {
     case 'location':
     case 'auto-incr-number':
     case 'longtext':
+    case 'otp':
       return field.defaultValue || '';
     case 'cascading-dropdown':
       return '';
@@ -172,6 +173,7 @@ export function getResetValue(field) {
     case 'location':
     case 'auto-incr-number':
     case 'longtext':
+    case 'otp':
       return null;
 
     case 'cascading-dropdown':
@@ -218,6 +220,8 @@ export function getInitialState(fields) {
     const fieldObj = field;
     fieldObj.error = false;
     fieldObj.errorMsg = '';
+    fieldObj.success = false;
+    fieldObj.successMsg = "";
     if (field && field.type) {
       fieldObj.value = getDefaultValue(field);
       state[field.name] = fieldObj;
@@ -229,18 +233,34 @@ export function getInitialState(fields) {
 export function autoValidate(field, data = {}) {
   let error = false;
   let errorMsg = '';
+  let success = false;
+  let successMsg = "";
+  let invalidRef = false;
+  
+
+  if(field.type=="email"){
+    if (isEmpty(field.value)) {
+      error = true;
+      errorMsg = `${field.label} is required`;
+    } else if (!isEmail(field.value)) {
+      error = true;
+      errorMsg = 'Please enter a valid email';
+    }
+    return { error, errorMsg}
+  }
+  if(field.type=="phone"){
+    if (isEmpty(field.value)) {
+      error = true;
+      errorMsg = `${field.label} is required`;
+    } else if (!isValidNumber(field.value)) {
+      error = true;
+      errorMsg = `${field.label} should be a number`;
+    }
+    return { error, errorMsg}
+  }
 
   if (field.required) {
     switch (field.type) {
-      case 'email':
-        if (isEmpty(field.value)) {
-          error = true;
-          errorMsg = `${field.label} is required`;
-        } else if (!isEmail(field.value)) {
-          error = true;
-          errorMsg = 'Please enter a valid email';
-        }
-        break;
       case 'text':
       case 'location':
       case 'image':
@@ -290,17 +310,6 @@ export function autoValidate(field, data = {}) {
         }
 
         break;
-
-      case 'phone':
-        if (isEmpty(field.value)) {
-          error = true;
-          errorMsg = `${field.label} is required`;
-        } else if (!validateMobileNumber(field.value)) {
-          error = true;
-          errorMsg = `${field.label} should be valid mobile number`;
-        }
-        break;
-
       case 'url':
         if (isEmpty(field.value)) {
           error = true;
@@ -414,8 +423,76 @@ export function autoValidate(field, data = {}) {
       default:
     }
   }
-  return { error, errorMsg };
+  return { error, errorMsg,success, successMsg, invalidRef  };
 }
+
+export function customValidateOTP(field, from = "") {
+  let error = false;
+  let errorMsg = "";
+  let success = false;
+  let successMsg = "";
+  let invalidRef = false;
+  if (field.type !== "otp") {
+    return { error, errorMsg, success, successMsg, invalidRef };
+  }
+  if (isEmpty(field.value) && field.required && from !== "otp") {
+    error = true;
+    errorMsg = `${field.label} is required`;
+  } else if (isEmpty(field["ref_value"]) && from === "otp") {
+    error = true;
+    errorMsg = `Reference data is required`;
+    invalidRef = true;
+  } else if (isEmpty(field["ref_value"]) && field.required) {
+    error = true;
+    errorMsg = `Get OTP`;
+    invalidRef = true;
+  } else if (!isEmpty(field["ref_value"])) {
+    const validateRefValue =
+      field["ref_value_type"] === "PHONE"
+        ? !validateMobileNumber(field["ref_value"])
+        : !isEmail(field["ref_value"]);
+    if (validateRefValue) {
+      error = true;
+      errorMsg =
+        field["ref_value_type"] === "PHONE"
+          ? `${field["ref_value"]} is not a valid mobile number`
+          : `${field["ref_value"]} is not a valid email`;
+      invalidRef = true;
+    } else if (!isEmpty(field.value) && field.value.length !== 4) {
+      error = true;
+      errorMsg = "Incorrect OTP. Retry.";
+    } else if (
+      
+      !isEmpty(field.value) &&
+      field.value.length === 4 &&
+      (isEmpty(field.res) ||
+        (!isEmpty(field.res) && isEmpty(field.res.otp_code)))
+    ) {
+      error = true;
+      errorMsg = "Incorrect OTP. Retry.";
+    } else if (
+      
+      !isEmpty(field.value) &&
+      !isEmpty(field.res) &&
+      !isEmpty(field.res.otp_code) &&
+      field.value != field.res.otp_code
+    ) {
+      error = true;
+      errorMsg = "Incorrect OTP. Retry.";
+    } else if (
+      !isEmpty(field.value) &&
+      !isEmpty(field.res) &&
+      !isEmpty(field.res.otp_code) &&
+      field.value == field.res.otp_code
+    ) {
+      success = true;
+      successMsg = "Correct OTP";
+    }
+  }
+
+  return { error, errorMsg, success, successMsg, invalidRef };
+}
+
 
 export const getGeoLocation = (options, cb) => {
   let highAccuracySuccess = false;
