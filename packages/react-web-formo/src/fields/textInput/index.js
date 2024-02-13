@@ -35,7 +35,7 @@ export default class TextInputField extends Component {
             <p
               id="error"
               style={{
-                color: 'yellow',
+                color: 'red',
                 fontSize: 12,
                 margin: 0,
               }}
