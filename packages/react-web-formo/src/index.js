@@ -26,7 +26,7 @@ import LongTextField from './fields/longtext';
 import ImageField from './fields/image';
 import DocumentField from './fields/document';
 import CascadingDropdownField from './fields/cascadingDropdown';
-import OtpInput from './fields/otp/index.js';
+import OtpField from './fields/otp/index.js';
 import { isEmpty } from './utils/validators';
 
 import './styles.css';
@@ -108,17 +108,12 @@ export default class FormO extends Component {
           field.error = validate.error;
           field.errorMsg = validate.errorMsg;
         }
-
         newFields[field.name] = Object.assign({}, field);
       }
     });
     this.setState({ ...newFields });
   };
-       
-
       
-
-  
   onAddNewFields = (name, newObj) => {
     let fieldObj = this.state[name];
     if (fieldObj) {
@@ -204,9 +199,6 @@ export default class FormO extends Component {
 
   getOtpByRefData = (field, cb) => {
     const validatedRes = customValidateOTP(field, "otp");
-    console.log("Validated",validatedRes,
-    "fields in validation",field
-    )
     Object.assign(field, validatedRes);
     const newField = {};
     newField[field.name] = field;
@@ -603,7 +595,7 @@ getFieldValue = (fieldObj, value) => {
             );
           case 'otp':
             return (
-              <OtpInput
+              <OtpField
                 ref={c => {
                     this[field.name] = c;
                   }}
