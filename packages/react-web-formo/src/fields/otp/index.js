@@ -6,6 +6,9 @@ class OtpField extends Component {
     super(props);
     this.state = {
       timer: 0,
+      btnText:"",
+      btnCounter:0,
+      disableBtn:true
     };
     this.interval = null;
   }  
