@@ -1,34 +1,14 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { isEmpty } from './../../utils/validators';
-import './style.css';
 
-class OtpInput extends Component {
+class OtpField extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: '',
       timer: 0,
-      otpSent: false,
-      isFocused: false,
-      refFieldValue: ""
     };
     this.interval = null;
   }  
-
-  startTimer = () => {
-    this.clearTimer();
-    this.interval = setInterval(() => {
-      this.setState(prevState => ({ timer: prevState.timer - 1 }));
-    }, 1000);
-  };
-
-  clearTimer = () => {
-    if (this.interval) {
-      clearInterval(this.interval);
-      this.interval = null;
-    }
-  };
 
   getInputValue = () => {
     const { attributes } = this.props;
@@ -42,10 +22,6 @@ class OtpInput extends Component {
     }
   };
 
-  handleFocus = () => this.setState({ isFocused: true });
-  handleBlur = () => this.setState({ isFocused: false });
-
-  
   getRefFieldValue = (attributes) => {
     const refField = attributes && attributes.additional_config && attributes.additional_config.ref_field;
 
@@ -115,13 +91,9 @@ handleChangeGetotp = (attributes) => () => {
     }
   }
   
-  
-
   renderLabel = () => {
-    const { otp, isFocused } = this.state;
-    const labelClass = otp || isFocused ? "label label-float" : "label";
     return (
-      <label htmlFor="otpInput" className={labelClass}>
+      <label htmlFor="otpInput">
         {this.getLabel(this.props.attributes)}
       </label>
     );
@@ -133,11 +105,9 @@ handleChangeGetotp = (attributes) => () => {
       <input
         id="otpInput"
         type="text"
-        className="otp-input"
+        style={{flexGrow: 1, border: '1px solid #979797', borderRadius: '5px', marginRight: '8px', display: 'flex', alignItems: 'center', height: '100%' }}
         value={this.props.attributes['value']}
         onChange={this.handleChange}
-        onFocus={this.handleFocus}
-        onBlur={this.handleBlur}
       />
     );
   };
@@ -174,7 +144,7 @@ handleChangeGetotp = (attributes) => () => {
               {this.props.attributes['errorMsg']}
             </p>
           )}
-           {!this.props.attributes['error'] && (
+           {this.props.attributes['success'] && (
             <p
               id="error"
               style={{
@@ -202,4 +172,4 @@ handleChangeGetotp = (attributes) => () => {
   }
 }
 
-export default OtpInput;
+export default OtpField;
