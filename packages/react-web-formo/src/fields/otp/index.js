@@ -5,17 +5,16 @@ class OtpField extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      timer: 0,
-      btnText:"",
-      btnCounter:0,
-      disableBtn:true
+      btnText: '',
+      btnCounter: 0,
+      disableBtn: false,
     };
     this.interval = null;
-  }  
+  }
 
   getInputValue = () => {
     const { attributes } = this.props;
-    return !isEmpty(attributes) && !isEmpty(attributes["value"]);
+    return !isEmpty(attributes) && !isEmpty(attributes['value']);
   };
 
   handleChange = (event) => {
@@ -26,36 +25,37 @@ class OtpField extends Component {
   };
 
   getRefFieldValue = (attributes) => {
-    const refField = attributes && attributes.additional_config && attributes.additional_config.ref_field;
+    const refField =
+      attributes &&
+      attributes.additional_config &&
+      attributes.additional_config.ref_field;
 
     if (!refField) {
-        return null;
+      return null;
     }
 
-    const stateValue = this.props.state[refField] && this.props.state[refField].value;
+    const stateValue =
+      this.props.state[refField] && this.props.state[refField].value;
     const refDataValue = this.props.refData && this.props.refData[refField];
 
     return stateValue || refDataValue;
-};
+  };
 
-
-handleChangeGetotp = (attributes) => () => {
-  const refValue = this.getRefFieldValue(attributes);
-  this.props.getOtpByRefData(
-    {
-      ...attributes,
-      ref_value: !isEmpty(refValue) ? refValue : null,
-      ref_value_type: !isEmpty(refValue)
-        ? refValue.includes("@")
-          ? "EMAIL"
-          : "PHONE"
-        : null,
-    },
-    this.callInitTimer
-  );
-};
-
-;
+  handleChangeGetotp = (attributes) => () => {
+    const refValue = this.getRefFieldValue(attributes);
+    this.props.getOtpByRefData(
+      {
+        ...attributes,
+        ref_value: !isEmpty(refValue) ? refValue : null,
+        ref_value_type: !isEmpty(refValue)
+          ? refValue.includes('@')
+            ? 'EMAIL'
+            : 'PHONE'
+          : null,
+      },
+      this.callInitTimer
+    );
+  };
 
   getLabel = (attributes) => {
     const refFieldValue = this.getRefFieldValue(attributes);
@@ -67,7 +67,7 @@ handleChangeGetotp = (attributes) => () => {
   callInitTimer = () => {
     this.setState({
       disableBtn: true,
-      btnText: "Resend",
+      btnText: 'Resend',
       btnCounter: 60,
     });
     this.initTimer();
@@ -78,7 +78,7 @@ handleChangeGetotp = (attributes) => () => {
   };
 
   timer = () => {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       if (prevState.btnCounter === 0) {
         clearInterval(this.intervalId);
         return { disableBtn: false };
@@ -93,12 +93,10 @@ handleChangeGetotp = (attributes) => () => {
       clearInterval(this.intervalId);
     }
   }
-  
+
   renderLabel = () => {
     return (
-      <label htmlFor="otpInput">
-        {this.getLabel(this.props.attributes)}
-      </label>
+      <label htmlFor="otpInput">{this.getLabel(this.props.attributes)}</label>
     );
   };
 
@@ -108,7 +106,15 @@ handleChangeGetotp = (attributes) => () => {
       <input
         id="otpInput"
         type="text"
-        style={{flexGrow: 1, border: '1px solid #979797', borderRadius: '5px', marginRight: '8px', display: 'flex', alignItems: 'center', height: '100%' }}
+        style={{
+          flexGrow: 1,
+          border: '1px solid #979797',
+          borderRadius: '5px',
+          marginRight: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          height: '100%',
+        }}
         value={this.props.attributes['value']}
         onChange={this.handleChange}
       />
@@ -118,13 +124,13 @@ handleChangeGetotp = (attributes) => () => {
   render() {
     return (
       <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        margin: 10,
-      }}
-    >
-          <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          margin: 10,
+        }}
+      >
+        <div
           style={{
             display: 'flex',
             flexDirection: 'row',
@@ -132,9 +138,7 @@ handleChangeGetotp = (attributes) => () => {
             alignItems: 'center',
           }}
         >
-          <p style={{ fontSize: 20, margin: 0 }}>
-           {this.renderLabel()}
-          </p>
+          <p style={{ fontSize: 20, margin: 0 }}>{this.renderLabel()}</p>
           {this.props.attributes['error'] && (
             <p
               id="error"
@@ -147,7 +151,7 @@ handleChangeGetotp = (attributes) => () => {
               {this.props.attributes['errorMsg']}
             </p>
           )}
-           {this.props.attributes['success'] && (
+          {this.props.attributes['success'] && (
             <p
               id="error"
               style={{
@@ -159,16 +163,22 @@ handleChangeGetotp = (attributes) => () => {
               {this.props.attributes['successMsg']}
             </p>
           )}
-          
         </div>
         <div style={{ display: 'flex', height: 45 }}>
           {this.renderInputField(this.props.attributes)}
-          <button style={{background:'#00acf1',color:'#ffffff',border:'#ffffff'}}
-  onClick={this.handleChangeGetotp(this.props.attributes)}
-  disabled={this.state.disableBtn}
->
-  {this.state.disableBtn ? `Resend in ${this.state.btnCounter}s` : 'Get OTP'}
-</button>
+          <button
+            style={{
+              background: '#00acf1',
+              color: '#ffffff',
+              border: '#ffffff',
+            }}
+            onClick={this.handleChangeGetotp(this.props.attributes)}
+            disabled={this.state.disableBtn}
+          >
+            {this.state.disableBtn
+              ? `Resend in ${this.state.btnCounter}s`
+              : 'Get OTP'}
+          </button>
         </div>
       </div>
     );
