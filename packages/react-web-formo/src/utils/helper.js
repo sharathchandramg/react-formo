@@ -229,20 +229,20 @@ export function autoValidate(field, data = {}) {
   let invalidRef = false;
 
   if (field.type == 'email') {
-    if (isEmpty(field.value)) {
+    if (field.required && isEmpty(field.value)) {
       error = true;
       errorMsg = `${field.label} is required`;
-    } else if (!isEmail(field.value)) {
+    } else if (!isEmpty(field.value) && !isEmail(field.value)) {
       error = true;
       errorMsg = 'Please enter a valid email';
     }
     return { error, errorMsg };
   }
   if (field.type == 'phone') {
-    if (isEmpty(field.value)) {
+    if (field.required && isEmpty(field.value)) {
       error = true;
       errorMsg = `${field.label} is required`;
-    } else if (!isValidNumber(field.value)) {
+    } else if (!isEmpty(field.value) && !isValidNumber(field.value)) {
       error = true;
       errorMsg = `${field.label} should be a number`;
     }
