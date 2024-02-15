@@ -13,6 +13,7 @@ import {
   getResetValue,
   customFieldCalculations,
   getCalculatedFields,
+  customValidateOTP,
 } from './utils/helper';
 import DateTimePicker from './fields/dateTimePicker/index.js';
 import Lookup from './fields/lookup/index.js';
@@ -25,11 +26,12 @@ import LongTextField from './fields/longtext';
 import ImageField from './fields/image';
 import DocumentField from './fields/document';
 import CascadingDropdownField from './fields/cascadingDropdown';
+import OtpField from './fields/otp/index.js';
 import { isEmpty } from './utils/validators';
 
 import './styles.css';
 
-const DefaultErrorComponent = props => {
+const DefaultErrorComponent = (props) => {
   const attributes = props.attributes;
   if (attributes.error) {
     return <p>{attributes.errorMsg}</p>;
@@ -63,7 +65,7 @@ export default class FormO extends Component {
     }
   }
 
-  getInitialState = fields => {
+  getInitialState = (fields) => {
     const state = {};
     fields.forEach((field, index) => {
       const fieldObj = field;
@@ -77,8 +79,8 @@ export default class FormO extends Component {
     return state;
   };
 
-  getLookupSubsciberFields = name => {
-    const lookupSubscriberFields = _.filter(this.props.fields, field => {
+  getLookupSubsciberFields = (name) => {
+    const lookupSubscriberFields = _.filter(this.props.fields, (field) => {
       if (
         typeof field['data-pub'] !== 'undefined' &&
         field['data-pub'] === name
@@ -91,7 +93,7 @@ export default class FormO extends Component {
 
   onValidateFields = () => {
     const newFields = {};
-    Object.keys(this.state).forEach(fieldName => {
+    Object.keys(this.state).forEach((fieldName) => {
       const field = this.state[fieldName];
       if (field) {
         if (field.required !== undefined && field.required) {
@@ -99,7 +101,11 @@ export default class FormO extends Component {
           field.error = validate.error;
           field.errorMsg = validate.errorMsg;
         }
-
+        if (field.type === 'otp') {
+          let validate = customValidateOTP(field);
+          field.error = validate.error;
+          field.errorMsg = validate.errorMsg;
+        }
         newFields[field.name] = Object.assign({}, field);
       }
     });
@@ -121,7 +127,10 @@ export default class FormO extends Component {
           let newValue;
           if (gIndex !== -1) {
             let preValue = Object.values(this.state)[gIndex].value;
-            let oIndex = _.findIndex(preValue, item => item._id === newObj._id);
+            let oIndex = _.findIndex(
+              preValue,
+              (item) => item._id === newObj._id
+            );
             if (oIndex !== -1) {
               preValue[oIndex] = newObj;
               newValue = preValue;
@@ -142,7 +151,7 @@ export default class FormO extends Component {
 
   resetForm = () => {
     const newFields = {};
-    Object.keys(this.state).forEach(fieldName => {
+    Object.keys(this.state).forEach((fieldName) => {
       const field = this.state[fieldName];
       if (field) {
         field.value = '';
@@ -160,21 +169,17 @@ export default class FormO extends Component {
     this.setState({ ...newFields });
   };
 
-  getFieldReturnValue = field => {
+  getFieldReturnValue = (field) => {
     if (
       field.type &&
       (field.type.match(/number/i) || field.type.match(/auto-incr-number/i))
     ) {
       return parseFloat(field.value);
     } else if (field.type && field.type.match(/date/i)) {
-      return field.value
-        ? moment(field.value)
-            .utc()
-            .valueOf()
-        : '';
+      return field.value ? moment(field.value).utc().valueOf() : '';
     } else if (field.type && field.type.match(/document/i)) {
       return !isEmpty(field.value)
-        ? field.value.map(item => {
+        ? field.value.map((item) => {
             return {
               name: item['name'],
               file_path: item['file_path'] ? item['file_path'] : '',
@@ -182,14 +187,39 @@ export default class FormO extends Component {
             };
           })
         : [];
+    } else if (field.type === 'otp') {
+      const { error, success, invalidRef } = customValidateOTP(field);
+      if (!error && success && !invalidRef && !isEmpty(field.value)) {
+        return Number(field.value);
+      } else {
+        return null;
+      }
     } else {
       return field.value;
     }
   };
 
+  getOtpByRefData = (field, cb) => {
+    const validatedRes = customValidateOTP(field, 'otp');
+    Object.assign(field, validatedRes);
+    const newField = {};
+    newField[field.name] = field;
+    this.setState({ ...newField });
+    if (!validatedRes.invalidRef) {
+      const refFieldData =
+        field['ref_value_type'] === 'PHONE'
+          ? field['ref_value'].length === 10
+            ? `91${field['ref_value']}`
+            : field['ref_value']
+          : field['ref_value'];
+      this.props.getOtp(field, refFieldData, field['ref_value_type']);
+      cb();
+    }
+  };
+
   getFormatedValues = () => {
     const values = {};
-    Object.keys(this.state).forEach(fieldName => {
+    Object.keys(this.state).forEach((fieldName) => {
       const field = this.state[fieldName];
       if (field) {
         values[field.name] = this.getFieldReturnValue(field);
@@ -203,6 +233,10 @@ export default class FormO extends Component {
     //autovalidate the fields
     if (this.props.autoValidation === undefined || this.props.autoValidation) {
       Object.assign(valueObj, autoValidate(valueObj));
+    }
+
+    if (valueObj.type === 'otp' && value.length === 4) {
+      Object.assign(valueObj, customValidateOTP(valueObj));
     }
     // apply some custom logic for validation
     if (
@@ -221,7 +255,7 @@ export default class FormO extends Component {
     ) {
       const res = customFieldCalculations(valueObj, value, this.state);
       if (res && res.length > 0) {
-        res.forEach(item => {
+        res.forEach((item) => {
           newField[item.name] = item;
         });
       }
@@ -242,7 +276,7 @@ export default class FormO extends Component {
       ) &&
       !isEmpty(this.state.calcFields)
     ) {
-      this.state.calcFields.forEach(ele => {
+      this.state.calcFields.forEach((ele) => {
         if (
           ele.additional_config &&
           ele.additional_config.calc &&
@@ -279,7 +313,7 @@ export default class FormO extends Component {
           const pk = valueObj['primaryKey'];
           const lk = valueObj['labelKey'];
           if (lookupSubscriberFields.length) {
-            _.forEach(lookupSubscriberFields, field => {
+            _.forEach(lookupSubscriberFields, (field) => {
               const key = field['name'];
               const val = value[key] || '';
               this.handleOnValueChange(field, val);
@@ -299,7 +333,7 @@ export default class FormO extends Component {
     this.onValidateFields();
     const values = {};
     let isValidFields = true;
-    Object.keys(this.state).forEach(fieldName => {
+    Object.keys(this.state).forEach((fieldName) => {
       if (!['calcFields'].includes(fieldName)) {
         const field = this.state[fieldName];
         if (field) {
@@ -314,13 +348,11 @@ export default class FormO extends Component {
             values[field.name] = parseFloat(field.value);
           } else if (field.type && field.type.match(/date/i)) {
             values[field.name] = field.value
-              ? moment(field.value)
-                  .utc()
-                  .valueOf()
+              ? moment(field.value).utc().valueOf()
               : '';
           } else if (field.type && field.type.match(/document/i)) {
             values[field.name] = !isEmpty(field.value)
-              ? field.value.map(item => {
+              ? field.value.map((item) => {
                   return {
                     name: item['name'],
                     file_path: item['file_path'] ? item['file_path'] : '',
@@ -355,7 +387,7 @@ export default class FormO extends Component {
     const field = fieldObj;
     if (field.type === 'group') {
       const subFields = {};
-      Object.keys(value).forEach(fieldName => {
+      Object.keys(value).forEach((fieldName) => {
         subFields[fieldName] = value[fieldName];
       });
       this[field.name].group.setValues(subFields);
@@ -367,6 +399,10 @@ export default class FormO extends Component {
         this.props.autoValidation
       ) {
         Object.assign(field, autoValidate(field));
+      }
+      if (field.type === 'otp') {
+        const otpValidationResult = customValidateOTP(field);
+        Object.assign(field, otpValidationResult);
       }
       if (
         this.props.customValidation &&
@@ -381,7 +417,7 @@ export default class FormO extends Component {
   setValues = (...args) => {
     if (args && args.length && args[0]) {
       const newFields = {};
-      Object.keys(args[0]).forEach(fieldName => {
+      Object.keys(args[0]).forEach((fieldName) => {
         const field = this.state[fieldName];
         if (field) {
           newFields[field.name] = this.getFieldValue(field, args[0][fieldName]);
@@ -418,7 +454,7 @@ export default class FormO extends Component {
           case 'auto-incr-number':
             return (
               <TextInputField
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -428,7 +464,7 @@ export default class FormO extends Component {
           case 'longtext':
             return (
               <LongTextField
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -438,7 +474,7 @@ export default class FormO extends Component {
           case 'picker':
             return (
               <PickerField
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -448,7 +484,7 @@ export default class FormO extends Component {
           case 'status_picker':
             return (
               <StatusPicker
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -458,7 +494,7 @@ export default class FormO extends Component {
           case 'date':
             return (
               <DateTimePicker
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -468,7 +504,7 @@ export default class FormO extends Component {
           case 'lookup':
             return (
               <Lookup
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -479,7 +515,7 @@ export default class FormO extends Component {
           case 'customDataView':
             return (
               <CustomDataComponent
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -489,7 +525,7 @@ export default class FormO extends Component {
           case 'checklist':
             return (
               <Checklist
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -500,7 +536,7 @@ export default class FormO extends Component {
           case 'location':
             return (
               <Location
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -511,7 +547,7 @@ export default class FormO extends Component {
           case 'select':
             return (
               <SelectField
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -522,7 +558,7 @@ export default class FormO extends Component {
           case 'user_directory':
             return (
               <UserDirectoryField
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -533,7 +569,7 @@ export default class FormO extends Component {
           case 'image':
             return (
               <ImageField
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -544,7 +580,7 @@ export default class FormO extends Component {
           case 'document':
             return (
               <DocumentField
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -555,7 +591,7 @@ export default class FormO extends Component {
           case 'cascading-dropdown':
             return (
               <CascadingDropdownField
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -563,7 +599,19 @@ export default class FormO extends Component {
                 state={this.state}
               />
             );
-
+          case 'otp':
+            return (
+              <OtpField
+                ref={(c) => {
+                  this[field.name] = c;
+                }}
+                {...commonProps}
+                {...this.props}
+                state={this.state}
+                getOtpByRefData={this.getOtpByRefData}
+                refData={this.props.refData}
+              />
+            );
           default:
             return null;
         }

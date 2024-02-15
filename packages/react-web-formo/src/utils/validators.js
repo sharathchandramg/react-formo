@@ -43,7 +43,7 @@ export const isValidNumber = num => {
 };
 
 export const validateMobileNumber = mobNumber => {
-  const re = /^(\+91[\-\s]?)?[0]?(91)?[6789]\d{9}$/;
+  const re = /^(\+91[\-\s]?)?(91)?[6789]\d{9}$/;
   return re.test(mobNumber);
 };
 
