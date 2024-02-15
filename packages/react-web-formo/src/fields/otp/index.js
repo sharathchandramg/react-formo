@@ -5,7 +5,6 @@ class OtpField extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      btnText: '',
       btnCounter: 0,
       disableBtn: false,
     };
@@ -60,14 +59,13 @@ class OtpField extends Component {
   getLabel = (attributes) => {
     const refFieldValue = this.getRefFieldValue(attributes);
     return refFieldValue
-      ? `${attributes.label}- ${refFieldValue}`
-      : attributes.label;
+      ? `${attributes.label}- ${refFieldValue}:`
+      : `${attributes.label}:`;
   };
 
   callInitTimer = () => {
     this.setState({
       disableBtn: true,
-      btnText: 'Resend',
       btnCounter: 60,
     });
     this.initTimer();
@@ -96,7 +94,8 @@ class OtpField extends Component {
 
   renderLabel = () => {
     return (
-      <label htmlFor="otpInput">{this.getLabel(this.props.attributes)}</label>
+      <label htmlFor="otpInput">{this.getLabel(this.props.attributes)} {this.props.attributes['required'] ? `*` : ''}
+      </label>
     );
   };
 
