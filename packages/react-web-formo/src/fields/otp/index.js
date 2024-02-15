@@ -100,7 +100,6 @@ class OtpField extends Component {
   };
 
   renderInputField = () => {
-    const { otp } = this.state;
     return (
       <input
         id="otpInput"
