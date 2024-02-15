@@ -13,7 +13,7 @@ import {
   getResetValue,
   customFieldCalculations,
   getCalculatedFields,
-  customValidateOTP
+  customValidateOTP,
 } from './utils/helper';
 import DateTimePicker from './fields/dateTimePicker/index.js';
 import Lookup from './fields/lookup/index.js';
@@ -31,7 +31,7 @@ import { isEmpty } from './utils/validators';
 
 import './styles.css';
 
-const DefaultErrorComponent = props => {
+const DefaultErrorComponent = (props) => {
   const attributes = props.attributes;
   if (attributes.error) {
     return <p>{attributes.errorMsg}</p>;
@@ -53,7 +53,7 @@ export default class FormO extends Component {
 
   componentDidMount() {
     this.isFirstTime = true;
-    const { formData} = this.props;
+    const { formData } = this.props;
     this.setValues(formData);
   }
 
@@ -65,7 +65,7 @@ export default class FormO extends Component {
     }
   }
 
-  getInitialState = fields => {
+  getInitialState = (fields) => {
     const state = {};
     fields.forEach((field, index) => {
       const fieldObj = field;
@@ -79,8 +79,8 @@ export default class FormO extends Component {
     return state;
   };
 
-  getLookupSubsciberFields = name => {
-    const lookupSubscriberFields = _.filter(this.props.fields, field => {
+  getLookupSubsciberFields = (name) => {
+    const lookupSubscriberFields = _.filter(this.props.fields, (field) => {
       if (
         typeof field['data-pub'] !== 'undefined' &&
         field['data-pub'] === name
@@ -91,11 +91,9 @@ export default class FormO extends Component {
     return lookupSubscriberFields;
   };
 
-
-
   onValidateFields = () => {
     const newFields = {};
-    Object.keys(this.state).forEach(fieldName => {
+    Object.keys(this.state).forEach((fieldName) => {
       const field = this.state[fieldName];
       if (field) {
         if (field.required !== undefined && field.required) {
@@ -103,7 +101,7 @@ export default class FormO extends Component {
           field.error = validate.error;
           field.errorMsg = validate.errorMsg;
         }
-        if (field.type === "otp") {
+        if (field.type === 'otp') {
           let validate = customValidateOTP(field);
           field.error = validate.error;
           field.errorMsg = validate.errorMsg;
@@ -113,7 +111,7 @@ export default class FormO extends Component {
     });
     this.setState({ ...newFields });
   };
-      
+
   onAddNewFields = (name, newObj) => {
     let fieldObj = this.state[name];
     if (fieldObj) {
@@ -129,7 +127,10 @@ export default class FormO extends Component {
           let newValue;
           if (gIndex !== -1) {
             let preValue = Object.values(this.state)[gIndex].value;
-            let oIndex = _.findIndex(preValue, item => item._id === newObj._id);
+            let oIndex = _.findIndex(
+              preValue,
+              (item) => item._id === newObj._id
+            );
             if (oIndex !== -1) {
               preValue[oIndex] = newObj;
               newValue = preValue;
@@ -150,7 +151,7 @@ export default class FormO extends Component {
 
   resetForm = () => {
     const newFields = {};
-    Object.keys(this.state).forEach(fieldName => {
+    Object.keys(this.state).forEach((fieldName) => {
       const field = this.state[fieldName];
       if (field) {
         field.value = '';
@@ -168,56 +169,57 @@ export default class FormO extends Component {
     this.setState({ ...newFields });
   };
 
-  getFieldReturnValue = field => {
-    if (field.type && (field.type.match(/number/i) || field.type.match(/auto-incr-number/i))) {
+  getFieldReturnValue = (field) => {
+    if (
+      field.type &&
+      (field.type.match(/number/i) || field.type.match(/auto-incr-number/i))
+    ) {
       return parseFloat(field.value);
-    } 
-    else if (field.type && field.type.match(/date/i)) {
+    } else if (field.type && field.type.match(/date/i)) {
       return field.value ? moment(field.value).utc().valueOf() : '';
-    } 
-    else if (field.type && field.type.match(/document/i)) {
-      return !isEmpty(field.value) ? field.value.map(item => {
-        return {
-          name: item['name'],
-          file_path: item['file_path'] ? item['file_path'] : '',
-          content_type: item['content_type'] ? item['content_type'] : '',
-        };
-      }) : [];
-    } 
-    else if (field.type === 'otp') {
+    } else if (field.type && field.type.match(/document/i)) {
+      return !isEmpty(field.value)
+        ? field.value.map((item) => {
+            return {
+              name: item['name'],
+              file_path: item['file_path'] ? item['file_path'] : '',
+              content_type: item['content_type'] ? item['content_type'] : '',
+            };
+          })
+        : [];
+    } else if (field.type === 'otp') {
       const { error, success, invalidRef } = customValidateOTP(field);
       if (!error && success && !invalidRef && !isEmpty(field.value)) {
         return Number(field.value);
       } else {
         return null;
       }
-    } 
-    else {
+    } else {
       return field.value;
     }
   };
 
   getOtpByRefData = (field, cb) => {
-    const validatedRes = customValidateOTP(field, "otp");
+    const validatedRes = customValidateOTP(field, 'otp');
     Object.assign(field, validatedRes);
     const newField = {};
     newField[field.name] = field;
     this.setState({ ...newField });
     if (!validatedRes.invalidRef) {
       const refFieldData =
-        field["ref_value_type"] === "PHONE"
-          ? field["ref_value"].length === 10
-            ? `91${field["ref_value"]}`
-            : field["ref_value"]
-          : field["ref_value"];
-      this.props.getOtp(field, refFieldData, field["ref_value_type"]);
+        field['ref_value_type'] === 'PHONE'
+          ? field['ref_value'].length === 10
+            ? `91${field['ref_value']}`
+            : field['ref_value']
+          : field['ref_value'];
+      this.props.getOtp(field, refFieldData, field['ref_value_type']);
       cb();
     }
   };
-  
+
   getFormatedValues = () => {
     const values = {};
-    Object.keys(this.state).forEach(fieldName => {
+    Object.keys(this.state).forEach((fieldName) => {
       const field = this.state[fieldName];
       if (field) {
         values[field.name] = this.getFieldReturnValue(field);
@@ -233,7 +235,7 @@ export default class FormO extends Component {
       Object.assign(valueObj, autoValidate(valueObj));
     }
 
-    if (valueObj.type === "otp" && value.length === 4) {
+    if (valueObj.type === 'otp' && value.length === 4) {
       Object.assign(valueObj, customValidateOTP(valueObj));
     }
     // apply some custom logic for validation
@@ -253,7 +255,7 @@ export default class FormO extends Component {
     ) {
       const res = customFieldCalculations(valueObj, value, this.state);
       if (res && res.length > 0) {
-        res.forEach(item => {
+        res.forEach((item) => {
           newField[item.name] = item;
         });
       }
@@ -274,7 +276,7 @@ export default class FormO extends Component {
       ) &&
       !isEmpty(this.state.calcFields)
     ) {
-      this.state.calcFields.forEach(ele => {
+      this.state.calcFields.forEach((ele) => {
         if (
           ele.additional_config &&
           ele.additional_config.calc &&
@@ -311,7 +313,7 @@ export default class FormO extends Component {
           const pk = valueObj['primaryKey'];
           const lk = valueObj['labelKey'];
           if (lookupSubscriberFields.length) {
-            _.forEach(lookupSubscriberFields, field => {
+            _.forEach(lookupSubscriberFields, (field) => {
               const key = field['name'];
               const val = value[key] || '';
               this.handleOnValueChange(field, val);
@@ -331,7 +333,7 @@ export default class FormO extends Component {
     this.onValidateFields();
     const values = {};
     let isValidFields = true;
-    Object.keys(this.state).forEach(fieldName => {
+    Object.keys(this.state).forEach((fieldName) => {
       if (!['calcFields'].includes(fieldName)) {
         const field = this.state[fieldName];
         if (field) {
@@ -346,13 +348,11 @@ export default class FormO extends Component {
             values[field.name] = parseFloat(field.value);
           } else if (field.type && field.type.match(/date/i)) {
             values[field.name] = field.value
-              ? moment(field.value)
-                  .utc()
-                  .valueOf()
+              ? moment(field.value).utc().valueOf()
               : '';
           } else if (field.type && field.type.match(/document/i)) {
             values[field.name] = !isEmpty(field.value)
-              ? field.value.map(item => {
+              ? field.value.map((item) => {
                   return {
                     name: item['name'],
                     file_path: item['file_path'] ? item['file_path'] : '',
@@ -383,35 +383,41 @@ export default class FormO extends Component {
     }
   };
 
-getFieldValue = (fieldObj, value) => {
-  const field = fieldObj;
-  if (field.type === 'group') {
-    const subFields = {};
-    Object.keys(value).forEach(fieldName => {
-      subFields[fieldName] = value[fieldName];
-    });
-    this[field.name].group.setValues(subFields);
-    field.value = this[field.name].group.getValues();
-  } else {
-    field.value = value;
-    if (this.props.autoValidation === undefined || this.props.autoValidation) {
-      Object.assign(field, autoValidate(field)); 
+  getFieldValue = (fieldObj, value) => {
+    const field = fieldObj;
+    if (field.type === 'group') {
+      const subFields = {};
+      Object.keys(value).forEach((fieldName) => {
+        subFields[fieldName] = value[fieldName];
+      });
+      this[field.name].group.setValues(subFields);
+      field.value = this[field.name].group.getValues();
+    } else {
+      field.value = value;
+      if (
+        this.props.autoValidation === undefined ||
+        this.props.autoValidation
+      ) {
+        Object.assign(field, autoValidate(field));
+      }
+      if (field.type === 'otp') {
+        const otpValidationResult = customValidateOTP(field);
+        Object.assign(field, otpValidationResult);
+      }
+      if (
+        this.props.customValidation &&
+        typeof this.props.customValidation === 'function'
+      ) {
+        Object.assign(field, this.props.customValidation(field));
+      }
     }
-    if (field.type === 'otp') {
-      const otpValidationResult = customValidateOTP(field);
-      Object.assign(field, otpValidationResult); 
-    } 
-    if (this.props.customValidation && typeof this.props.customValidation === 'function') {
-      Object.assign(field, this.props.customValidation(field));
-    }
-  }
-  return field;
-};
+    return field;
+  };
 
   setValues = (...args) => {
     if (args && args.length && args[0]) {
       const newFields = {};
-      Object.keys(args[0]).forEach(fieldName => {
+      Object.keys(args[0]).forEach((fieldName) => {
         const field = this.state[fieldName];
         if (field) {
           newFields[field.name] = this.getFieldValue(field, args[0][fieldName]);
@@ -448,7 +454,7 @@ getFieldValue = (fieldObj, value) => {
           case 'auto-incr-number':
             return (
               <TextInputField
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -458,7 +464,7 @@ getFieldValue = (fieldObj, value) => {
           case 'longtext':
             return (
               <LongTextField
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -468,7 +474,7 @@ getFieldValue = (fieldObj, value) => {
           case 'picker':
             return (
               <PickerField
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -478,7 +484,7 @@ getFieldValue = (fieldObj, value) => {
           case 'status_picker':
             return (
               <StatusPicker
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -488,7 +494,7 @@ getFieldValue = (fieldObj, value) => {
           case 'date':
             return (
               <DateTimePicker
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -498,7 +504,7 @@ getFieldValue = (fieldObj, value) => {
           case 'lookup':
             return (
               <Lookup
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -509,7 +515,7 @@ getFieldValue = (fieldObj, value) => {
           case 'customDataView':
             return (
               <CustomDataComponent
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -519,7 +525,7 @@ getFieldValue = (fieldObj, value) => {
           case 'checklist':
             return (
               <Checklist
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -530,7 +536,7 @@ getFieldValue = (fieldObj, value) => {
           case 'location':
             return (
               <Location
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -541,7 +547,7 @@ getFieldValue = (fieldObj, value) => {
           case 'select':
             return (
               <SelectField
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -552,7 +558,7 @@ getFieldValue = (fieldObj, value) => {
           case 'user_directory':
             return (
               <UserDirectoryField
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -563,7 +569,7 @@ getFieldValue = (fieldObj, value) => {
           case 'image':
             return (
               <ImageField
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -574,7 +580,7 @@ getFieldValue = (fieldObj, value) => {
           case 'document':
             return (
               <DocumentField
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -585,7 +591,7 @@ getFieldValue = (fieldObj, value) => {
           case 'cascading-dropdown':
             return (
               <CascadingDropdownField
-                ref={c => {
+                ref={(c) => {
                   this[field.name] = c;
                 }}
                 {...commonProps}
@@ -596,16 +602,16 @@ getFieldValue = (fieldObj, value) => {
           case 'otp':
             return (
               <OtpField
-                ref={c => {
-                    this[field.name] = c;
-                  }}
-                  {...commonProps}
-                  {...this.props}
-                  state={this.state}
-                  getOtpByRefData={this.getOtpByRefData}
-                  refData={this.props.refData}
-            />
-             );
+                ref={(c) => {
+                  this[field.name] = c;
+                }}
+                {...commonProps}
+                {...this.props}
+                state={this.state}
+                getOtpByRefData={this.getOtpByRefData}
+                refData={this.props.refData}
+              />
+            );
           default:
             return null;
         }

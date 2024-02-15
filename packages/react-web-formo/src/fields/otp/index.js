@@ -94,7 +94,9 @@ class OtpField extends Component {
 
   renderLabel = () => {
     return (
-      <label htmlFor="otpInput">{this.getLabel(this.props.attributes)} {this.props.attributes['required'] ? `*` : ''}
+      <label htmlFor="otpInput">
+        {this.getLabel(this.props.attributes)}{' '}
+        {this.props.attributes['required'] ? `*` : ''}
       </label>
     );
   };

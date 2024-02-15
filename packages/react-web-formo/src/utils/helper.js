@@ -50,16 +50,16 @@ export function getDefaultValue(field) {
       if (Array.isArray(field.defaultValue)) {
         const selected = [];
         if (!field.objectType) {
-          field.defaultValue.forEach(item => {
+          field.defaultValue.forEach((item) => {
             if (field.options.indexOf(item) !== -1) {
               selected.push(item);
             }
           });
         } else {
-          field.defaultValue.forEach(item => {
+          field.defaultValue.forEach((item) => {
             if (
               field.options.findIndex(
-                option => option[field.primaryKey] === item[field.primaryKey]
+                (option) => option[field.primaryKey] === item[field.primaryKey]
               ) !== -1
             ) {
               selected.push(item);
@@ -78,16 +78,16 @@ export function getDefaultValue(field) {
       if (Array.isArray(field.defaultValue)) {
         const selected = [];
         if (!field.objectType) {
-          field.defaultValue.forEach(item => {
+          field.defaultValue.forEach((item) => {
             if (field.options.indexOf(item) !== -1) {
               selected.push(item);
             }
           });
         } else {
-          field.defaultValue.forEach(item => {
+          field.defaultValue.forEach((item) => {
             if (
               field.options.findIndex(
-                option => option[field.primaryKey] === item[field.primaryKey]
+                (option) => option[field.primaryKey] === item[field.primaryKey]
               ) !== -1
             ) {
               selected.push(item);
@@ -112,20 +112,11 @@ export function getDefaultValue(field) {
         case 'date':
         case 'time':
         case 'datetime':
-          if (field.defaultValue === 'today')
-            return moment()
-              .utc()
-              .valueOf();
+          if (field.defaultValue === 'today') return moment().utc().valueOf();
           else if (field.defaultValue === 'tomorrow')
-            return moment()
-              .add(1, 'day')
-              .utc()
-              .valueOf();
+            return moment().add(1, 'day').utc().valueOf();
           else if (field.defaultValue === 'yesterday')
-            return moment()
-              .subtract(1, 'day')
-              .utc()
-              .valueOf();
+            return moment().subtract(1, 'day').utc().valueOf();
           else if (
             typeof field.defaultValue !== 'undefined' &&
             !_.isNaN(field.defaultValue)
@@ -216,12 +207,12 @@ export function getResetValue(field) {
 
 export function getInitialState(fields) {
   const state = {};
-  _.forEach(fields, field => {
+  _.forEach(fields, (field) => {
     const fieldObj = field;
     fieldObj.error = false;
     fieldObj.errorMsg = '';
     fieldObj.success = false;
-    fieldObj.successMsg = "";
+    fieldObj.successMsg = '';
     if (field && field.type) {
       fieldObj.value = getDefaultValue(field);
       state[field.name] = fieldObj;
@@ -234,11 +225,10 @@ export function autoValidate(field, data = {}) {
   let error = false;
   let errorMsg = '';
   let success = false;
-  let successMsg = "";
+  let successMsg = '';
   let invalidRef = false;
-  
 
-  if(field.type=="email"){
+  if (field.type == 'email') {
     if (isEmpty(field.value)) {
       error = true;
       errorMsg = `${field.label} is required`;
@@ -246,9 +236,9 @@ export function autoValidate(field, data = {}) {
       error = true;
       errorMsg = 'Please enter a valid email';
     }
-    return { error, errorMsg}
+    return { error, errorMsg };
   }
-  if(field.type=="phone"){
+  if (field.type == 'phone') {
     if (isEmpty(field.value)) {
       error = true;
       errorMsg = `${field.label} is required`;
@@ -256,7 +246,7 @@ export function autoValidate(field, data = {}) {
       error = true;
       errorMsg = `${field.label} should be a number`;
     }
-    return { error, errorMsg}
+    return { error, errorMsg };
   }
 
   if (field.required) {
@@ -285,9 +275,7 @@ export function autoValidate(field, data = {}) {
             field.value.trim().length > Number(additionalConfig['max_length'])
           ) {
             error = true;
-            errorMsg = `Maximum characters allowed is ${
-              additionalConfig['max_length']
-            }`;
+            errorMsg = `Maximum characters allowed is ${additionalConfig['max_length']}`;
           }
         }
         break;
@@ -423,62 +411,60 @@ export function autoValidate(field, data = {}) {
       default:
     }
   }
-  return { error, errorMsg,success, successMsg, invalidRef  };
+  return { error, errorMsg, success, successMsg, invalidRef };
 }
 
-export function customValidateOTP(field, from = "") {
+export function customValidateOTP(field, from = '') {
   let error = false;
-  let errorMsg = "";
+  let errorMsg = '';
   let success = false;
-  let successMsg = "";
+  let successMsg = '';
   let invalidRef = false;
-  if (field.type !== "otp") {
+  if (field.type !== 'otp') {
     return { error, errorMsg, success, successMsg, invalidRef };
   }
-  if (isEmpty(field.value) && field.required && from !== "otp") {
+  if (isEmpty(field.value) && field.required && from !== 'otp') {
     error = true;
     errorMsg = `${field.label} is required`;
-  } else if (isEmpty(field["ref_value"]) && from === "otp") {
+  } else if (isEmpty(field['ref_value']) && from === 'otp') {
     error = true;
     errorMsg = `Reference data is required`;
     invalidRef = true;
-  } else if (isEmpty(field["ref_value"]) && field.required) {
+  } else if (isEmpty(field['ref_value']) && field.required) {
     error = true;
     errorMsg = `Get OTP`;
     invalidRef = true;
-  } else if (!isEmpty(field["ref_value"])) {
+  } else if (!isEmpty(field['ref_value'])) {
     const validateRefValue =
-      field["ref_value_type"] === "PHONE"
-        ? !validateMobileNumber(field["ref_value"])
-        : !isEmail(field["ref_value"]);
+      field['ref_value_type'] === 'PHONE'
+        ? !validateMobileNumber(field['ref_value'])
+        : !isEmail(field['ref_value']);
     if (validateRefValue) {
       error = true;
       errorMsg =
-        field["ref_value_type"] === "PHONE"
-          ? `${field["ref_value"]} is not a valid mobile number`
-          : `${field["ref_value"]} is not a valid email`;
+        field['ref_value_type'] === 'PHONE'
+          ? `${field['ref_value']} is not a valid mobile number`
+          : `${field['ref_value']} is not a valid email`;
       invalidRef = true;
     } else if (!isEmpty(field.value) && field.value.length !== 4) {
       error = true;
-      errorMsg = "Incorrect OTP. Retry.";
+      errorMsg = 'Incorrect OTP. Retry.';
     } else if (
-      
       !isEmpty(field.value) &&
       field.value.length === 4 &&
       (isEmpty(field.res) ||
         (!isEmpty(field.res) && isEmpty(field.res.otp_code)))
     ) {
       error = true;
-      errorMsg = "Incorrect OTP. Retry.";
+      errorMsg = 'Incorrect OTP. Retry.';
     } else if (
-      
       !isEmpty(field.value) &&
       !isEmpty(field.res) &&
       !isEmpty(field.res.otp_code) &&
       field.value != field.res.otp_code
     ) {
       error = true;
-      errorMsg = "Incorrect OTP. Retry.";
+      errorMsg = 'Incorrect OTP. Retry.';
     } else if (
       !isEmpty(field.value) &&
       !isEmpty(field.res) &&
@@ -486,13 +472,12 @@ export function customValidateOTP(field, from = "") {
       field.value == field.res.otp_code
     ) {
       success = true;
-      successMsg = "Correct OTP";
+      successMsg = 'Correct OTP';
     }
   }
 
   return { error, errorMsg, success, successMsg, invalidRef };
 }
-
 
 export const getGeoLocation = (options, cb) => {
   let highAccuracySuccess = false;
@@ -506,10 +491,10 @@ export const getGeoLocation = (options, cb) => {
 
   let getLowAccuracyPosition = () => {
     navigator.geolocation.getCurrentPosition(
-      position => {
+      (position) => {
         cb(position.coords);
       },
-      error => {
+      (error) => {
         console.log(error);
         cb(null, error);
       },
@@ -523,13 +508,13 @@ export const getGeoLocation = (options, cb) => {
 
   if (highAccuracy) {
     const watchId = navigator.geolocation.watchPosition(
-      position => {
+      (position) => {
         // location retrieved
         highAccuracySuccess = true;
         navigator.geolocation.clearWatch(watchId);
         cb(position.coords);
       },
-      error => {
+      (error) => {
         console.log(error);
         highAccuracyError = true;
         navigator.geolocation.clearWatch(watchId);
@@ -647,17 +632,17 @@ export const customFieldCalculations = (field, fieldValue, allFields) => {
   return res;
 };
 
-export const fileToBase64 = file =>
+export const fileToBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
+    reader.onerror = (error) => reject(error);
   });
 
 export function getCalculatedFields(fields) {
   const calcFields = [];
-  _.forEach(fields, field => {
+  _.forEach(fields, (field) => {
     if (
       field.type &&
       field.type === 'number' &&
