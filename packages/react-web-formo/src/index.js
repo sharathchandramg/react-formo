@@ -53,7 +53,7 @@ export default class FormO extends Component {
 
   componentDidMount() {
     this.isFirstTime = true;
-    const { formData,refData } = this.props;
+    const { formData} = this.props;
     this.setValues(formData);
   }
 
