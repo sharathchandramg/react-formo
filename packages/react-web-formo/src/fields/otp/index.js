@@ -103,7 +103,7 @@ class OtpField extends Component {
     return (
       <input
         id="otpInput"
-        type="text"
+        type="number"
         style={{
           flexGrow: 1,
           border: '1px solid #979797',
