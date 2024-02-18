@@ -171,6 +171,8 @@ class OtpField extends Component {
               background: '#00acf1',
               color: '#ffffff',
               border: '#ffffff',
+              borderRadius:`5px`,
+              cursor:'pointer'
             }}
             onClick={this.handleChangeGetotp(this.props.attributes)}
             disabled={this.state.disableBtn}
