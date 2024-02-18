@@ -242,9 +242,9 @@ export function autoValidate(field, data = {}) {
     if (field.required && isEmpty(field.value)) {
       error = true;
       errorMsg = `${field.label} is required`;
-    } else if (!isEmpty(field.value) && !isValidNumber(field.value)) {
+    } else if (!isEmpty(field.value) && !validateMobileNumber(field.value)) {
       error = true;
-      errorMsg = `${field.label} should be a number`;
+      errorMsg = `Please enter a valid phone number`;
     }
     return { error, errorMsg };
   }
