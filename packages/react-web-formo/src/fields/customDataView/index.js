@@ -13,7 +13,7 @@ export default class CustomDataComponent extends Component {
     return;
   };
 
-  getLabel = value => {
+  getLabel = (value) => {
     let label = 'None';
     if (typeof value !== 'undefined' && value && Object.keys(value).length) {
       return value.label ? value.label : 'None';
@@ -44,14 +44,14 @@ export default class CustomDataComponent extends Component {
     return (
       <div className="catalog-root">
         <div className="catalog-label-wrapper">
-          <div className="catalog-label-text">
-            <p>
-              {attributes['label']} {attributes['required'] ? `*` : ''} :
+          <p className="catalog-label-text">
+            {attributes['label']} {attributes['required'] ? `*` : ''} :
+          </p>
+          {attributes['error'] && (
+            <p id="error" className="error-text">
+              {attributes['errorMsg']}
             </p>
-          </div>
-          <div className="error-text">
-            {attributes['error'] && <p id="error">{attributes['errorMsg']}</p>}
-          </div>
+          )}
         </div>
         <div className="catalog-content-wrapper">{this.renderCatalogUI()}</div>
       </div>

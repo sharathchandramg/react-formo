@@ -13,23 +13,11 @@
 }
 
 .catalog-label-wrapper .catalog-label-text {
-  width: 50%;
-  display: flex;
-  justify-content: flex-start;
-}
-
-.catalog-label-wrapper .catalog-label-text p {
   font-size: 20px;
   margin: 0;
 }
 
 .catalog-label-wrapper .error-text {
-  width: 50%;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.catalog-label-wrapper .error-text p {
   color: red;
   font-size: 12px;
   margin: 0px;
