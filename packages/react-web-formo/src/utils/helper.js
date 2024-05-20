@@ -21,6 +21,7 @@ export function getDefaultValue(field) {
     case 'location':
     case 'auto-incr-number':
     case 'longtext':
+    case 'rating':
     case 'otp':
       return field.defaultValue || '';
     case 'cascading-dropdown':
@@ -164,6 +165,7 @@ export function getResetValue(field) {
     case 'location':
     case 'auto-incr-number':
     case 'longtext':
+    case 'rating':
     case 'otp':
       return null;
 
@@ -256,6 +258,7 @@ export function autoValidate(field, data = {}) {
       case 'image':
       case 'password':
       case 'document':
+      case 'rating':
         if (isEmpty(field.value)) {
           error = true;
           errorMsg = `${field.label} is required`;

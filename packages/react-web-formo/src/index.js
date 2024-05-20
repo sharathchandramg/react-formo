@@ -27,6 +27,7 @@ import ImageField from './fields/image';
 import DocumentField from './fields/document';
 import CascadingDropdownField from './fields/cascadingDropdown';
 import OtpField from './fields/otp/index.js';
+import RatingField from './fields/rating/index.js';
 import { isEmpty } from './utils/validators';
 
 import './styles.css';
@@ -404,6 +405,7 @@ export default class FormO extends Component {
         const otpValidationResult = customValidateOTP(field);
         Object.assign(field, otpValidationResult);
       }
+
       if (
         this.props.customValidation &&
         typeof this.props.customValidation === 'function'
@@ -588,6 +590,16 @@ export default class FormO extends Component {
               />
             );
 
+            case 'rating':
+              return (
+                <RatingField
+                  ref={(c) => {
+                    this[field.name] = c;
+                  }}
+                  {...commonProps}
+                  {...this.props}
+                />
+              );
           case 'cascading-dropdown':
             return (
               <CascadingDropdownField
