@@ -4,14 +4,7 @@ import { isEmpty } from './../../utils/validators';
 class RatingField extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-    };
   }
-
-  getInputValue = () => {
-    const { attributes } = this.props;
-    return !isEmpty(attributes) && !isEmpty(attributes['value']);
-  };
 
   handleChange = (value) => {
     this.props.updateValue(this.props.attributes.name, value);
