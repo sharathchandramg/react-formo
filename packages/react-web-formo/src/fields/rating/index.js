@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { isEmpty } from './../../utils/validators';
 
 class RatingField extends Component {
   constructor(props) {
