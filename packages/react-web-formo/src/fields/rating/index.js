@@ -56,8 +56,9 @@ class RatingField extends Component {
                   className={`fa fa-${icon}`}
                   style={{
                     fontSize: 25,
-                    color: value > 0 && item + 1 <= value ? "rgb(255, 212, 59)" : "#828282",
-                    cursor: "pointer"
+                    color: value > 0 && item + 1 <= value ? "rgb(255, 212, 59)" : "#FFFFFF",
+                    cursor: "pointer",
+                    WebkitTextStroke: value > 0 && item + 1 <= value ? "0px" : "1px #828282"
                   }}
                   onClick={() => this.handleChange(item + 1)}
                 ></i>
