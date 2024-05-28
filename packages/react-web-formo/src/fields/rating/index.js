@@ -12,14 +12,13 @@ class RatingField extends Component {
   getIcon = (attributes) => {
     const icon = attributes?.additional_config?.icon;
     switch (icon) {
-      case "smile":
-      case "face-smile":
-        return "smile";
+      case 'smile':
+      case 'face-smile':
+        return 'smile';
       default:
         return icon;
     }
   };
-
 
   renderLabel = () => {
     return (
@@ -32,7 +31,7 @@ class RatingField extends Component {
 
   renderIcon = () => {
     const { attributes } = this.props;
-    const value = attributes["value"] || 0;
+    const value = attributes['value'] || 0;
     const noOfIcons = attributes?.additional_config?.no_of_icons;
     const icon = this.getIcon(attributes);
 
@@ -40,24 +39,27 @@ class RatingField extends Component {
       <div>
         <div
           style={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
             paddingLeft: 10,
             paddingTop: 10,
             paddingBottom: 10,
-            ...(noOfIcons > 5 ? { justifyContent: "space-between" } : {})
+            ...(noOfIcons > 5 ? { justifyContent: 'space-between' } : {}),
           }}
         >
           {Array.from(Array(noOfIcons).keys()).map((item) => {
             return (
               <div key={item} style={{ paddingRight: noOfIcons <= 5 ? 10 : 0 }}>
                 <i
-                   className={`${value > 0 && item + 1 <= value ? 'fa' : 'far'} fa-${icon}`}
+                  className={`${value > 0 && item + 1 <= value ? 'fa' : 'far'} fa-${icon}`}
                   style={{
                     fontSize: 25,
-                    color: value > 0 && item + 1 <= value ? "rgb(255, 212, 59)" : "#828282",
-                    cursor: "pointer"
+                    color:
+                      value > 0 && item + 1 <= value
+                        ? 'rgb(255, 212, 59)'
+                        : '#828282',
+                    cursor: 'pointer',
                   }}
                   onClick={() => this.handleChange(item + 1)}
                 ></i>
@@ -68,28 +70,28 @@ class RatingField extends Component {
       </div>
     );
   };
-  
+
   render() {
     return (
       <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        margin: 10,
-      }}
-    >
-      <div
         style={{
           display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          flexDirection: 'column',
+          margin: 10,
         }}
       >
-        <p style={{ fontSize: 20, margin: 0 }}>{this.renderLabel()}</p>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <p style={{ fontSize: 20, margin: 0 }}>{this.renderLabel()}</p>
+        </div>
+        <div style={{ fontSize: 20, margin: 0 }}>{this.renderIcon()}</div>
       </div>
-      <div style={{ fontSize: 20, margin: 0 }}>{this.renderIcon()}</div>
-    </div>
     );
   }
 }
