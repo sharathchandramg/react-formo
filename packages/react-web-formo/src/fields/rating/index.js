@@ -53,10 +53,10 @@ class RatingField extends Component {
             return (
               <div key={item} style={{ paddingRight: noOfIcons <= 5 ? 10 : 0 }}>
                 <i
-                   className={`${value > 0 && item + 1 <= value ? 'fa' : 'far'} fa-star`}
+                   className={`${value > 0 && item + 1 <= value ? 'fa' : 'far'} fa-${icon}`}
                   style={{
                     fontSize: 25,
-                    color: value > 0 && item + 1 <= value ? "rgb(255, 212, 59)" : "",
+                    color: value > 0 && item + 1 <= value ? "rgb(255, 212, 59)" : "#828282",
                     cursor: "pointer"
                   }}
                   onClick={() => this.handleChange(item + 1)}
