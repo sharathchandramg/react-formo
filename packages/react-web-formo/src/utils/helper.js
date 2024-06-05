@@ -24,6 +24,8 @@ export function getDefaultValue(field) {
     case 'rating':
     case 'otp':
       return field.defaultValue || '';
+    case 'signature':
+      return [];
     case 'cascading-dropdown':
       return '';
 
@@ -31,8 +33,8 @@ export function getDefaultValue(field) {
       let curr_type = field.defaultCurrency
         ? field.defaultCurrency
         : field.currencyOptions
-        ? field.currencyOptions[0]
-        : '';
+          ? field.currencyOptions[0]
+          : '';
       let curr_value = field.defaultValue ? field.defaultValue : '';
       return { curr_value: curr_value, curr_type: curr_type };
 
@@ -167,8 +169,8 @@ export function getResetValue(field) {
     case 'longtext':
     case 'rating':
     case 'otp':
+    case 'signature':
       return null;
-
     case 'cascading-dropdown':
       return '';
 
@@ -258,6 +260,7 @@ export function autoValidate(field, data = {}) {
       case 'image':
       case 'password':
       case 'document':
+      case 'signature':
       case 'rating':
         if (isEmpty(field.value)) {
           error = true;
@@ -619,8 +622,8 @@ export const customFieldCalculations = (field, fieldValue, allFields) => {
         field['name'] === fieldName
           ? fieldValue
           : !isEmpty(dfObjValue)
-          ? dfObjValue
-          : null;
+            ? dfObjValue
+            : null;
       if (!isEmpty(value)) dfValues[fieldName] = value;
     }
 
