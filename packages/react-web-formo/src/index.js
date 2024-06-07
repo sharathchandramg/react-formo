@@ -62,7 +62,10 @@ export default class FormO extends Component {
 
   componentDidUpdate(prevProps) {
     const { formData } = this.props;
-    if (!_.isEqual(prevProps, this.props) && this.isFirstTime) {
+    if (
+      !_.isEqual(prevProps.formData, this.props.formData) &&
+      this.isFirstTime
+    ) {
       this.setValues(formData);
       this.isFirstTime = false;
     }
