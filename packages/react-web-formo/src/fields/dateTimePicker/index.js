@@ -28,14 +28,12 @@ class CustomInput extends Component {
 }
 
 export default class DateTimePicker extends Component {
-  handleChange = date => {
-    const data = moment(date)
-      .utc()
-      .valueOf();
+  handleChange = (date) => {
+    const data = moment(date).utc().valueOf();
     this.props.updateValue(this.props.attributes.name, data);
   };
 
-  dateFormatter = date => {
+  dateFormatter = (date) => {
     switch (date) {
       case 'today':
         return new Date();
@@ -63,7 +61,7 @@ export default class DateTimePicker extends Component {
         disabled={disableCondition}
         minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
         maxDate={attributes.maxDate && this.dateFormatter(attributes.maxDate)}
-        onChange={date => this.handleChange(date)}
+        onChange={(date) => this.handleChange(date)}
         dateFormat="do MMM yyyy"
       />
     );
@@ -77,7 +75,7 @@ export default class DateTimePicker extends Component {
       <DatePicker
         customInput={<CustomInput />}
         selected={attributes.value ? new Date(attributes.value) : null}
-        onChange={date => this.handleChange(date)}
+        onChange={(date) => this.handleChange(date)}
         disabled={disableCondition}
         minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
         maxDate={attributes.maxDate && this.dateFormatter(attributes.maxDate)}
@@ -85,7 +83,7 @@ export default class DateTimePicker extends Component {
         showTimeSelectOnly
         timeIntervals={15}
         timeCaption="Time"
-        dateFormat="hh:mm a"
+        dateFormat={this.props.attributes.is_24hour ? 'HH:mm' : 'hh:mm a'}
       />
     );
   };
@@ -98,15 +96,19 @@ export default class DateTimePicker extends Component {
       <DatePicker
         customInput={<CustomInput />}
         selected={attributes.value ? new Date(attributes.value) : null}
-        onChange={date => this.handleChange(date)}
+        onChange={(date) => this.handleChange(date)}
         disabled={disableCondition}
         minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
         maxDate={attributes.maxDate && this.dateFormatter(attributes.maxDate)}
         showTimeSelect
-        timeFormat="hh:mm a"
+        timeFormat={this.props.attributes.is_24hour ? 'HH:mm' : 'hh:mm a'}
         timeIntervals={15}
         timeCaption="Time"
-        dateFormat="do MMM yyyy hh:mm a"
+        dateFormat={
+          this.props.attributes.is_24hour
+            ? 'do MMM yyyy HH:mm'
+            : 'do MMM yyyy hh:mm a'
+        }
       />
     );
   };
