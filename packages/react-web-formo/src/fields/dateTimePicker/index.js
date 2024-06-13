@@ -83,6 +83,7 @@ export default class DateTimePicker extends Component {
         showTimeSelectOnly
         timeIntervals={15}
         timeCaption="Time"
+        timeFormat={this.props.attributes.is_24hour ? 'HH:mm' : 'hh:mm a'}
         dateFormat={this.props.attributes.is_24hour ? 'HH:mm' : 'hh:mm a'}
       />
     );
