@@ -1,0 +1,9 @@
+.formo-text {
+  -moz-appearance: textfield;
+}
+
+.formo-text::-webkit-outer-spin-button,
+.formo-text::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
