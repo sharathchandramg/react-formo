@@ -1,6 +1,31 @@
 import React, { Component } from 'react';
+import './style.css';
 
 export default class TextInputField extends Component {
+  constructor(props) {
+    super(props);
+    this.inputRef = React.createRef();
+  }
+  componentDidMount() {
+    const inputElement = this.inputRef.current;
+
+    if (inputElement) {
+      inputElement.addEventListener('wheel', this.handleWheel);
+    }
+  }
+
+  componentWillUnmount() {
+    const inputElement = this.inputRef.current;
+
+    if (inputElement) {
+      inputElement.removeEventListener('wheel', this.handleWheel);
+    }
+  }
+
+  handleWheel = (event) => {
+    event.preventDefault();
+  };
+
   handleChange = (event) => {
     this.props.updateValue(this.props.attributes.name, event.target.value);
   };
@@ -47,7 +72,7 @@ export default class TextInputField extends Component {
         <div style={{ display: 'flex', height: 45 }}>
           <input
             type={attributes['type']}
-            value={attributes['value']}
+            value={attributes['value'] || ''}
             id={attributes['name']}
             disabled={disableCondition}
             style={{
@@ -60,6 +85,8 @@ export default class TextInputField extends Component {
               opacity: disableCondition ? 0.5 : 1,
             }}
             onChange={this.handleChange}
+            className="formo-text"
+            ref={this.inputRef}
           />
         </div>
       </div>
