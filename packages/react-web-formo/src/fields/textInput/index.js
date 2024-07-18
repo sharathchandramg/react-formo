@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 export default class TextInputField extends Component {
-  handleChange = event => {
+  handleChange = (event) => {
     this.props.updateValue(this.props.attributes.name, event.target.value);
   };
 
@@ -47,7 +47,7 @@ export default class TextInputField extends Component {
         <div style={{ display: 'flex', height: 45 }}>
           <input
             type={attributes['type']}
-            value={attributes['value']}
+            value={attributes['value'] || ''}
             id={attributes['name']}
             disabled={disableCondition}
             style={{
