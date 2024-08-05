@@ -292,13 +292,16 @@ export default class FormO extends Component {
           const data = this.getFormatedValues();
           const calculationExpression = jsonStringTemplater(query, data);
           try {
-            const value = evaluate(calculationExpression, data);
-            const updatevalue = value ? Number(Number(value).toFixed(2)) : null;
+            const evaluateValue = evaluate(calculationExpression, data);
+            const updatevalue = !isNaN(evaluateValue)
+              ? Number(Number(evaluateValue).toFixed(2))
+              : evaluateValue === 0
+              ? 0
+              : null;
             // if (!isEmpty(updatevalue) && !isNaN(updatevalue)) {
             const updatedField = {};
             const obj = this.state[ele.name];
-            obj.value =
-              !isEmpty(updatevalue) && !isNaN(updatevalue) ? updatevalue : null;
+            obj.value = !isNaN(updatevalue) ? updatevalue : null;
             updatedField[obj.name] = obj;
             this.setState({ ...updatedField });
             // }
