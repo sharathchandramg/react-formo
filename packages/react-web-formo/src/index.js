@@ -482,9 +482,7 @@ export default class FormO extends Component {
               stateObj,
               !isNaN(updatevalue) ? updatevalue : null
             );
-          } catch (err) {
-            console.log(err);
-          }
+          } catch (err) {}
         }
       });
       this.setState({ ...newFields });
