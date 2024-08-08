@@ -292,13 +292,16 @@ export default class FormO extends Component {
           const data = this.getFormatedValues();
           const calculationExpression = jsonStringTemplater(query, data);
           try {
-            const value = evaluate(calculationExpression, data);
-            const updatevalue = value ? Number(Number(value).toFixed(2)) : null;
+            const evaluateValue = evaluate(calculationExpression, data);
+            const updatevalue = !isNaN(evaluateValue)
+              ? Number(Number(evaluateValue).toFixed(2))
+              : evaluateValue === 0
+              ? 0
+              : null;
             // if (!isEmpty(updatevalue) && !isNaN(updatevalue)) {
             const updatedField = {};
             const obj = this.state[ele.name];
-            obj.value =
-              !isEmpty(updatevalue) && !isNaN(updatevalue) ? updatevalue : null;
+            obj.value = !isNaN(updatevalue) ? updatevalue : null;
             updatedField[obj.name] = obj;
             this.setState({ ...updatedField });
             // }
@@ -429,6 +432,57 @@ export default class FormO extends Component {
         const field = this.state[fieldName];
         if (field) {
           newFields[field.name] = this.getFieldValue(field, args[0][fieldName]);
+        }
+      });
+
+      const values = {};
+      const namesInNewFields = new Set(Object.keys(newFields));
+      const stateFields = Object.keys(this.state)
+        .filter((key) => !namesInNewFields.has(key))
+        .reduce((acc, key) => {
+          acc[key] = this.state[key];
+          return acc;
+        }, {});
+
+      const updatedFields = { ...newFields, ...stateFields };
+
+      Object.keys(updatedFields).forEach((fieldName) => {
+        const field = updatedFields[fieldName];
+        if (field) {
+          values[field.name] = this.getFieldReturnValue(field);
+        }
+      });
+
+      const calcFields =
+        this.state.calcFields && this.state.calcFields.length > 0
+          ? this.state.calcFields
+          : [];
+
+      calcFields.forEach((field) => {
+        const stateObj = this.state[field.name];
+        if (
+          stateObj &&
+          stateObj.additional_config &&
+          stateObj.additional_config.calc &&
+          stateObj.additional_config.calc.expr
+        ) {
+          const calcExpr = jsonStringTemplater(
+            stateObj.additional_config.calc.expr,
+            values
+          );
+          try {
+            const evaluateValue = evaluate(calcExpr, values);
+            const updatevalue = !isNaN(evaluateValue)
+              ? Number(Number(evaluateValue).toFixed(2))
+              : evaluateValue === 0
+              ? 0
+              : null;
+
+            newFields[stateObj.name] = this.getFieldValue(
+              stateObj,
+              !isNaN(updatevalue) ? updatevalue : null
+            );
+          } catch (err) {}
         }
       });
       this.setState({ ...newFields });

@@ -72,7 +72,11 @@ export default class TextInputField extends Component {
         <div style={{ display: 'flex', height: 45 }}>
           <input
             type={attributes['type']}
-            value={attributes['value'] || ''}
+            value={
+              attributes['value'] || attributes['value'] === 0
+                ? attributes['value']
+                : ''
+            }
             id={attributes['name']}
             disabled={disableCondition}
             style={{
