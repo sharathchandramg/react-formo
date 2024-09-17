@@ -7,8 +7,7 @@ export default class StatusPickerField extends Component {
 
   renderWebPicker = () => {
     const { attributes } = this.props;
-    const disableCondition =
-      this.props.formSubmissionType === 'update' && !attributes.editable;
+    const disableCondition = !attributes.editable;
     return (
       <select
         style={{

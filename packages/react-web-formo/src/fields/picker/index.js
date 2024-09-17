@@ -9,9 +9,7 @@ export default class PickerField extends Component {
 
   renderWebPicker = () => {
     const { attributes } = this.props;
-    const disableCondition =
-    (this.props.formSubmissionType === 'create' && !attributes.editable) ||
-    (this.props.formSubmissionType === 'update' && !attributes.editable);
+    const disableCondition = !attributes.editable;
     return (
       <select
         style={{

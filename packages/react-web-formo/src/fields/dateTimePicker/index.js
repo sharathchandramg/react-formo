@@ -52,9 +52,7 @@ export default class DateTimePicker extends Component {
 
   showDatePicker = () => {
     const { attributes } = this.props;
-    const disableCondition =
-    (this.props.formSubmissionType === 'create' && !attributes.editable) ||
-    (this.props.formSubmissionType === 'update' && !attributes.editable);
+    const disableCondition = !attributes.editable;
     return (
       <DatePicker
         customInput={<CustomInput />}
@@ -70,9 +68,7 @@ export default class DateTimePicker extends Component {
 
   showTimePicker = () => {
     const { attributes } = this.props;
-    const disableCondition =
-    (this.props.formSubmissionType === 'create' && !attributes.editable) ||
-      (this.props.formSubmissionType === 'update' && !attributes.editable);
+    const disableCondition = !attributes.editable;
     return (
       <DatePicker
         customInput={<CustomInput />}
@@ -93,9 +89,7 @@ export default class DateTimePicker extends Component {
 
   showDateTimePicker = () => {
     const { attributes } = this.props;
-    const disableCondition =
-    (this.props.formSubmissionType === 'create' && !attributes.editable) ||
-    (this.props.formSubmissionType === 'update' && !attributes.editable);
+    const disableCondition = !attributes.editable;
     return (
       <DatePicker
         customInput={<CustomInput />}
