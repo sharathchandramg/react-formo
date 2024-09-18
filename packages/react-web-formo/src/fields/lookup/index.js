@@ -40,8 +40,8 @@ export default class Lookup extends Component {
 
   renderLookupUI = () => {
     const { attributes } = this.props;
-    const disableCondition =
-      this.props.formSubmissionType === 'update' && !attributes.editable;
+    const disableCondition = !attributes.editable;
+
     return (
       <div
         className={`lookup-data-wrapper ${disableCondition ? 'disabled' : ''}`}
