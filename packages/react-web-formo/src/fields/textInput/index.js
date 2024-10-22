@@ -5,7 +5,11 @@ export default class TextInputField extends Component {
   constructor(props) {
     super(props);
     this.inputRef = React.createRef();
+    this.state = {
+      errorMsg: '', // Store dynamically generated error message
+    };
   }
+
   componentDidMount() {
     const inputElement = this.inputRef.current;
 
@@ -27,15 +31,69 @@ export default class TextInputField extends Component {
   };
 
   handleChange = (event) => {
-    this.props.updateValue(this.props.attributes.name, event.target.value);
+    const { attributes } = this.props;
+    const { additional_config = {} } = attributes;
+    const { allow_decimal, allow_negative } = additional_config;
+    let inputValue = event.target.value;
+
+    if (allow_decimal === undefined && allow_negative === undefined) {
+      this.props.updateValue(attributes.name, inputValue);
+      return;
+    }
+
+    const { valid, errorMsg } = this.isValidInput(
+      inputValue,
+      allow_decimal,
+      allow_negative
+    );
+
+    if (!valid) {
+      this.setState({ errorMsg }); // Set dynamic error message
+      return;
+    }
+
+    // Clear any previous error message if input is valid
+    this.setState({ errorMsg: '' });
+    this.props.updateValue(attributes.name, inputValue);
+  };
+
+  isValidInput = (value, allow_decimal, allow_negative) => {
+    if (allow_decimal && !allow_negative) {
+      if (!/^(\d*\.?\d*)$/.test(value)) {
+        return { valid: false, errorMsg: 'Negative not allowed' };
+      }
+    }
+
+    if (!allow_decimal && allow_negative) {
+      if (!/^-?\d*$/.test(value)) {
+        return { valid: false, errorMsg: 'Decimal not allowed' };
+      }
+    }
+
+    if (!allow_decimal && !allow_negative) {
+      if (!/^\d*$/.test(value)) {
+        return { valid: false, errorMsg: 'Negative and decimal not allowed' };
+      }
+    }
+
+    if (allow_decimal && allow_negative) {
+      if (!/^-?\d*\.?\d*$/.test(value)) {
+        return { valid: false, errorMsg: 'Invalid input' };
+      }
+    }
+
+    return { valid: true, errorMsg: '' };
   };
 
   render() {
     const { attributes } = this.props;
+    const { errorMsg } = this.state; // Get dynamic error message from state
+
     const disableCondition =
       !attributes.editable ||
       (attributes['type'] === 'auto-incr-number' && !attributes.editable) ||
       (attributes && attributes['expression']);
+
     return (
       <div
         style={{
@@ -54,20 +112,8 @@ export default class TextInputField extends Component {
           }}
         >
           <p style={{ fontSize: 20, margin: 0 }}>
-            {attributes['label']} {attributes['required'] ? `*` : ''} :
+            {attributes['label']} {attributes['required'] ? '*' : ''} :
           </p>
-          {attributes['error'] && (
-            <p
-              id="error"
-              style={{
-                color: 'red',
-                fontSize: 12,
-                margin: 0,
-              }}
-            >
-              {attributes['errorMsg']}
-            </p>
-          )}
         </div>
         <div style={{ display: 'flex', height: 45 }}>
           <input
@@ -93,6 +139,29 @@ export default class TextInputField extends Component {
             ref={this.inputRef}
           />
         </div>
+        {/* Display error messages if present */}
+        {attributes['errorMsg'] && (
+          <p
+            style={{
+              color: 'red',
+              fontSize: 12,
+              marginTop: 5,
+            }}
+          >
+            {attributes['errorMsg']}
+          </p>
+        )}
+        {errorMsg && (
+          <p
+            style={{
+              color: 'red',
+              fontSize: 12,
+              marginTop: 5,
+            }}
+          >
+            {errorMsg}
+          </p>
+        )}
       </div>
     );
   }
