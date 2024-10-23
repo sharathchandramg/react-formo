@@ -33,7 +33,8 @@ export default class TextInputField extends Component {
   handleChange = (event) => {
     const { attributes } = this.props;
     const { additional_config = {} } = attributes;
-    const { allow_decimal, allow_negative } = additional_config;
+    const { allow_decimal, allow_negative,max,min } = additional_config;
+    console.log(additional_config,"CONFIG")
     let inputValue = event.target.value;
 
     if (allow_decimal === undefined && allow_negative === undefined) {
@@ -57,7 +58,7 @@ export default class TextInputField extends Component {
     this.props.updateValue(attributes.name, inputValue);
   };
 
-  isValidInput = (value, allow_decimal, allow_negative) => {
+  isValidInput = (value, allow_decimal, allow_negative,min,max) => {
     if (allow_decimal && !allow_negative) {
       if (!/^(\d*\.?\d*)$/.test(value)) {
         return { valid: false, errorMsg: 'Negative not allowed' };
@@ -102,6 +103,7 @@ export default class TextInputField extends Component {
           margin: 10,
         }}
       >
+
         <div
           style={{
             display: 'flex',
@@ -114,7 +116,37 @@ export default class TextInputField extends Component {
           <p style={{ fontSize: 20, margin: 0 }}>
             {attributes['label']} {attributes['required'] ? '*' : ''} :
           </p>
+        
+
+        {attributes['errorMsg'] && (
+          <p
+              id="error"
+              style={{
+                color: 'red',
+                fontSize: 12,
+                margin: 0,
+              }}
+            >
+            {attributes['errorMsg']}
+          </p>
+        )}
+    
+       
+        {errorMsg && (
+          <p
+            id="error"
+            style={{
+              color: 'red',
+              fontSize: 12,
+              margin:0,
+            }}
+          >
+            {errorMsg}
+          </p>
+        )}
+
         </div>
+  
         <div style={{ display: 'flex', height: 45 }}>
           <input
             type={attributes['type']}
@@ -139,29 +171,6 @@ export default class TextInputField extends Component {
             ref={this.inputRef}
           />
         </div>
-        {/* Display error messages if present */}
-        {attributes['errorMsg'] && (
-          <p
-            style={{
-              color: 'red',
-              fontSize: 12,
-              marginTop: 5,
-            }}
-          >
-            {attributes['errorMsg']}
-          </p>
-        )}
-        {errorMsg && (
-          <p
-            style={{
-              color: 'red',
-              fontSize: 12,
-              marginTop: 5,
-            }}
-          >
-            {errorMsg}
-          </p>
-        )}
       </div>
     );
   }
