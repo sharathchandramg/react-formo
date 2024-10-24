@@ -252,6 +252,12 @@ export function autoValidate(field, data = {}) {
 
   if (field.type == 'number') {
     const additionalConfigNum = field['additional_config'];
+    if (field.value === '') {
+      return { error: false, errorMsg: '' };
+    }
+  
+    const numericValue = Number(field.value);
+
     if (!isEmpty(additionalConfigNum) && !isEmpty(additionalConfigNum['max'])) {
       if (Number(field.value) > additionalConfigNum['max']) {
         error = true;
@@ -260,7 +266,7 @@ export function autoValidate(field, data = {}) {
     }
 
     if (!isEmpty(additionalConfigNum) && !isEmpty(additionalConfigNum['min'])) {
-      if (Number(field.value) < additionalConfigNum['min']) {
+      if (!isNaN(numericValue) && numericValue < additionalConfigNum['min']) {
         error = true;
         errorMsg = `Minimum value allowed is ${additionalConfigNum['min']}`;
       }
