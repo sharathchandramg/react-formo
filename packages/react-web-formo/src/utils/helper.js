@@ -31,8 +31,8 @@ export function getDefaultValue(field) {
       let curr_type = field.defaultCurrency
         ? field.defaultCurrency
         : field.currencyOptions
-        ? field.currencyOptions[0]
-        : '';
+          ? field.currencyOptions[0]
+          : '';
       let curr_value = field.defaultValue ? field.defaultValue : '';
       return { curr_value: curr_value, curr_type: curr_type };
 
@@ -250,6 +250,51 @@ export function autoValidate(field, data = {}) {
     return { error, errorMsg };
   }
 
+  if (field.type == 'number') {
+    const additionalConfigNum = field['additional_config'];
+    if (!isEmpty(additionalConfigNum) && !isEmpty(additionalConfigNum['max'])) {
+      if (Number(field.value) > additionalConfigNum['max']) {
+        error = true;
+        errorMsg = `Maximum value allowed is ${additionalConfigNum['max']}`;
+      }
+    }
+
+    if (!isEmpty(additionalConfigNum) && !isEmpty(additionalConfigNum['min'])) {
+      if (Number(field.value) < additionalConfigNum['min']) {
+        error = true;
+        errorMsg = `Minimum value allowed is ${additionalConfigNum['min']}`;
+      }
+    }
+
+    if (
+      !isEmpty(additionalConfigNum) &&
+      !isEmpty(additionalConfigNum['allow_decimal'])
+    ) {
+      const value = field.value.trim();
+
+      const hasDecimal = value.includes('.');
+
+      if (!additionalConfigNum['allow_decimal'] && hasDecimal) {
+        error = true;
+        errorMsg = `Decimal values are not allowed.`;
+      }
+    }
+
+    if (
+      !isEmpty(additionalConfigNum) &&
+      !isEmpty(additionalConfigNum['allow_negative'])
+    ) {
+      const value = field.value.trim();
+      const isNegative = value.startsWith('-');
+
+      if (!additionalConfigNum['allow_negative'] && isNegative) {
+        error = true;
+        errorMsg = `Negative values are not allowed.`;
+      }
+    }
+
+    return { error, errorMsg };
+  }
   if (field.required) {
     switch (field.type) {
       case 'text':
@@ -619,8 +664,8 @@ export const customFieldCalculations = (field, fieldValue, allFields) => {
         field['name'] === fieldName
           ? fieldValue
           : !isEmpty(dfObjValue)
-          ? dfObjValue
-          : null;
+            ? dfObjValue
+            : null;
       if (!isEmpty(value)) dfValues[fieldName] = value;
     }
 
