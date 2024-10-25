@@ -249,58 +249,6 @@ export function autoValidate(field, data = {}) {
     }
     return { error, errorMsg };
   }
-
-  if (field.type == 'number') {
-    const additionalConfigNum = field['additional_config'];
-    if (field.value === '') {
-      return { error: false, errorMsg: '' };
-    }
-  
-    const numericValue = Number(field.value);
-
-    if (!isEmpty(additionalConfigNum) && !isEmpty(additionalConfigNum['max'])) {
-      if (Number(field.value) > additionalConfigNum['max']) {
-        error = true;
-        errorMsg = `Maximum value allowed is ${additionalConfigNum['max']}`;
-      }
-    }
-
-    if (!isEmpty(additionalConfigNum) && !isEmpty(additionalConfigNum['min'])) {
-      if (!isNaN(numericValue) && numericValue < additionalConfigNum['min']) {
-        error = true;
-        errorMsg = `Minimum value allowed is ${additionalConfigNum['min']}`;
-      }
-    }
-
-    if (
-      !isEmpty(additionalConfigNum) &&
-      !isEmpty(additionalConfigNum['allow_decimal'])
-    ) {
-      const value = field.value.trim();
-
-      const hasDecimal = value.includes('.');
-
-      if (!additionalConfigNum['allow_decimal'] && hasDecimal) {
-        error = true;
-        errorMsg = `Decimal values are not allowed.`;
-      }
-    }
-
-    if (
-      !isEmpty(additionalConfigNum) &&
-      !isEmpty(additionalConfigNum['allow_negative'])
-    ) {
-      const value = field.value.trim();
-      const isNegative = value.startsWith('-');
-
-      if (!additionalConfigNum['allow_negative'] && isNegative) {
-        error = true;
-        errorMsg = `Negative values are not allowed.`;
-      }
-    }
-
-    return { error, errorMsg };
-  }
   if (field.required) {
     switch (field.type) {
       case 'text':
@@ -341,7 +289,6 @@ export function autoValidate(field, data = {}) {
         }
         break;
 
-      case 'number':
       case 'auto-incr-number':
         if (isEmpty(field.value)) {
           error = true;
@@ -468,66 +415,142 @@ export function autoValidate(field, data = {}) {
   return { error, errorMsg, success, successMsg, invalidRef };
 }
 
-export function customValidateOTP(field, from = '') {
+export function customValidateData(field, from = '') {
   let error = false;
   let errorMsg = '';
   let success = false;
   let successMsg = '';
   let invalidRef = false;
-  if (field.type !== 'otp') {
-    return { error, errorMsg, success, successMsg, invalidRef };
-  }
-  if (isEmpty(field.value) && field.required && from !== 'otp') {
-    error = true;
-    errorMsg = `${field.label} is required`;
-  } else if (isEmpty(field['ref_value']) && from === 'otp') {
-    error = true;
-    errorMsg = `Reference data is required`;
-    invalidRef = true;
-  } else if (isEmpty(field['ref_value']) && field.required) {
-    error = true;
-    errorMsg = `Get OTP`;
-    invalidRef = true;
-  } else if (!isEmpty(field['ref_value'])) {
-    const validateRefValue =
-      field['ref_value_type'] === 'PHONE'
-        ? !validateMobileNumber(field['ref_value'])
-        : !isEmail(field['ref_value']);
-    if (validateRefValue) {
-      error = true;
-      errorMsg =
-        field['ref_value_type'] === 'PHONE'
-          ? `${field['ref_value']} is not a valid mobile number`
-          : `${field['ref_value']} is not a valid email`;
-      invalidRef = true;
-    } else if (!isEmpty(field.value) && field.value.length !== 4) {
-      error = true;
-      errorMsg = 'Incorrect OTP. Retry.';
-    } else if (
-      !isEmpty(field.value) &&
-      field.value.length === 4 &&
-      (isEmpty(field.res) ||
-        (!isEmpty(field.res) && isEmpty(field.res.otp_code)))
-    ) {
-      error = true;
-      errorMsg = 'Incorrect OTP. Retry.';
-    } else if (
-      !isEmpty(field.value) &&
-      !isEmpty(field.res) &&
-      !isEmpty(field.res.otp_code) &&
-      field.value != field.res.otp_code
-    ) {
-      error = true;
-      errorMsg = 'Incorrect OTP. Retry.';
-    } else if (
-      !isEmpty(field.value) &&
-      !isEmpty(field.res) &&
-      !isEmpty(field.res.otp_code) &&
-      field.value == field.res.otp_code
-    ) {
-      success = true;
-      successMsg = 'Correct OTP';
+
+  switch (field.type) {
+    case 'number': {
+      const additionalConfigNum = field['additional_config'];
+
+      // Check if field is required and value is empty
+      if (isEmpty(field.value) && field.required) {
+        return { error: true, errorMsg: `${field.label} is required` };
+      }
+
+      if (isEmpty(field.value)) {
+        return { error: false, errorMsg: '' };
+      }
+
+      const numericValue = Number(field.value);
+
+      // Validate max value
+      if (
+        !isEmpty(additionalConfigNum) &&
+        !isEmpty(additionalConfigNum['max']) &&
+        numericValue > additionalConfigNum['max']
+      ) {
+        return {
+          error: true,
+          errorMsg: `Maximum value allowed is ${additionalConfigNum['max']}`,
+        };
+      }
+
+      // Validate min value
+      if (
+        !isEmpty(additionalConfigNum) &&
+        !isEmpty(additionalConfigNum['min']) &&
+        numericValue < additionalConfigNum['min']
+      ) {
+        return {
+          error: true,
+          errorMsg: `Minimum value allowed is ${additionalConfigNum['min']}`,
+        };
+      }
+
+      // Check for decimal values
+      if (
+        !isEmpty(additionalConfigNum) &&
+        !isEmpty(additionalConfigNum['allow_decimal'])
+      ) {
+        const value = field.value.trim();
+        const hasDecimal = value.includes('.');
+
+        if (!additionalConfigNum['allow_decimal'] && hasDecimal) {
+          return { error: true, errorMsg: `Decimal values are not allowed.` };
+        }
+
+        if (additionalConfigNum['allow_decimal'] && /[eE]/.test(value)) {
+          return {
+            error: true,
+            errorMsg: `Scientific notation (e/E) values are not allowed.`,
+          };
+        }
+      }
+
+      // Check for negative values
+      if (
+        !isEmpty(additionalConfigNum) &&
+        !isEmpty(additionalConfigNum['allow_negative'])
+      ) {
+        const value = field.value.trim();
+        const isNegative = value.startsWith('-');
+
+        if (!additionalConfigNum['allow_negative'] && isNegative) {
+          return { error: true, errorMsg: `Negative values are not allowed.` };
+        }
+      }
+
+      // If all validations pass, return no error
+      return { error: false, errorMsg: '' };
     }
+
+    case 'otp':
+      if (isEmpty(field.value) && field.required && from !== 'otp') {
+        error = true;
+        errorMsg = `${field.label} is required`;
+      } else if (isEmpty(field['ref_value']) && from === 'otp') {
+        error = true;
+        errorMsg = `Reference data is required`;
+        invalidRef = true;
+      } else if (isEmpty(field['ref_value']) && field.required) {
+        error = true;
+        errorMsg = `Get OTP`;
+        invalidRef = true;
+      } else if (!isEmpty(field['ref_value'])) {
+        const validateRefValue =
+          field['ref_value_type'] === 'PHONE'
+            ? !validateMobileNumber(field['ref_value'])
+            : !isEmail(field['ref_value']);
+        if (validateRefValue) {
+          error = true;
+          errorMsg =
+            field['ref_value_type'] === 'PHONE'
+              ? `${field['ref_value']} is not a valid mobile number`
+              : `${field['ref_value']} is not a valid email`;
+          invalidRef = true;
+        } else if (!isEmpty(field.value) && field.value.length !== 4) {
+          error = true;
+          errorMsg = 'Incorrect OTP. Retry.';
+        } else if (
+          !isEmpty(field.value) &&
+          field.value.length === 4 &&
+          (isEmpty(field.res) ||
+            (!isEmpty(field.res) && isEmpty(field.res.otp_code)))
+        ) {
+          error = true;
+          errorMsg = 'Incorrect OTP. Retry.';
+        } else if (
+          !isEmpty(field.value) &&
+          !isEmpty(field.res) &&
+          !isEmpty(field.res.otp_code) &&
+          field.value != field.res.otp_code
+        ) {
+          error = true;
+          errorMsg = 'Incorrect OTP. Retry.';
+        } else if (
+          !isEmpty(field.value) &&
+          !isEmpty(field.res) &&
+          !isEmpty(field.res.otp_code) &&
+          field.value == field.res.otp_code
+        ) {
+          success = true;
+          successMsg = 'Correct OTP';
+        }
+      }
   }
 
   return { error, errorMsg, success, successMsg, invalidRef };

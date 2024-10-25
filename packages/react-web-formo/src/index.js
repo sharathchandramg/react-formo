@@ -13,7 +13,7 @@ import {
   getResetValue,
   customFieldCalculations,
   getCalculatedFields,
-  customValidateOTP,
+  customValidateData,
 } from './utils/helper';
 import DateTimePicker from './fields/dateTimePicker/index.js';
 import Lookup from './fields/lookup/index.js';
@@ -107,8 +107,8 @@ export default class FormO extends Component {
           field.error = validate.error;
           field.errorMsg = validate.errorMsg;
         }
-        if (field.type === 'otp') {
-          let validate = customValidateOTP(field);
+        if (field.type === 'otp' || field.type=='number') {
+          let validate = customValidateData(field);
           field.error = validate.error;
           field.errorMsg = validate.errorMsg;
         }
@@ -194,7 +194,7 @@ export default class FormO extends Component {
           })
         : [];
     } else if (field.type === 'otp') {
-      const { error, success, invalidRef } = customValidateOTP(field);
+      const { error, success, invalidRef } = customValidateData(field);
       if (!error && success && !invalidRef && !isEmpty(field.value)) {
         return Number(field.value);
       } else {
@@ -206,7 +206,7 @@ export default class FormO extends Component {
   };
 
   getOtpByRefData = (field, cb) => {
-    const validatedRes = customValidateOTP(field, 'otp');
+    const validatedRes = customValidateData(field, 'otp');
     Object.assign(field, validatedRes);
     const newField = {};
     newField[field.name] = field;
@@ -242,8 +242,12 @@ export default class FormO extends Component {
     }
 
     if (valueObj.type === 'otp' && value.length === 4) {
-      Object.assign(valueObj, customValidateOTP(valueObj));
+      Object.assign(valueObj, customValidateData(valueObj));
     }
+    if (valueObj.type === 'number') {
+      Object.assign(valueObj, customValidateData(valueObj));
+    }
+
     // apply some custom logic for validation
     if (
       this.props.customValidation &&
@@ -411,7 +415,7 @@ export default class FormO extends Component {
         Object.assign(field, autoValidate(field));
       }
       if (field.type === 'otp') {
-        const otpValidationResult = customValidateOTP(field);
+        const otpValidationResult = customValidateData(field);
         Object.assign(field, otpValidationResult);
       }
 
