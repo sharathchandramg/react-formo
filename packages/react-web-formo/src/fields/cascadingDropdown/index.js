@@ -66,7 +66,7 @@ export default class CascadingDropdownField extends Component {
             <p
               id="error"
               style={{
-                color: 'red',
+                color: 'purple',
                 fontSize: 12,
                 margin: 0,
               }}
