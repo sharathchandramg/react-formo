@@ -347,9 +347,9 @@ export function autoValidate(field, data = {}) {
                 : null;
             const isValidOption =
               refFieldOption &&
-              refFieldOption.id &&
-              valueOption &&
-              valueOption.ref_id.length > 0
+                refFieldOption.id &&
+                valueOption &&
+                valueOption.ref_id.length > 0
                 ? valueOption.ref_id.includes(refFieldOption.id)
                 : false;
             if (!isValidOption) {
@@ -473,13 +473,14 @@ export function customValidateData(field, from = '') {
           return { error: true, errorMsg: `Decimal values are not allowed.` };
         }
 
-        if (additionalConfigNum['allow_decimal'] && /[eE]/.test(value)) {
+        if (additionalConfigNum['allow_decimal'] && /e|E/.test(value)) {
           return {
             error: true,
-            errorMsg: `Scientific notation (e/E) values are not allowed.`,
+            errorMsg: `Number is required`,
           };
         }
       }
+
 
       // Check for negative values
       if (
@@ -492,7 +493,15 @@ export function customValidateData(field, from = '') {
         if (!additionalConfigNum['allow_negative'] && isNegative) {
           return { error: true, errorMsg: `Negative values are not allowed.` };
         }
+
+        if (additionalConfigNum['allow_negative'] && /e|E/.test(value)) {
+          return {
+            error: true,
+            errorMsg: `Number is required`,
+          };
+        }
       }
+
 
       // If all validations pass, return no error
       return { error: false, errorMsg: '' };
