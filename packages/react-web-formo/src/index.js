@@ -410,9 +410,8 @@ export default class FormO extends Component {
       ) {
         Object.assign(field, autoValidate(field));
       }
-      if (field.type === 'otp') {
-        const otpValidationResult = customValidateOTP(field);
-        Object.assign(field, otpValidationResult);
+      if (field.type === 'otp' && isEmpty(field.value)) {
+        Object.assign(field, customValidateOTP(field));
       }
 
       if (
