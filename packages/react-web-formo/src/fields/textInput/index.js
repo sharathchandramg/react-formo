@@ -30,6 +30,16 @@ export default class TextInputField extends Component {
     this.props.updateValue(this.props.attributes.name, event.target.value);
   };
 
+  handleChangeNum = (event) => {
+    const value = event.target.value;
+    const isValidInput = /^[-+]?\d*\.?\d*$/.test(value);
+
+
+    if (isValidInput) {
+      this.props.updateValue(this.props.attributes.name, value);
+    }
+  };
+
   render() {
     const { attributes } = this.props;
     const disableCondition =
@@ -70,28 +80,53 @@ export default class TextInputField extends Component {
           )}
         </div>
         <div style={{ display: 'flex', height: 45 }}>
-          <input
-            type={attributes['type']}
-            value={
-              attributes['value'] || attributes['value'] === 0
-                ? attributes['value']
-                : ''
-            }
-            id={attributes['name']}
-            disabled={disableCondition}
-            style={{
-              width: '100%',
-              border: '1px solid #979797',
-              borderRadius: 5,
-              padding: 5,
-              fontSize: 16,
-              outline: 'none',
-              opacity: disableCondition ? 0.5 : 1,
-            }}
-            onChange={this.handleChange}
-            className="formo-text"
-            ref={this.inputRef}
-          />
+          {attributes['type'] === 'number' ? (
+            <input
+              type="text"
+              value={
+                attributes['value'] || attributes['value'] === 0
+                  ? attributes['value']
+                  : ''
+              }
+              id={attributes['name']}
+              disabled={disableCondition}
+              style={{
+                width: '100%',
+                border: '1px solid #979797',
+                borderRadius: 5,
+                padding: 5,
+                fontSize: 16,
+                outline: 'none',
+                opacity: disableCondition ? 0.5 : 1,
+              }}
+              onChange={this.handleChangeNum}
+              className="formo-text"
+              ref={this.inputRef}
+            />
+          ) : (
+            <input
+              type={attributes['type']}
+              value={
+                attributes['value'] || attributes['value'] === 0
+                  ? attributes['value']
+                  : ''
+              }
+              id={attributes['name']}
+              disabled={disableCondition}
+              style={{
+                width: '100%',
+                border: '1px solid #979797',
+                borderRadius: 5,
+                padding: 5,
+                fontSize: 16,
+                outline: 'none',
+                opacity: disableCondition ? 0.5 : 1,
+              }}
+              onChange={this.handleChange}
+              className="formo-text"
+              ref={this.inputRef}
+            />
+          )}
         </div>
       </div>
     );
