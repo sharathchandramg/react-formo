@@ -415,98 +415,62 @@ export function autoValidate(field, data = {}) {
   return { error, errorMsg, success, successMsg, invalidRef };
 }
 
-export function customValidateData(field, from = '') {
+export function isNumeric(value) {
+  return !isNaN(parseFloat(value)) && isFinite(value);
+}
+
+export function customValidateData(field, from = "") {
   let error = false;
-  let errorMsg = '';
+  let errorMsg = "";
   let success = false;
-  let successMsg = '';
+  let successMsg = "";
   let invalidRef = false;
-
   switch (field.type) {
-    case 'number': {
-      const additionalConfigNum = field['additional_config'];
-
-      // Check if field is required and value is empty
-      if (isEmpty(field.value) && field.required) {
-        return { error: true, errorMsg: `${field.label} is required` };
+    case "number":
+      const additionalConfig = field["additional_config"];
+      const numValue = field.value;
+      if (isEmpty(numValue) && field.required) {
+        error = true;
+        errorMsg = `${field.label} is required`;
       }
-
-      if (isEmpty(field.value)) {
-        return { error: false, errorMsg: '' };
-      }
-
-      const numericValue = Number(field.value);
-
-      // Validate max value
-      if (
-        !isEmpty(additionalConfigNum) &&
-        !isEmpty(additionalConfigNum['max']) &&
-        numericValue > additionalConfigNum['max']
+      else if (
+        !isEmpty(numValue) &&
+        isNumeric(numValue) &&
+        additionalConfig
       ) {
-        return {
-          error: true,
-          errorMsg: `Maximum value allowed is ${additionalConfigNum['max']}`,
-        };
-      }
+        const { min, max, allow_decimal, allow_negative } = additionalConfig;
+        if (!isEmpty(max) && numValue > max) {
+          error = true;
+          errorMsg = `Max allowed value is ${max}`;
+        } else if (!isEmpty(min) && numValue < min) {
+          error = true;
+          errorMsg = `Min allowed value is ${min}`;
+        } else {
+          const allowDecimal = allow_decimal ?? false;
+          const allowNegative = allow_negative ?? false;
 
-      // Validate min value
-      if (
-        !isEmpty(additionalConfigNum) &&
-        !isEmpty(additionalConfigNum['min']) &&
-        numericValue < additionalConfigNum['min']
-      ) {
-        return {
-          error: true,
-          errorMsg: `Minimum value allowed is ${additionalConfigNum['min']}`,
-        };
-      }
+          const regex = allowDecimal
+            ? allowNegative
+              ? /^-?\d*\.?\d*$/
+              : /^\d*\.?\d*$/
+            : allowNegative
+              ? /^-?\d*$/
+              : /^\d*$/;
 
-      // Check for decimal values
-      if (
-        !isEmpty(additionalConfigNum) &&
-        !isEmpty(additionalConfigNum['allow_decimal'])
-      ) {
-        const value = field.value.trim();
-        const hasDecimal = value.includes('.');
-
-        if (!additionalConfigNum['allow_decimal'] && hasDecimal) {
-          return { error: true, errorMsg: `Decimal values are not allowed.` };
-        }
-
-        if (additionalConfigNum['allow_decimal'] && /e|E/.test(value)) {
-          return {
-            error: true,
-            errorMsg: `Number is required`,
-          };
+          if (!regex.test(numValue)) {
+            error = true;
+            errorMsg =
+              allowDecimal && allowNegative
+                ? "Number is required"
+                : allowDecimal
+                  ? "Negative value are not allowed"
+                  : allowNegative
+                    ? "Decimal value are not allowed"
+                    : "Decimal and negative values are not allowed";
+          }
         }
       }
-
-
-      // Check for negative values
-      if (
-        !isEmpty(additionalConfigNum) &&
-        !isEmpty(additionalConfigNum['allow_negative'])
-      ) {
-        const value = field.value.trim();
-        const isNegative = value.startsWith('-');
-
-        if (!additionalConfigNum['allow_negative'] && isNegative) {
-          return { error: true, errorMsg: `Negative values are not allowed.` };
-        }
-
-        if (additionalConfigNum['allow_negative'] && /e|E/.test(value)) {
-          return {
-            error: true,
-            errorMsg: `Number is required`,
-          };
-        }
-      }
-
-
-      // If all validations pass, return no error
-      return { error: false, errorMsg: '' };
-    }
-
+      break;
     case 'otp':
       if (isEmpty(field.value) && field.required && from !== 'otp') {
         error = true;
@@ -561,7 +525,6 @@ export function customValidateData(field, from = '') {
         }
       }
   }
-
   return { error, errorMsg, success, successMsg, invalidRef };
 }
 
