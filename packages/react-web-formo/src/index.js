@@ -411,15 +411,10 @@ export default class FormO extends Component {
       ) {
         Object.assign(field, autoValidate(field));
       }
-      if (field.type === 'otp') {
-        const otpValidationResult = customValidateData(field);
-        Object.assign(field, otpValidationResult);
+      if (field.type === 'otp' || field.type === 'number') {
+        const validationResult = customValidateData(field);
+        Object.assign(field, validationResult);
       }
-      if (field.type === 'number') {
-        const numValidationResult = customValidateData(field);
-        Object.assign(field, numValidationResult);
-      }
-
       if (
         this.props.customValidation &&
         typeof this.props.customValidation === 'function'

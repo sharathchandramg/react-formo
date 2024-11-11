@@ -27,17 +27,15 @@ export default class TextInputField extends Component {
   };
 
   handleChange = (event) => {
-    this.props.updateValue(this.props.attributes.name, event.target.value);
-  };
+    const { value } = event.target;
+    const { type } = this.props.attributes;
 
-  handleChangeNum = (event) => {
-    const value = event.target.value;
-    const isValidInput = /^[-+]?\d*\.?\d*$/.test(value);
-
-
-    if (isValidInput) {
-      this.props.updateValue(this.props.attributes.name, value);
+    // Validate only if the input type is 'number'
+    if (type === 'number' && !/^[-+]?\d*\.?\d*$/.test(value)) {
+      return;
     }
+
+    this.props.updateValue(this.props.attributes.name, value);
   };
 
   render() {
@@ -47,87 +45,40 @@ export default class TextInputField extends Component {
       (attributes['type'] === 'auto-incr-number' && !attributes.editable) ||
       (attributes && attributes['expression']);
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          margin: 10,
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 8,
-          }}
-        >
+      <div style={{ display: 'flex', flexDirection: 'column', margin: 10 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
           <p style={{ fontSize: 20, margin: 0 }}>
-            {attributes['label']} {attributes['required'] ? `*` : ''} :
+            {attributes.label} {attributes.required ? '*' : ''} :
           </p>
-          {attributes['error'] && (
-            <p
-              id="error"
-              style={{
-                color: 'red',
-                fontSize: 12,
-                margin: 0,
-              }}
-            >
-              {attributes['errorMsg']}
+          {attributes.error && (
+            <p id="error" style={{ color: 'red', fontSize: 12, margin: 0 }}>
+              {attributes.errorMsg}
             </p>
           )}
         </div>
-        <div style={{ display: 'flex', height: 45 }}>
-          {attributes['type'] === 'number' ? (
-            <input
-              type="text"
-              value={
-                attributes['value'] || attributes['value'] === 0
-                  ? attributes['value']
-                  : ''
-              }
-              id={attributes['name']}
-              disabled={disableCondition}
-              style={{
-                width: '100%',
-                border: '1px solid #979797',
-                borderRadius: 5,
-                padding: 5,
-                fontSize: 16,
-                outline: 'none',
-                opacity: disableCondition ? 0.5 : 1,
-              }}
-              onChange={this.handleChangeNum}
-              className="formo-text"
-              ref={this.inputRef}
-            />
-          ) : (
-            <input
-              type={attributes['type']}
-              value={
-                attributes['value'] || attributes['value'] === 0
-                  ? attributes['value']
-                  : ''
-              }
-              id={attributes['name']}
-              disabled={disableCondition}
-              style={{
-                width: '100%',
-                border: '1px solid #979797',
-                borderRadius: 5,
-                padding: 5,
-                fontSize: 16,
-                outline: 'none',
-                opacity: disableCondition ? 0.5 : 1,
-              }}
-              onChange={this.handleChange}
-              className="formo-text"
-              ref={this.inputRef}
-            />
-          )}
-        </div>
+
+        <input
+          type={attributes.type === 'number' ? 'text' : attributes.type}
+          value={
+            attributes['value'] || attributes['value'] === 0
+              ? attributes['value']
+              : ''
+          }
+          id={attributes['name']}
+          disabled={disableCondition}
+          style={{
+            width: '100%',
+            border: '1px solid #979797',
+            borderRadius: 5,
+            padding: 5,
+            fontSize: 16,
+            outline: 'none',
+            opacity: disableCondition ? 0.5 : 1,
+          }}
+          onChange={this.handleChange}
+          className="formo-text"
+          ref={this.inputRef}
+        />
       </div>
     );
   }
