@@ -31,8 +31,8 @@ export function getDefaultValue(field) {
       let curr_type = field.defaultCurrency
         ? field.defaultCurrency
         : field.currencyOptions
-        ? field.currencyOptions[0]
-        : '';
+          ? field.currencyOptions[0]
+          : '';
       let curr_value = field.defaultValue ? field.defaultValue : '';
       return { curr_value: curr_value, curr_type: curr_type };
 
@@ -249,7 +249,6 @@ export function autoValidate(field, data = {}) {
     }
     return { error, errorMsg };
   }
-
   if (field.required) {
     switch (field.type) {
       case 'text':
@@ -290,7 +289,6 @@ export function autoValidate(field, data = {}) {
         }
         break;
 
-      case 'number':
       case 'auto-incr-number':
         if (isEmpty(field.value)) {
           error = true;
@@ -349,9 +347,9 @@ export function autoValidate(field, data = {}) {
                 : null;
             const isValidOption =
               refFieldOption &&
-              refFieldOption.id &&
-              valueOption &&
-              valueOption.ref_id.length > 0
+                refFieldOption.id &&
+                valueOption &&
+                valueOption.ref_id.length > 0
                 ? valueOption.ref_id.includes(refFieldOption.id)
                 : false;
             if (!isValidOption) {
@@ -417,68 +415,116 @@ export function autoValidate(field, data = {}) {
   return { error, errorMsg, success, successMsg, invalidRef };
 }
 
-export function customValidateOTP(field, from = '') {
-  let error = false;
-  let errorMsg = '';
-  let success = false;
-  let successMsg = '';
-  let invalidRef = false;
-  if (field.type !== 'otp') {
-    return { error, errorMsg, success, successMsg, invalidRef };
-  }
-  if (isEmpty(field.value) && field.required && from !== 'otp') {
-    error = true;
-    errorMsg = `${field.label} is required`;
-  } else if (isEmpty(field['ref_value']) && from === 'otp') {
-    error = true;
-    errorMsg = `Reference data is required`;
-    invalidRef = true;
-  } else if (isEmpty(field['ref_value']) && field.required) {
-    error = true;
-    errorMsg = `Get OTP`;
-    invalidRef = true;
-  } else if (!isEmpty(field['ref_value'])) {
-    const validateRefValue =
-      field['ref_value_type'] === 'PHONE'
-        ? !validateMobileNumber(field['ref_value'])
-        : !isEmail(field['ref_value']);
-    if (validateRefValue) {
-      error = true;
-      errorMsg =
-        field['ref_value_type'] === 'PHONE'
-          ? `${field['ref_value']} is not a valid mobile number`
-          : `${field['ref_value']} is not a valid email`;
-      invalidRef = true;
-    } else if (!isEmpty(field.value) && field.value.length !== 4) {
-      error = true;
-      errorMsg = 'Incorrect OTP. Retry.';
-    } else if (
-      !isEmpty(field.value) &&
-      field.value.length === 4 &&
-      (isEmpty(field.res) ||
-        (!isEmpty(field.res) && isEmpty(field.res.otp_code)))
-    ) {
-      error = true;
-      errorMsg = 'Incorrect OTP. Retry.';
-    } else if (
-      !isEmpty(field.value) &&
-      !isEmpty(field.res) &&
-      !isEmpty(field.res.otp_code) &&
-      field.value != field.res.otp_code
-    ) {
-      error = true;
-      errorMsg = 'Incorrect OTP. Retry.';
-    } else if (
-      !isEmpty(field.value) &&
-      !isEmpty(field.res) &&
-      !isEmpty(field.res.otp_code) &&
-      field.value == field.res.otp_code
-    ) {
-      success = true;
-      successMsg = 'Correct OTP';
-    }
-  }
+export function isNumeric(value) {
+  return !isNaN(parseFloat(value)) && isFinite(value);
+}
 
+export function customValidateData(field, from = "") {
+  let error = false;
+  let errorMsg = "";
+  let success = false;
+  let successMsg = "";
+  let invalidRef = false;
+  switch (field.type) {
+    case "number":
+      const additionalConfig = field["additional_config"];
+      const numValue = field.value;
+      if (isEmpty(numValue) && field.required) {
+        error = true;
+        errorMsg = `${field.label} is required`;
+      }
+      else if (
+        !isEmpty(numValue) &&
+        isNumeric(numValue) &&
+        additionalConfig
+      ) {
+        const { min, max, allow_decimal, allow_negative } = additionalConfig;
+        if (!isEmpty(max) && numValue > max) {
+          error = true;
+          errorMsg = `Max allowed value is ${max}`;
+        } else if (!isEmpty(min) && numValue < min) {
+          error = true;
+          errorMsg = `Min allowed value is ${min}`;
+        } else {
+          const allowDecimal = allow_decimal ?? false;
+          const allowNegative = allow_negative ?? false;
+
+          const regex = allowDecimal
+            ? allowNegative
+              ? /^-?\d*\.?\d*$/
+              : /^\d*\.?\d*$/
+            : allowNegative
+              ? /^-?\d*$/
+              : /^\d*$/;
+
+          if (!regex.test(numValue)) {
+            error = true;
+            errorMsg =
+              allowDecimal && allowNegative
+                ? "Number is required"
+                : allowDecimal
+                  ? "Negative value are not allowed"
+                  : allowNegative
+                    ? "Decimal value are not allowed"
+                    : "Decimal and negative values are not allowed";
+          }
+        }
+      }
+      break;
+    case 'otp':
+      if (isEmpty(field.value) && field.required && from !== 'otp') {
+        error = true;
+        errorMsg = `${field.label} is required`;
+      } else if (isEmpty(field['ref_value']) && from === 'otp') {
+        error = true;
+        errorMsg = `Reference data is required`;
+        invalidRef = true;
+      } else if (isEmpty(field['ref_value']) && field.required) {
+        error = true;
+        errorMsg = `Get OTP`;
+        invalidRef = true;
+      } else if (!isEmpty(field['ref_value'])) {
+        const validateRefValue =
+          field['ref_value_type'] === 'PHONE'
+            ? !validateMobileNumber(field['ref_value'])
+            : !isEmail(field['ref_value']);
+        if (validateRefValue) {
+          error = true;
+          errorMsg =
+            field['ref_value_type'] === 'PHONE'
+              ? `${field['ref_value']} is not a valid mobile number`
+              : `${field['ref_value']} is not a valid email`;
+          invalidRef = true;
+        } else if (!isEmpty(field.value) && field.value.length !== 4) {
+          error = true;
+          errorMsg = 'Incorrect OTP. Retry.';
+        } else if (
+          !isEmpty(field.value) &&
+          field.value.length === 4 &&
+          (isEmpty(field.res) ||
+            (!isEmpty(field.res) && isEmpty(field.res.otp_code)))
+        ) {
+          error = true;
+          errorMsg = 'Incorrect OTP. Retry.';
+        } else if (
+          !isEmpty(field.value) &&
+          !isEmpty(field.res) &&
+          !isEmpty(field.res.otp_code) &&
+          field.value != field.res.otp_code
+        ) {
+          error = true;
+          errorMsg = 'Incorrect OTP. Retry.';
+        } else if (
+          !isEmpty(field.value) &&
+          !isEmpty(field.res) &&
+          !isEmpty(field.res.otp_code) &&
+          field.value == field.res.otp_code
+        ) {
+          success = true;
+          successMsg = 'Correct OTP';
+        }
+      }
+  }
   return { error, errorMsg, success, successMsg, invalidRef };
 }
 
@@ -619,8 +665,8 @@ export const customFieldCalculations = (field, fieldValue, allFields) => {
         field['name'] === fieldName
           ? fieldValue
           : !isEmpty(dfObjValue)
-          ? dfObjValue
-          : null;
+            ? dfObjValue
+            : null;
       if (!isEmpty(value)) dfValues[fieldName] = value;
     }
 

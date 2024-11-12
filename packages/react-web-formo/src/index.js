@@ -13,7 +13,7 @@ import {
   getResetValue,
   customFieldCalculations,
   getCalculatedFields,
-  customValidateOTP,
+  customValidateData,
 } from './utils/helper';
 import DateTimePicker from './fields/dateTimePicker/index.js';
 import Lookup from './fields/lookup/index.js';
@@ -107,8 +107,8 @@ export default class FormO extends Component {
           field.error = validate.error;
           field.errorMsg = validate.errorMsg;
         }
-        if (field.type === 'otp') {
-          let validate = customValidateOTP(field);
+        if (field.type === 'otp' || field.type == 'number') {
+          let validate = customValidateData(field);
           field.error = validate.error;
           field.errorMsg = validate.errorMsg;
         }
@@ -186,15 +186,15 @@ export default class FormO extends Component {
     } else if (field.type && field.type.match(/document/i)) {
       return !isEmpty(field.value)
         ? field.value.map((item) => {
-            return {
-              name: item['name'],
-              file_path: item['file_path'] ? item['file_path'] : '',
-              content_type: item['content_type'] ? item['content_type'] : '',
-            };
-          })
+          return {
+            name: item['name'],
+            file_path: item['file_path'] ? item['file_path'] : '',
+            content_type: item['content_type'] ? item['content_type'] : '',
+          };
+        })
         : [];
-    } else if (field.type === 'otp') {
-      const { error, success, invalidRef } = customValidateOTP(field);
+    } else if (field.type === 'otp' || field.type == 'number') {
+      const { error, success, invalidRef } = customValidateData(field);
       if (!error && success && !invalidRef && !isEmpty(field.value)) {
         return Number(field.value);
       } else {
@@ -206,7 +206,7 @@ export default class FormO extends Component {
   };
 
   getOtpByRefData = (field, cb) => {
-    const validatedRes = customValidateOTP(field, 'otp');
+    const validatedRes = customValidateData(field, 'otp');
     Object.assign(field, validatedRes);
     const newField = {};
     newField[field.name] = field;
@@ -242,8 +242,9 @@ export default class FormO extends Component {
     }
 
     if (valueObj.type === 'otp' && value.length === 4) {
-      Object.assign(valueObj, customValidateOTP(valueObj));
+      Object.assign(valueObj, customValidateData(valueObj));
     }
+
     // apply some custom logic for validation
     if (
       this.props.customValidation &&
@@ -296,8 +297,8 @@ export default class FormO extends Component {
             const updatevalue = !isNaN(evaluateValue)
               ? Number(Number(evaluateValue).toFixed(2))
               : evaluateValue === 0
-              ? 0
-              : null;
+                ? 0
+                : null;
             // if (!isEmpty(updatevalue) && !isNaN(updatevalue)) {
             const updatedField = {};
             const obj = this.state[ele.name];
@@ -305,7 +306,7 @@ export default class FormO extends Component {
             updatedField[obj.name] = obj;
             this.setState({ ...updatedField });
             // }
-          } catch (err) {}
+          } catch (err) { }
         }
       });
     }
@@ -363,14 +364,14 @@ export default class FormO extends Component {
           } else if (field.type && field.type.match(/document/i)) {
             values[field.name] = !isEmpty(field.value)
               ? field.value.map((item) => {
-                  return {
-                    name: item['name'],
-                    file_path: item['file_path'] ? item['file_path'] : '',
-                    content_type: item['content_type']
-                      ? item['content_type']
-                      : '',
-                  };
-                })
+                return {
+                  name: item['name'],
+                  file_path: item['file_path'] ? item['file_path'] : '',
+                  content_type: item['content_type']
+                    ? item['content_type']
+                    : '',
+                };
+              })
               : [];
           } else {
             values[field.name] = field.value;
@@ -410,11 +411,10 @@ export default class FormO extends Component {
       ) {
         Object.assign(field, autoValidate(field));
       }
-      if (field.type === 'otp') {
-        const otpValidationResult = customValidateOTP(field);
-        Object.assign(field, otpValidationResult);
+      if (field.type === 'otp' || field.type === 'number') {
+        const validationResult = customValidateData(field);
+        Object.assign(field, validationResult);
       }
-
       if (
         this.props.customValidation &&
         typeof this.props.customValidation === 'function'
@@ -475,14 +475,14 @@ export default class FormO extends Component {
             const updatevalue = !isNaN(evaluateValue)
               ? Number(Number(evaluateValue).toFixed(2))
               : evaluateValue === 0
-              ? 0
-              : null;
+                ? 0
+                : null;
 
             newFields[stateObj.name] = this.getFieldValue(
               stateObj,
               !isNaN(updatevalue) ? updatevalue : null
             );
-          } catch (err) {}
+          } catch (err) { }
         }
       });
       this.setState({ ...newFields });
