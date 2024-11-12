@@ -186,12 +186,12 @@ export default class FormO extends Component {
     } else if (field.type && field.type.match(/document/i)) {
       return !isEmpty(field.value)
         ? field.value.map((item) => {
-          return {
-            name: item['name'],
-            file_path: item['file_path'] ? item['file_path'] : '',
-            content_type: item['content_type'] ? item['content_type'] : '',
-          };
-        })
+            return {
+              name: item['name'],
+              file_path: item['file_path'] ? item['file_path'] : '',
+              content_type: item['content_type'] ? item['content_type'] : '',
+            };
+          })
         : [];
     } else if (field.type === 'otp' || field.type == 'number') {
       const { error, success, invalidRef } = customValidateData(field);
@@ -297,8 +297,8 @@ export default class FormO extends Component {
             const updatevalue = !isNaN(evaluateValue)
               ? Number(Number(evaluateValue).toFixed(2))
               : evaluateValue === 0
-                ? 0
-                : null;
+              ? 0
+              : null;
             // if (!isEmpty(updatevalue) && !isNaN(updatevalue)) {
             const updatedField = {};
             const obj = this.state[ele.name];
@@ -306,7 +306,7 @@ export default class FormO extends Component {
             updatedField[obj.name] = obj;
             this.setState({ ...updatedField });
             // }
-          } catch (err) { }
+          } catch (err) {}
         }
       });
     }
@@ -364,14 +364,14 @@ export default class FormO extends Component {
           } else if (field.type && field.type.match(/document/i)) {
             values[field.name] = !isEmpty(field.value)
               ? field.value.map((item) => {
-                return {
-                  name: item['name'],
-                  file_path: item['file_path'] ? item['file_path'] : '',
-                  content_type: item['content_type']
-                    ? item['content_type']
-                    : '',
-                };
-              })
+                  return {
+                    name: item['name'],
+                    file_path: item['file_path'] ? item['file_path'] : '',
+                    content_type: item['content_type']
+                      ? item['content_type']
+                      : '',
+                  };
+                })
               : [];
           } else {
             values[field.name] = field.value;
@@ -475,14 +475,14 @@ export default class FormO extends Component {
             const updatevalue = !isNaN(evaluateValue)
               ? Number(Number(evaluateValue).toFixed(2))
               : evaluateValue === 0
-                ? 0
-                : null;
+              ? 0
+              : null;
 
             newFields[stateObj.name] = this.getFieldValue(
               stateObj,
               !isNaN(updatevalue) ? updatevalue : null
             );
-          } catch (err) { }
+          } catch (err) {}
         }
       });
       this.setState({ ...newFields });

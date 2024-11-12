@@ -46,7 +46,14 @@ export default class TextInputField extends Component {
       (attributes && attributes['expression']);
     return (
       <div style={{ display: 'flex', flexDirection: 'column', margin: 10 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 8,
+          }}
+        >
           <p style={{ fontSize: 20, margin: 0 }}>
             {attributes.label} {attributes.required ? '*' : ''} :
           </p>
