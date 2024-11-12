@@ -31,8 +31,8 @@ export function getDefaultValue(field) {
       let curr_type = field.defaultCurrency
         ? field.defaultCurrency
         : field.currencyOptions
-          ? field.currencyOptions[0]
-          : '';
+        ? field.currencyOptions[0]
+        : '';
       let curr_value = field.defaultValue ? field.defaultValue : '';
       return { curr_value: curr_value, curr_type: curr_type };
 
@@ -347,9 +347,9 @@ export function autoValidate(field, data = {}) {
                 : null;
             const isValidOption =
               refFieldOption &&
-                refFieldOption.id &&
-                valueOption &&
-                valueOption.ref_id.length > 0
+              refFieldOption.id &&
+              valueOption &&
+              valueOption.ref_id.length > 0
                 ? valueOption.ref_id.includes(refFieldOption.id)
                 : false;
             if (!isValidOption) {
@@ -419,21 +419,20 @@ export function isNumeric(value) {
   return !isNaN(parseFloat(value)) && isFinite(value);
 }
 
-export function customValidateData(field, from = "") {
+export function customValidateData(field, from = '') {
   let error = false;
-  let errorMsg = "";
+  let errorMsg = '';
   let success = false;
-  let successMsg = "";
+  let successMsg = '';
   let invalidRef = false;
   switch (field.type) {
-    case "number":
-      const additionalConfig = field["additional_config"];
+    case 'number':
+      const additionalConfig = field['additional_config'];
       const numValue = field.value;
       if (isEmpty(numValue) && field.required) {
         error = true;
         errorMsg = `${field.label} is required`;
-      }
-      else if (
+      } else if (
         !isEmpty(numValue) &&
         isNumeric(numValue) &&
         additionalConfig
@@ -454,19 +453,19 @@ export function customValidateData(field, from = "") {
               ? /^-?\d*\.?\d*$/
               : /^\d*\.?\d*$/
             : allowNegative
-              ? /^-?\d*$/
-              : /^\d*$/;
+            ? /^-?\d*$/
+            : /^\d*$/;
 
           if (!regex.test(numValue)) {
             error = true;
             errorMsg =
               allowDecimal && allowNegative
-                ? "Number is required"
+                ? 'Number is required'
                 : allowDecimal
-                  ? "Negative value are not allowed"
-                  : allowNegative
-                    ? "Decimal value are not allowed"
-                    : "Decimal and negative values are not allowed";
+                ? 'Negative value are not allowed'
+                : allowNegative
+                ? 'Decimal value are not allowed'
+                : 'Decimal and negative values are not allowed';
           }
         }
       }
@@ -665,8 +664,8 @@ export const customFieldCalculations = (field, fieldValue, allFields) => {
         field['name'] === fieldName
           ? fieldValue
           : !isEmpty(dfObjValue)
-            ? dfObjValue
-            : null;
+          ? dfObjValue
+          : null;
       if (!isEmpty(value)) dfValues[fieldName] = value;
     }
 
