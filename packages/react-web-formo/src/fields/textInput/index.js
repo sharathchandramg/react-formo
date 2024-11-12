@@ -56,29 +56,30 @@ export default class TextInputField extends Component {
             </p>
           )}
         </div>
-
-        <input
-          type={attributes.type === 'number' ? 'text' : attributes.type}
-          value={
-            attributes['value'] || attributes['value'] === 0
-              ? attributes['value']
-              : ''
-          }
-          id={attributes['name']}
-          disabled={disableCondition}
-          style={{
-            width: '100%',
-            border: '1px solid #979797',
-            borderRadius: 5,
-            padding: 5,
-            fontSize: 16,
-            outline: 'none',
-            opacity: disableCondition ? 0.5 : 1,
-          }}
-          onChange={this.handleChange}
-          className="formo-text"
-          ref={this.inputRef}
-        />
+        <div style={{ display: 'flex', height: 45 }}>
+          <input
+            type={attributes.type === 'number' ? 'text' : attributes.type}
+            value={
+              attributes['value'] || attributes['value'] === 0
+                ? attributes['value']
+                : ''
+            }
+            id={attributes['name']}
+            disabled={disableCondition}
+            style={{
+              width: '100%',
+              border: '1px solid #979797',
+              borderRadius: 5,
+              padding: 5,
+              fontSize: 16,
+              outline: 'none',
+              opacity: disableCondition ? 0.5 : 1,
+            }}
+            onChange={this.handleChange}
+            className="formo-text"
+            ref={this.inputRef}
+          />
+        </div>
       </div>
     );
   }
