@@ -30,7 +30,7 @@ export default class SearchableDropDown extends Component {
     document.removeEventListener('mousedown', this.handleClickOutside);
   }
 
-  handleClickOutside = event => {
+  handleClickOutside = (event) => {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.setState({ focus: false, item: this.props.selectedValue });
     }
@@ -39,45 +39,55 @@ export default class SearchableDropDown extends Component {
   renderList = () => {
     return (
       <div
-        className="list-wrapper"
-        style={{
-          border:
-            this.state.listItems.length > 0
-              ? '1px solid rgb(151, 151, 151)'
-              : 'unset',
-        }}
-        ref={node => (this.wrapperRef = node)}
+        className={`list-wrapper ${
+          this.state.listItems.length > 0 ? '' : 'list-wrapper-no-data'
+        }`}
+        ref={(node) => (this.wrapperRef = node)}
       >
-        {this.state.listItems.map((item, index) => {
-          return (
-            <div
-              onClick={() => {
-                this.setState({ focus: false });
-                this.props.onItemSelect(item.label);
-              }}
-              className="list-item"
-              style={{
-                borderBottom:
-                  index === this.state.listItems.length - 1
-                    ? 'unset'
-                    : '1px solid #979797',
-              }}
-              key={`cascading-${index}`}
-            >
-              {item.label}
-            </div>
-          );
-        })}
+        {this.state.listItems.length > 0 ? (
+          this.state.listItems.map((item, index) => {
+            return (
+              <div
+                onClick={() => {
+                  this.setState({ focus: false });
+                  this.props.onItemSelect(item.label);
+                }}
+                className="list-item"
+                style={{
+                  borderBottom:
+                    index === this.state.listItems.length - 1
+                      ? 'unset'
+                      : '1px solid #979797',
+                }}
+                key={`cascading-${index}`}
+              >
+                {item.label}
+              </div>
+            );
+          })
+        ) : (
+          <div
+            className="list-item"
+            style={{
+              borderBottom: 'unset',
+              cursor: 'inherit',
+              opacity: 0.4,
+            }}
+            key={`cascading-no-data-found`}
+          >
+            No Data Found
+          </div>
+        )}
       </div>
     );
   };
 
-  searchedItems = event => {
+  searchedItems = (event) => {
     const searchedText = event.target.value;
     const setSort = (item, searchedText) => {
       return item.label.toLowerCase().indexOf(searchedText.toLowerCase()) > -1;
     };
-    const searchedList = this.props.items.filter(item => {
+    const searchedList = this.props.items.filter((item) => {
       return setSort(item, searchedText);
     });
     this.setState({
