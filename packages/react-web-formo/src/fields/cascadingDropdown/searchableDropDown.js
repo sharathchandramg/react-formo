@@ -67,12 +67,7 @@ export default class SearchableDropDown extends Component {
           })
         ) : (
           <div
-            className="list-item"
-            style={{
-              borderBottom: 'unset',
-              cursor: 'inherit',
-              opacity: 0.4,
-            }}
+            className="list-item list-item-no-data"
             key={`cascading-no-data-found`}
           >
             No Data Found
@@ -99,7 +94,7 @@ export default class SearchableDropDown extends Component {
   renderInput = () => {
     const { attributes } = this.props;
     return (
-      <div style={{ display: 'flex', height: 45 }}>
+      <div className="cas-input-wrapper">
         <input
           type={'text'}
           value={this.state.item}

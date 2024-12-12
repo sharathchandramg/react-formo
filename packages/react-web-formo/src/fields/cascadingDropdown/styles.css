@@ -50,3 +50,14 @@
   cursor: pointer;
   overflow: hidden;
 }
+
+.list-item-no-data {
+  border-bottom: unset;
+  cursor: inherit;
+  opacity: 0.4;
+}
+
+.cas-input-wrapper{
+  display: flex;
+  height: 45px;
+}
