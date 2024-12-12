@@ -14,6 +14,7 @@ import {
   customFieldCalculations,
   getCalculatedFields,
   customValidateData,
+  isFieldCalculated,
 } from './utils/helper';
 import DateTimePicker from './fields/dateTimePicker/index.js';
 import Lookup from './fields/lookup/index.js';
@@ -107,7 +108,10 @@ export default class FormO extends Component {
           field.error = validate.error;
           field.errorMsg = validate.errorMsg;
         }
-        if (field.type === 'otp' || field.type == 'number') {
+        if (
+          field.type === 'otp' ||
+          (field.type == 'number' && !isFieldCalculated(field))
+        ) {
           let validate = customValidateData(field);
           field.error = validate.error;
           field.errorMsg = validate.errorMsg;
@@ -193,7 +197,10 @@ export default class FormO extends Component {
             };
           })
         : [];
-    } else if (field.type === 'otp' || field.type == 'number') {
+    } else if (
+      field.type === 'otp' ||
+      (field.type == 'number' && !isFieldCalculated(field))
+    ) {
       const { error, success, invalidRef } = customValidateData(field);
       if (!error && success && !invalidRef && !isEmpty(field.value)) {
         return Number(field.value);
@@ -411,7 +418,10 @@ export default class FormO extends Component {
       ) {
         Object.assign(field, autoValidate(field));
       }
-      if (field.type === 'otp' || field.type === 'number') {
+      if (
+        field.type === 'otp' ||
+        (field.type === 'number' && !isFieldCalculated(field))
+      ) {
         const validationResult = customValidateData(field);
         Object.assign(field, validationResult);
       }

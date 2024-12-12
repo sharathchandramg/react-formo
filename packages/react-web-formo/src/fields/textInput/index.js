@@ -31,7 +31,7 @@ export default class TextInputField extends Component {
     const { type } = this.props.attributes;
 
     // Validate only if the input type is 'number'
-    if (type === 'number' && !/^[-+]?\d*\.?\d*$/.test(value)) {
+    if (type === 'number' && !/^[-]?\d*\.?\d*$/.test(value)) {
       return;
     }
 
