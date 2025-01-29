@@ -9,3 +9,11 @@
   padding-left: 5px;
   font-size: 16px;
 }
+.value-wrapper{
+  display: flex;
+  align-items: flex-start;
+}
+
+.option-label{
+  margin-top: -0.5%;
+}
