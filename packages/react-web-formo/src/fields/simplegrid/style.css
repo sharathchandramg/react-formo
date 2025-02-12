@@ -1,0 +1,121 @@
+.lookup-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.lookup-content-wrapper {
+  display: flex;
+  height: 45px;
+}
+
+.lookup-data-wrapper {
+  width: 100%;
+  padding: 0 10px;
+  border: 1px solid #979797;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.lookup-data-wrapper p {
+  margin: 0;
+  font-size: 16px;
+}
+.lookup-data-wrapper .value-icon-wrapper {
+  display: flex;
+  align-items: center;
+}
+.lookup-data-wrapper .value-icon-wrapper h6 {
+  font-size: 16px;
+  margin: 0;
+  font-weight: initial;
+}
+
+.lookup-data-wrapper .value-icon-wrapper i {
+  font-size: 16px;
+  padding-left: 10px;
+}
+
+.label-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.label-wrapper .label-text {
+  width: 50%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.label-wrapper .label-text p {
+  font-size: 20px;
+  margin: 0;
+}
+
+.label-wrapper .error-text {
+  width: 50%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.label-wrapper .error-text p {
+  color: red;
+  font-size: 12px;
+  margin: 0px;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+
+#doc-preview-modal-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+  #doc-preview-modal-wrapper .doc-preview-modal-container {
+    width: 50%;
+    height: 90%;
+    max-height: 90%;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff; }
+    #doc-preview-modal-wrapper .doc-preview-modal-container .doc-preview-modal-header {
+      height: 50px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      border-bottom: 2px solid black; }
+      #doc-preview-modal-wrapper .doc-preview-modal-container .doc-preview-modal-header p {
+        color: #4a4a4a;
+        font-size: 20px;
+        font-weight: bold;
+        line-height: 25px;
+        margin-bottom: 0; }
+      #doc-preview-modal-wrapper .doc-preview-modal-container .doc-preview-modal-header .close-button {
+        color: #00acf1;
+        font-family: 'Font Awesome 5 Pro';
+        font-size: 20px;
+        font-weight: 300;
+        position: absolute;
+        right: 2%;
+        cursor: pointer; }
+    #doc-preview-modal-wrapper .doc-preview-modal-container .doc-preview-modal-body {
+      width: 100%;
+      height: 90%;
+      overflow: auto;
+      padding: 15px; }
+      #doc-preview-modal-wrapper .doc-preview-modal-container .doc-preview-modal-body .doc-item {
+        color: #007bff;
+        cursor: pointer; }
