@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { isEmpty } from './../../utils/validators';
 import TableModal from './tableModal';
 import './style.css';
-export default class Lookup extends Component {
+
+export default class SimpleGrid extends Component {
   wrapperRef;
   constructor(props) {
     super(props);
@@ -392,11 +393,13 @@ export default class Lookup extends Component {
       this.props.formSubmissionType === 'update' && !attributes.editable;
     return (
       <div
-        className={`lookup-data-wrapper ${disableCondition ? 'disabled' : ''}`}
+        className={`simple-grid-data-wrapper ${
+          disableCondition ? 'disabled' : ''
+        }`}
         onClick={() => this.toggleModal()}
       >
         <p style={{ paddingStart: 5 }}>{attributes.label}</p>
-        <div className="value-icon-wrapper">
+        <div className="simple-grid-value-icon-wrapper">
           <h6>{this.getSelectedValue()}</h6>
           <i className="fal fa-angle-right"></i>
         </div>
@@ -406,24 +409,24 @@ export default class Lookup extends Component {
 
   render() {
     const { attributes } = this.props;
-    console.log(this.state.rowData);
-    console.log(this.state.data);
     return (
       <>
-        <div className="lookup-wrapper">
-          <div className="label-wrapper">
-            <div className="label-text">
+        <div className="simple-grid-wrapper">
+          <div className="simple-grid-label-wrapper">
+            <div className="simple-grid-label-text">
               <p>
                 {attributes['label']} {attributes['required'] ? `*` : ''} :
               </p>
             </div>
-            <div className="error-text">
+            <div className="simple-grid-error-text">
               {attributes['error'] && (
                 <p id="error">{attributes['errorMsg']}</p>
               )}
             </div>
           </div>
-          <div className="lookup-content-wrapper">{this.renderLookupUI()}</div>
+          <div className="simple-grid-content-wrapper">
+            {this.renderLookupUI()}
+          </div>
         </div>
         {this.state.modalVisible && (
           <TableModal

@@ -14,11 +14,11 @@ const TableModal = ({
     <Modal
       isOpen={modalVisible}
       onRequestClose={() => toggleModal()}
-      className="grid-component-modal-wrapper"
-      overlayClassName="grid-component-modal-overlay"
+      className="simple-grid-modal-wrapper"
+      overlayClassName="simple-grid-modal-overlay"
     >
-      <div className="doc-preview-modal-container">
-        <div className="doc-preview-modal-header">
+      <div className="simple-grid-modal-container">
+        <div className="simple-grid-modal-header">
           <p>{label}</p>
           <i
             className="far fa-times-circle close-button"
@@ -26,7 +26,7 @@ const TableModal = ({
           />
         </div>
         <div
-          className="doc-preview-modal-body"
+          className="simple-grid-modal-body"
           ref={(node) => (wrapperRef = node)}
         >
           <div className="simple-grid-table-wrapper">
