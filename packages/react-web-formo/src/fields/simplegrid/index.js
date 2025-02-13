@@ -9,11 +9,9 @@ export default class SimpleGrid extends Component {
     super(props);
     this.state = {
       modalVisible: false,
-      editModal: false,
       selectedItm: {},
       data: {},
       rowData: null,
-      rowIndex: 0,
     };
   }
 
@@ -161,13 +159,13 @@ export default class SimpleGrid extends Component {
         }
         selectedItm[rk] = data[rk];
       });
-      this.setState({ data: data, selectedItm: selectedItm, editModal: false });
-    } else {
-      this.setState({ editModal: false });
+      this.setState({ data: data, selectedItm: selectedItm });
     }
   };
 
   handleOnDoneClick = () => {
+    console.log(this.getSummaryLabel());
+    console.log(this.state.data);
     let summary = {
       label: this.getSummaryLabel(),
       data: this.state.data,
@@ -187,6 +185,61 @@ export default class SimpleGrid extends Component {
     this.setState({ rowData: rowData });
   };
 
+  onChangeTextNew = (rk, ck, value) => {
+    let data = this.state.data;
+    // let rowData = this.state.rowData;
+    // rowData = _.map(rowData, (item) => {
+    //   if (item['rowKey'] === rk && item['colKey'] === ck) {
+    //     item['value'] = text;
+    //   }
+    //   return item;
+    // });
+    // this.setState({ rowData: rowData });
+    const preColSum = data[`${String.fromCharCode(931)}`][ck];
+    const header_type = data['type'];
+    const ck_type = header_type[ck];
+    if (ck_type.toLowerCase() === 'number') {
+      const preColVal = data[rk][ck] || '0';
+      data[rk][ck] = value;
+      if (value && !isNaN(value)) {
+        if (preColVal) {
+          const diff =
+            this.getFormattedNumber(value) - this.getFormattedNumber(preColVal);
+          data[`${String.fromCharCode(931)}`][ck] = this.getFormattedNumber(
+            this.getFormattedNumber(preColSum) + diff
+          );
+        } else {
+          data[`${String.fromCharCode(931)}`][ck] = this.getFormattedNumber(
+            this.getFormattedNumber(preColSum) + this.getFormattedNumber(value)
+          );
+        }
+      } else {
+        data[`${String.fromCharCode(931)}`][ck] = this.getFormattedNumber(
+          this.getFormattedNumber(preColSum) -
+            this.getFormattedNumber(preColVal)
+        );
+      }
+    } else if (
+      ck_type.toLowerCase() === 'string' ||
+      ck_type.toLowerCase() === 'text'
+    ) {
+      const preColVal = data[rk][ck] || '';
+      data[rk][ck] = value;
+      if (value) {
+        if (preColVal) {
+          data[`${String.fromCharCode(931)}`][ck] = parseInt(preColSum);
+        } else {
+          data[`${String.fromCharCode(931)}`][ck] = parseInt(preColSum) + 1;
+        }
+      } else {
+        data[`${String.fromCharCode(931)}`][ck] = preColSum
+          ? parseInt(preColSum) - 1
+          : parseInt(preColSum);
+      }
+    }
+    this.setState({ data: data });
+  };
+
   toggleModal = () => {
     if (this.state.modalVisible) {
       this.setState({
@@ -201,15 +254,6 @@ export default class SimpleGrid extends Component {
         }
       }
       this.setState({ modalVisible: true });
-    }
-  };
-
-  toggleEditModal = (rowData, rowIndex) => {
-    const editModal = this.state.editModal;
-    if (editModal) {
-      this.setState({ editModal: false, rowData: null, rowIndex: 0 });
-    } else {
-      this.setState({ editModal: true, rowData: rowData, rowIndex: rowIndex });
     }
   };
 
@@ -335,35 +379,6 @@ export default class SimpleGrid extends Component {
     return tableData;
   };
 
-  getHeaderWidth = (data) => {
-    let widthArr = [];
-    if (data && Object.keys(data).length && !isEmpty(data['style'])) {
-      const column_width = data['style']['column_width'];
-      widthArr = Object.keys(column_width).map((key) => {
-        return parseInt(column_width[key]);
-      });
-    } else {
-      if (!isEmpty(data['header'])) {
-        const len = Object.keys(data['header']).length;
-        for (let i = 0; i < len; i++) {
-          widthArr.push(100);
-        }
-      }
-    }
-
-    return widthArr;
-  };
-
-  getRowHeight = (data) => {
-    let height = 40;
-    if (data && Object.keys(data).length && !isEmpty(data['style'])) {
-      if (!isEmpty(data['style']['row_height'])) {
-        height = parseInt(data['style']['row_height']);
-      }
-    }
-    return height;
-  };
-
   getSelectedValue = () => {
     const { attributes } = this.props;
     let value = 'None';
@@ -437,6 +452,7 @@ export default class SimpleGrid extends Component {
             summary={this.getSummaryLabel()}
             handleOnDoneClick={this.handleOnDoneClick}
             wrapperRef={this.wrapperRef}
+            onChangeText={this.onChangeTextNew}
           />
         )}
       </>

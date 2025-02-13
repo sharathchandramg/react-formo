@@ -9,6 +9,7 @@ const TableModal = ({
   summary,
   handleOnDoneClick,
   wrapperRef,
+  onChangeText,
 }) => {
   return (
     <Modal
@@ -74,6 +75,9 @@ const TableModal = ({
                             type="text"
                             className="simple-grid-table-cell-input"
                             defaultValue={values[field]}
+                            onChange={(e) =>
+                              onChangeText(key, field, e.target.value)
+                            }
                           />
                         </div>
                       ))}
