@@ -24,10 +24,12 @@
   margin: 0;
   font-size: 16px;
 }
+
 .lookup-data-wrapper .value-icon-wrapper {
   display: flex;
   align-items: center;
 }
+
 .lookup-data-wrapper .value-icon-wrapper h6 {
   font-size: 16px;
   margin: 0;
@@ -75,47 +77,135 @@
   opacity: 0.5;
 }
 
+.grid-component-modal-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid-component-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
 
 #doc-preview-modal-wrapper {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center; }
-  #doc-preview-modal-wrapper .doc-preview-modal-container {
-    width: 50%;
-    height: 90%;
-    max-height: 90%;
-    display: flex;
-    flex-direction: column;
-    background-color: #ffffff; }
-    #doc-preview-modal-wrapper .doc-preview-modal-container .doc-preview-modal-header {
-      height: 50px;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      border-bottom: 2px solid black; }
-      #doc-preview-modal-wrapper .doc-preview-modal-container .doc-preview-modal-header p {
-        color: #4a4a4a;
-        font-size: 20px;
-        font-weight: bold;
-        line-height: 25px;
-        margin-bottom: 0; }
-      #doc-preview-modal-wrapper .doc-preview-modal-container .doc-preview-modal-header .close-button {
-        color: #00acf1;
-        font-family: 'Font Awesome 5 Pro';
-        font-size: 20px;
-        font-weight: 300;
-        position: absolute;
-        right: 2%;
-        cursor: pointer; }
-    #doc-preview-modal-wrapper .doc-preview-modal-container .doc-preview-modal-body {
-      width: 100%;
-      height: 90%;
-      overflow: auto;
-      padding: 15px; }
-      #doc-preview-modal-wrapper .doc-preview-modal-container .doc-preview-modal-body .doc-item {
-        color: #007bff;
-        cursor: pointer; }
+  align-items: center;
+}
+
+.doc-preview-modal-container {
+  max-width: 90%;
+  height: 90%;
+  max-height: 90%;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+.doc-preview-modal-container .doc-preview-modal-header {
+  padding: 10px 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border-bottom: 2px solid black;
+}
+
+.doc-preview-modal-container .doc-preview-modal-header p {
+  max-width: 80%;
+  color: #4a4a4a;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 25px;
+  margin-bottom: 0;
+}
+
+.doc-preview-modal-container .doc-preview-modal-header .close-button {
+  color: #00acf1;
+  font-family: 'Font Awesome 5 Pro';
+  font-size: 20px;
+  font-weight: 300;
+  position: absolute;
+  right: 2%;
+  cursor: pointer;
+}
+
+.doc-preview-modal-container .doc-preview-modal-body {
+  width: 100%;
+  overflow: auto;
+  padding: 15px;
+}
+
+.doc-preview-modal-container .doc-preview-modal-body .doc-item {
+  color: #007bff;
+  cursor: pointer;
+}
+
+.simple-grid-table-wrapper {
+  display: table;
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+}
+
+.simple-grid-table-row {
+  display: table-row;
+}
+
+.simple-grid-table-cell {
+  display: table-cell;
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.simple-grid-table-cell-first-column {
+  min-width: 400px;
+  max-width: 500px;
+  font-weight: bold;
+}
+
+.simple-grid-table-header {
+  background-color: rgb(72, 187, 236);
+  color: white;
+  font-weight: bold;
+}
+
+.simple-grid-table-header-cell {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.simple-grid-table-header-cell-first-column{
+  min-width: 400px;
+  max-width: 500px;
+}
+.simple-grid-table-header-cell-field-column{
+  width: 300px;
+}
+
+.simple-grid-table-cell-textarea {
+  width: 100%;
+  min-height: 40px;
+  max-height: 80px;
+  border: 0.5px solid #ccc;
+  padding: 5px;
+  /* resize: vertical; */
+  /* Allow resizing */
+}
+
+.simple-grid-table-cell-input{
+  width: 100%;
+  border: 0.5px solid #ccc;
+  padding: 5px;
+}

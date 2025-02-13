@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { isEmpty } from './../../utils/validators';
-import { Modal } from '@material-ui/core';
+import TableModal from './tableModal';
 import './style.css';
-
 export default class Lookup extends Component {
+  wrapperRef;
   constructor(props) {
     super(props);
     this.state = {
@@ -18,13 +18,25 @@ export default class Lookup extends Component {
 
   componentDidMount() {
     const { attributes } = this.props;
+    console.log(attributes);
     if (attributes) {
       const data = this.getGridData();
       if (Object.keys(data).length) {
         this.setGridData(data);
       }
     }
+    document.addEventListener('mousedown', this.handleClickOutside);
   }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  handleClickOutside = (event) => {
+    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+      this.toggleModal();
+    }
+  };
 
   getGridData = () => {
     const { attributes } = this.props;
@@ -351,13 +363,6 @@ export default class Lookup extends Component {
     return height;
   };
 
-  handleOnclick = () => {
-    if (typeof this.props.renderComponent === 'function') {
-      this.props.renderComponent(this.props);
-    }
-    return;
-  };
-
   getSelectedValue = () => {
     const { attributes } = this.props;
     let value = 'None';
@@ -388,7 +393,7 @@ export default class Lookup extends Component {
     return (
       <div
         className={`lookup-data-wrapper ${disableCondition ? 'disabled' : ''}`}
-        onClick={() => this.handleOnclick()}
+        onClick={() => this.toggleModal()}
       >
         <p style={{ paddingStart: 5 }}>{attributes.label}</p>
         <div className="value-icon-wrapper">
@@ -401,6 +406,8 @@ export default class Lookup extends Component {
 
   render() {
     const { attributes } = this.props;
+    console.log(this.state.rowData);
+    console.log(this.state.data);
     return (
       <>
         <div className="lookup-wrapper">
@@ -418,44 +425,17 @@ export default class Lookup extends Component {
           </div>
           <div className="lookup-content-wrapper">{this.renderLookupUI()}</div>
         </div>
-        <Modal open={this.state.modalVisible} onClose={this.toggleModal}>
-          <div id="doc-preview-modal-wrapper">
-            <div
-              className="doc-preview-modal-container"
-              ref={(node) => (this.wrapperRef = node)}
-            >
-              <div className="doc-preview-modal-header">
-                <p>Document(s)</p>
-                <i
-                  className="far fa-times-circle close-button"
-                  onClick={() => this.toggleModal()}
-                />
-              </div>
-              <div className="doc-preview-modal-body">
-                <GridComponent
-                  modalVisible={this.state.modalVisible}
-                  theme={theme}
-                  attributes={attributes}
-                  toggleModalVisible={this.toggleModal}
-                  toggleEditModal={this.toggleEditModal}
-                  data={this.state.data}
-                  handleOnDoneClick={this.handleOnDoneClick}
-                  summary={this.getSummaryLabel()}
-                  rowHeight={this.getRowHeight(this.state.data)}
-                  widthArr={this.getHeaderWidth(this.state.data)}
-                  tableHeader={this.getTableHeader(this.state.data)}
-                  rowTitle={this.getRowTitle(this.state.data)}
-                  tableData={this.getTableData(this.state.data)}
-                />
-              </div>
-            </div>
-            <SnackbarMessage
-              handleClose={this.handleCloseSnackbar}
-              message={this.state.errMessage}
-              open={this.state.open}
-            />
-          </div>
-        </Modal>
+        {this.state.modalVisible && (
+          <TableModal
+            modalVisible={this.state.modalVisible}
+            toggleModal={this.toggleModal}
+            data={this.state.data}
+            label={attributes.label}
+            summary={this.getSummaryLabel()}
+            handleOnDoneClick={this.handleOnDoneClick}
+            wrapperRef={this.wrapperRef}
+          />
+        )}
       </>
     );
   }
