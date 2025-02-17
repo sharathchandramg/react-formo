@@ -10,7 +10,12 @@ const TableModal = ({
   handleOnDoneClick,
   wrapperRef,
   onChangeText,
+  attributes,
 }) => {
+  const inputMaxLength =
+    attributes.data.style && attributes.data.style.input_length
+      ? attributes.data.style.input_length
+      : 150;
   return (
     <Modal
       isOpen={modalVisible}
@@ -78,6 +83,7 @@ const TableModal = ({
                             onChange={(e) =>
                               onChangeText(key, field, e.target.value)
                             }
+                            maxLength={inputMaxLength}
                           />
                         </div>
                       ))}
@@ -85,45 +91,14 @@ const TableModal = ({
                   );
                 })}
           </div>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <div
-              style={{
-                width: '50%',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <p
-                style={{
-                  fontSize: '16px',
-                  color: '#989898',
-                  textAlign: 'center',
-                  margin: '10px 0',
-                }}
-              >
+          <div className="simple-grid-modal-footer">
+            <div className="simple-grid-modal-footer-summary-wrapper">
+              <p className="simple-grid-modal-footer-summary-label">
                 {summary ? summary : ''}
               </p>
             </div>
             <button
-              style={{
-                height: '50px',
-                width: '50%',
-                backgroundColor: '#48BBEC',
-                color: 'white',
-                fontSize: '16px',
-                fontWeight: 'bold',
-                textAlign: 'center',
-                border: 'none',
-                cursor: 'pointer',
-              }}
+              className="simple-grid-modal-footer-done-button"
               onClick={() => handleOnDoneClick()}
             >
               Done
