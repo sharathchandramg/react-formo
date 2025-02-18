@@ -132,8 +132,9 @@
 
 .simple-grid-modal-container .simple-grid-modal-body {
   width: 100%;
-  overflow: auto;
   padding: 15px;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .simple-grid-modal-container .simple-grid-modal-body .doc-item {
@@ -207,7 +208,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-top: 1px solid #ccc;
 }
 
 .simple-grid-modal-footer-summary-wrapper {
@@ -221,7 +224,7 @@
   font-size: 16px;
   color: #989898;
   text-align: center;
-  margin: 10px 0;
+  margin: 0 0 10px 0;
 }
 
 .simple-grid-modal-footer-done-button {

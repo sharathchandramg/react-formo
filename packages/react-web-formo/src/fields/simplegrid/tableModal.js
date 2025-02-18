@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 
+// Set the app element for accessibility
 Modal.setAppElement('#root');
 
 /**
@@ -110,19 +111,19 @@ const TableModal = ({
                   </div>
                 ))}
           </div>
-          <div className="simple-grid-modal-footer">
-            <div className="simple-grid-modal-footer-summary-wrapper">
-              <p className="simple-grid-modal-footer-summary-label">
-                {summary ? summary : ''}
-              </p>
-            </div>
-            <button
-              className="simple-grid-modal-footer-done-button"
-              onClick={handleOnDoneClick}
-            >
-              Done
-            </button>
+        </div>
+        <div className="simple-grid-modal-footer">
+          <div className="simple-grid-modal-footer-summary-wrapper">
+            <p className="simple-grid-modal-footer-summary-label">
+              {summary ? summary : ''}
+            </p>
           </div>
+          <button
+            className="simple-grid-modal-footer-done-button"
+            onClick={handleOnDoneClick}
+          >
+            Done
+          </button>
         </div>
       </div>
     </Modal>
