@@ -183,7 +183,8 @@
 }
 
 .simple-grid-table-header-cell-field-column {
-  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
 }
 
 .simple-grid-table-cell-textarea {
