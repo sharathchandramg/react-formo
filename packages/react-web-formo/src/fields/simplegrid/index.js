@@ -4,20 +4,15 @@ import TableModal from './tableModal';
 import './style.css';
 
 /**
- * SimpleGrid component that renders a grid with editable fields and a modal for detailed view.
+ * SimpleGrid component for rendering a grid with editable cells and a summary row.
  *
  * @extends Component
  */
 export default class SimpleGrid extends Component {
   /**
-   * Reference to the wrapper element for detecting outside clicks.
-   * @type {HTMLElement}
-   */
-  wrapperRef;
-
-  /**
    * Creates an instance of SimpleGrid.
-   * @param {Object} props - The component props.
+   *
+   * @param {Object} props - The properties passed to the component.
    */
   constructor(props) {
     super(props);
@@ -29,7 +24,7 @@ export default class SimpleGrid extends Component {
 
   /**
    * Lifecycle method called after the component is mounted.
-   * Initializes grid data and sets up event listener for outside clicks.
+   * Initializes the grid data if attributes are provided.
    */
   componentDidMount() {
     const { attributes } = this.props;
@@ -39,29 +34,11 @@ export default class SimpleGrid extends Component {
         this.setGridData(data);
       }
     }
-    document.addEventListener('mousedown', this.handleClickOutside);
   }
 
   /**
-   * Lifecycle method called before the component is unmounted.
-   * Removes the event listener for outside clicks.
-   */
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
-  }
-
-  /**
-   * Handles clicks outside the wrapper element to toggle the modal.
-   * @param {Event} event - The mousedown event.
-   */
-  handleClickOutside = (event) => {
-    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-      this.toggleModal();
-    }
-  };
-
-  /**
-   * Retrieves grid data from the component props.
+   * Retrieves the grid data from the component's attributes.
+   *
    * @returns {Object} The grid data.
    */
   getGridData = () => {
@@ -79,8 +56,9 @@ export default class SimpleGrid extends Component {
   };
 
   /**
-   * Sets the grid data and calculates summary values.
-   * @param {Object} data - The grid data.
+   * Sets the grid data and calculates the summary row.
+   *
+   * @param {Object} gridData - The grid data to set.
    */
   setGridData = (gridData) => {
     const summary = {};
@@ -113,6 +91,7 @@ export default class SimpleGrid extends Component {
 
   /**
    * Formats a number to two decimal places.
+   *
    * @param {number} value - The number to format.
    * @returns {number} The formatted number.
    */
@@ -121,8 +100,8 @@ export default class SimpleGrid extends Component {
   };
 
   /**
-   * Handles the click event for the "Done" button in the modal.
-   * Updates the parent component with the grid data.
+   * Handles the click event for the "Done" button.
+   * Updates the value and hides the modal.
    */
   handleOnDoneClick = () => {
     this.props.updateValue(this.props.attributes.name, {
@@ -133,8 +112,8 @@ export default class SimpleGrid extends Component {
   };
 
   /**
-   * Handles changes to text input fields in the grid.
-   * Updates the grid data and recalculates summary values.
+   * Handles the change event for text input in the grid.
+   *
    * @param {string} rk - The row key.
    * @param {string} ck - The column key.
    * @param {string} value - The new value.
@@ -188,7 +167,7 @@ export default class SimpleGrid extends Component {
 
   /**
    * Toggles the visibility of the modal.
-   * If opening the modal, initializes the grid data.
+   * If the modal is being shown, initializes the grid data.
    */
   toggleModal = () => {
     if (this.state.modalVisible) {
@@ -208,7 +187,8 @@ export default class SimpleGrid extends Component {
   };
 
   /**
-   * Generates a summary label based on the grid data.
+   * Generates a summary label for the grid data.
+   *
    * @returns {string} The summary label.
    */
   getSummaryLabel = () => {
@@ -244,8 +224,9 @@ export default class SimpleGrid extends Component {
   };
 
   /**
-   * Retrieves the label from the grid value.
-   * @param {Object} value - The grid value.
+   * Retrieves the label from the value object.
+   *
+   * @param {Object} value - The value object.
    * @returns {string} The label.
    */
   getLabel = (value) => {
@@ -258,7 +239,8 @@ export default class SimpleGrid extends Component {
 
   /**
    * Renders the UI for the simple grid.
-   * @returns {JSX.Element} The simple grid UI.
+   *
+   * @returns {JSX.Element} The rendered UI.
    */
   renderSimpleGridUI = () => {
     const { attributes } = this.props;
@@ -282,6 +264,7 @@ export default class SimpleGrid extends Component {
 
   /**
    * Renders the SimpleGrid component.
+   *
    * @returns {JSX.Element} The rendered component.
    */
   render() {
@@ -313,7 +296,6 @@ export default class SimpleGrid extends Component {
             label={attributes.label}
             summary={this.getSummaryLabel()}
             handleOnDoneClick={this.handleOnDoneClick}
-            wrapperRef={this.wrapperRef}
             onChangeText={this.onChangeText}
             attributes={attributes}
           />

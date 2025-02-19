@@ -29,7 +29,6 @@ const TableModal = ({
   label,
   summary,
   handleOnDoneClick,
-  wrapperRef,
   onChangeText,
   attributes = {},
 }) => {
@@ -48,7 +47,7 @@ const TableModal = ({
       className="simple-grid-modal-wrapper"
       overlayClassName="simple-grid-modal-overlay"
     >
-      <div className="simple-grid-modal-container" ref={wrapperRef}>
+      <div className="simple-grid-modal-container">
         <div className="simple-grid-modal-header">
           <p>{label}</p>
           <i
