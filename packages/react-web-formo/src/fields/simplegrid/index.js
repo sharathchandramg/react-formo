@@ -35,7 +35,7 @@ export default class SimpleGrid extends Component {
     const { attributes } = this.props;
     if (attributes) {
       const data = this.getGridData();
-      if (Object.keys(data).length) {
+      if (data && Object.keys(data).length) {
         this.setGridData(data);
       }
     }
@@ -66,69 +66,49 @@ export default class SimpleGrid extends Component {
    */
   getGridData = () => {
     const { attributes } = this.props;
-    let mData = null;
-    if (attributes) {
-      if (
-        !isEmpty(attributes['value']) &&
-        !isEmpty(attributes['value']['data'])
-      ) {
-        const summary = attributes['value'];
-        const selectedItm = summary['data'];
-        mData = attributes['data'];
-        if (!isEmpty(selectedItm)) {
-          _.forEach(Object.keys(selectedItm), (rowKey) => {
-            if (mData.hasOwnProperty(rowKey)) {
-              mData[rowKey] = selectedItm[rowKey];
-            }
-          });
+    if (!attributes) return {};
+    const { value, data: gridData } = attributes;
+    if (!isEmpty(value) && !isEmpty(value['data'])) {
+      Object.keys(value.data).forEach((key) => {
+        if (gridData?.hasOwnProperty(key)) {
+          gridData[key] = value.data[key];
         }
-      } else {
-        mData = attributes['data'];
-      }
+      });
     }
-    return mData;
+    return gridData || {};
   };
 
   /**
    * Sets the grid data and calculates summary values.
    * @param {Object} data - The grid data.
    */
-  setGridData = (data) => {
-    const header = data['header'];
-    const header_type = data['type'];
-    let summary = {};
-    Object.keys(header).map((ck) => {
-      let ckTotal = 0;
-      let count = 0;
-      Object.keys(data).map((rk) => {
+  setGridData = (gridData) => {
+    const summary = {};
+    const { header, type: headerType } = gridData;
+
+    Object.keys(header).forEach((key) => {
+      let total = 0,
+        count = 0;
+      Object.entries(gridData).forEach(([rowKey, rowData]) => {
         if (
-          !rk.match(/header/) &&
-          !rk.match(/style/) &&
-          !rk.match(/type/) &&
-          rk !== `${String.fromCharCode(931)}`
+          !['header', 'style', 'type'].includes(rowKey) &&
+          rowKey !== `${String.fromCharCode(931)}`
         ) {
-          if (header_type && header_type[ck].toLowerCase() === 'number') {
-            const ckValue = data[rk][ck] || '0';
-            if (ckValue) {
-              ckTotal = parseInt(ckTotal) + parseInt(ckValue);
-            }
+          const value = rowData[key] || 0;
+          if (headerType[key].toLowerCase() === 'number') {
+            total += parseInt(value, 10);
           } else if (
-            header_type &&
-            (header_type[ck].toLowerCase() === 'string' ||
-              header_type[ck].toLowerCase() === 'text')
+            ['string', 'text'].includes(headerType[key].toLowerCase())
           ) {
-            const ckValue = data[rk][ck];
-            if (ckValue) {
-              count += 1;
-              ckTotal = count;
-            }
+            count += value ? 1 : 0;
+            total = count;
           }
         }
       });
-      summary[`${ck}`] = ckTotal;
+      summary[key] = total;
     });
-    data[`${String.fromCharCode(931)}`] = summary;
-    this.setState({ data: data });
+    gridData[`${String.fromCharCode(931)}`] = summary;
+    this.setState({ data: gridData });
   };
 
   /**
@@ -145,11 +125,10 @@ export default class SimpleGrid extends Component {
    * Updates the parent component with the grid data.
    */
   handleOnDoneClick = () => {
-    let summary = {
+    this.props.updateValue(this.props.attributes.name, {
       label: this.getSummaryLabel(),
       data: this.state.data,
-    };
-    this.props.updateValue(this.props.attributes.name, summary);
+    });
     this.setState({ modalVisible: false });
   };
 
@@ -220,7 +199,7 @@ export default class SimpleGrid extends Component {
       const { attributes } = this.props;
       if (attributes) {
         const data = this.getGridData();
-        if (Object.keys(data).length) {
+        if (data && Object.keys(data).length) {
           this.setGridData(data);
         }
       }
