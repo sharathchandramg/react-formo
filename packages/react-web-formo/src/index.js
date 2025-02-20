@@ -30,6 +30,7 @@ import CascadingDropdownField from './fields/cascadingDropdown';
 import OtpField from './fields/otp/index.js';
 import RatingField from './fields/rating/index.js';
 import SignatureField from './fields/signature';
+import SimpleGridView from './fields/simplegrid';
 
 import { isEmpty } from './utils/validators';
 
@@ -587,6 +588,17 @@ export default class FormO extends Component {
           case 'lookup':
             return (
               <Lookup
+                ref={(c) => {
+                  this[field.name] = c;
+                }}
+                {...commonProps}
+                {...this.props}
+              />
+            );
+
+          case 'simple-grid':
+            return (
+              <SimpleGridView
                 ref={(c) => {
                   this[field.name] = c;
                 }}

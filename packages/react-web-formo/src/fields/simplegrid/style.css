@@ -1,0 +1,239 @@
+.simple-grid-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.simple-grid-content-wrapper {
+  display: flex;
+  height: 45px;
+}
+
+.simple-grid-data-wrapper {
+  width: 100%;
+  padding: 0 10px;
+  border: 1px solid #979797;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.simple-grid-data-wrapper p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.simple-grid-data-wrapper .simple-grid-value-icon-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.simple-grid-data-wrapper .simple-grid-value-icon-wrapper h6 {
+  font-size: 16px;
+  margin: 0;
+  font-weight: initial;
+}
+
+.simple-grid-data-wrapper .simple-grid-value-icon-wrapper i {
+  font-size: 16px;
+  padding-left: 10px;
+}
+
+.simple-grid-label-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.simple-grid-label-wrapper .simple-grid-label-text {
+  width: 50%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.simple-grid-label-wrapper .simple-grid-label-text p {
+  font-size: 20px;
+  margin: 0;
+}
+
+.simple-grid-label-wrapper .simple-grid-error-text {
+  width: 50%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.simple-grid-label-wrapper .simple-grid-error-text p {
+  color: red;
+  font-size: 12px;
+  margin: 0px;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.simple-grid-modal-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.simple-grid-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.simple-grid-modal-container {
+  max-width: 90%;
+  height: 90%;
+  max-height: 90%;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+.simple-grid-modal-container .simple-grid-modal-header {
+  padding: 10px 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border-bottom: 2px solid black;
+}
+
+.simple-grid-modal-container .simple-grid-modal-header p {
+  max-width: 80%;
+  color: #4a4a4a;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 25px;
+  margin-bottom: 0;
+}
+
+.simple-grid-modal-container .simple-grid-modal-header .close-button {
+  color: #00acf1;
+  font-family: 'Font Awesome 5 Pro';
+  font-size: 20px;
+  font-weight: 300;
+  position: absolute;
+  right: 2%;
+  cursor: pointer;
+}
+
+.simple-grid-modal-container .simple-grid-modal-body {
+  width: 100%;
+  padding: 15px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.simple-grid-modal-container .simple-grid-modal-body .doc-item {
+  color: #007bff;
+  cursor: pointer;
+}
+
+.simple-grid-table-wrapper {
+  display: table;
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+}
+
+.simple-grid-table-row {
+  display: table-row;
+}
+
+.simple-grid-table-cell {
+  display: table-cell;
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.simple-grid-table-cell-first-column {
+  min-width: 400px;
+  max-width: 500px;
+  font-weight: bold;
+}
+
+.simple-grid-table-header {
+  background-color: rgb(72, 187, 236);
+  color: white;
+  font-weight: bold;
+}
+
+.simple-grid-table-header-cell {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.simple-grid-table-header-cell-first-column {
+  min-width: 400px;
+  max-width: 500px;
+}
+
+.simple-grid-table-header-cell-field-column {
+  min-width: 300px;
+  max-width: 300px;
+}
+
+.simple-grid-table-cell-textarea {
+  width: 100%;
+  min-height: 40px;
+  max-height: 80px;
+  border: 0.5px solid #ccc;
+  padding: 5px;
+  /* resize: vertical; */
+  /* Allow resizing */
+}
+
+.simple-grid-table-cell-input {
+  width: 100%;
+  border: 0.5px solid #ccc;
+  padding: 5px;
+}
+
+.simple-grid-modal-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.simple-grid-modal-footer-summary-wrapper {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.simple-grid-modal-footer-summary-label {
+  font-size: 16px;
+  color: #989898;
+  text-align: center;
+  margin: 0 0 10px 0;
+}
+
+.simple-grid-modal-footer-done-button {
+  height: 50px;
+  width: 50%;
+  background-color: #48bbec;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
