@@ -5,28 +5,6 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './style.css';
 
-class CustomInput extends Component {
-  render() {
-    return (
-      <input
-        style={{
-          width: '100%',
-          height: 40,
-          border: '1px solid #979797',
-          borderRadius: 5,
-          fontSize: 16,
-          outline: 'none',
-          opacity: this.props.disabled ? 0.5 : 1,
-        }}
-        disabled={this.props.disabled}
-        value={this.props.value}
-        onClick={this.props.onClick}
-        onChange={this.props.onChange}
-      />
-    );
-  }
-}
-
 export default class DateTimePicker extends Component {
   handleChange = (date) => {
     const data = moment(date).utc().valueOf();
@@ -55,13 +33,15 @@ export default class DateTimePicker extends Component {
     const disableCondition = !attributes.editable;
     return (
       <DatePicker
-        customInput={<CustomInput />}
         selected={attributes.value ? new Date(attributes.value) : null}
         disabled={disableCondition}
         minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
         maxDate={attributes.maxDate && this.dateFormatter(attributes.maxDate)}
         onChange={(date) => this.handleChange(date)}
         dateFormat="do MMM yyyy"
+        showMonthDropdown
+        showYearDropdown
+        dropdownMode="select"
       />
     );
   };
@@ -71,7 +51,6 @@ export default class DateTimePicker extends Component {
     const disableCondition = !attributes.editable;
     return (
       <DatePicker
-        customInput={<CustomInput />}
         selected={attributes.value ? new Date(attributes.value) : null}
         onChange={(date) => this.handleChange(date)}
         disabled={disableCondition}
@@ -92,13 +71,15 @@ export default class DateTimePicker extends Component {
     const disableCondition = !attributes.editable;
     return (
       <DatePicker
-        customInput={<CustomInput />}
         selected={attributes.value ? new Date(attributes.value) : null}
         onChange={(date) => this.handleChange(date)}
         disabled={disableCondition}
         minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
         maxDate={attributes.maxDate && this.dateFormatter(attributes.maxDate)}
         showTimeSelect
+        showMonthDropdown
+        showYearDropdown
+        dropdownMode="select"
         timeFormat={this.props.attributes.is_24hour ? 'HH:mm' : 'hh:mm a'}
         timeIntervals={15}
         timeCaption="Time"
@@ -142,6 +123,7 @@ export default class DateTimePicker extends Component {
           flexDirection: 'column',
           margin: 10,
         }}
+        className="formo-date-wrapper"
       >
         <div
           style={{
