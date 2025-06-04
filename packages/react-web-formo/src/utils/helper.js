@@ -595,13 +595,26 @@ const calculateConditionalMatch = (expressions, values, defaultValue) => {
       return result;
     }
   }
+  if (defaultValue.includes('{{') && defaultValue.includes('}}')) {
+    const defaultExpr = defaultValue.replace(/{{|}}/g, '');
+    const fn = compileExpression(defaultExpr);
+    const result = fn(values);
+    return result !== 'false' ? result : null;
+  }
   return !isEmpty(values) ? defaultValue : null;
 };
 
 const calculateExpr = (type, expressions, values, defaultValue) => {
   switch (type) {
     case 'conditional_match':
-      return calculateConditionalMatch(expressions, values, defaultValue);
+      const updatedExpressions = expressions.map((s) =>
+        s.replace(/{{|}}/g, '')
+      );
+      return calculateConditionalMatch(
+        updatedExpressions,
+        values,
+        defaultValue
+      );
     default:
       return null;
   }

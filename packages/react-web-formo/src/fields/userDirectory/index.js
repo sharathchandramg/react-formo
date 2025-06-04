@@ -2,7 +2,7 @@ import React from 'react';
 import { isEmpty } from './../../utils/validators';
 import './style.css';
 
-const UserDirectoryField = props => {
+const UserDirectoryField = (props) => {
   const { attributes } = props;
 
   const handleOnclick = () => {
@@ -27,11 +27,12 @@ const UserDirectoryField = props => {
   };
 
   const renderLabel = () => {
-    const disableCondition =
-      props.formSubmissionType === 'update' && !attributes.editable;
+    const disableCondition = !attributes.editable;
     return (
       <div
-        className={`user-directory-data-wrapper ${disableCondition ? 'disabled' : ''}`}
+        className={`user-directory-data-wrapper ${
+          disableCondition ? 'disabled' : ''
+        }`}
         onClick={() => handleOnclick()}
       >
         <p style={{ paddingStart: 5 }}>{attributes.label}</p>

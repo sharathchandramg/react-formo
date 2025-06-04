@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/sharathchandramg/react-formo#readme",
   "dependencies": {
-    "filtrex": "3.0.0",
+    "filtrex": "2.0.0",
     "json-templater": "1.2.0",
     "lodash": "4.17.21",
     "mathjs": "12.4.0",

@@ -42,10 +42,15 @@ export default class TextInputField extends Component {
     const { attributes } = this.props;
     const disableCondition =
       !attributes.editable ||
-      (attributes['type'] === 'auto-incr-number' && !attributes.editable) ||
-      (attributes && attributes['expression']);
+      (attributes['type'] === 'auto-incr-number' && !attributes.editable);
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', margin: 10 }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          margin: 10,
+        }}
+      >
         <div
           style={{
             display: 'flex',
