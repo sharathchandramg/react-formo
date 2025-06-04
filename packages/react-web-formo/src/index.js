@@ -84,6 +84,18 @@ export default class FormO extends Component {
         state[field.name] = fieldObj;
       }
     });
+
+    fields.forEach((field, index) => {
+      if (field && field['expr_field'] && field['expr_field'].length > 0) {
+        const res = customFieldCalculations(field, field.value, state);
+        if (res && res.length > 0) {
+          res.forEach((item) => {
+            state[item.name] = item;
+          });
+        }
+      }
+    });
+
     return state;
   };
 
@@ -496,6 +508,23 @@ export default class FormO extends Component {
           } catch (err) {}
         }
       });
+
+      Object.keys(updatedFields).forEach((fieldName) => {
+        const field = updatedFields[fieldName];
+        if (field && field['expr_field'] && field['expr_field'].length > 0) {
+          const res = customFieldCalculations(
+            field,
+            field.value,
+            updatedFields
+          );
+          if (res && res.length > 0) {
+            res.forEach((item) => {
+              newFields[item.name] = item;
+            });
+          }
+        }
+      });
+
       this.setState({ ...newFields });
     }
   };
