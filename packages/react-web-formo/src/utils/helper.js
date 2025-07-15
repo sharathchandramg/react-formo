@@ -31,8 +31,8 @@ export function getDefaultValue(field) {
       let curr_type = field.defaultCurrency
         ? field.defaultCurrency
         : field.currencyOptions
-        ? field.currencyOptions[0]
-        : '';
+          ? field.currencyOptions[0]
+          : '';
       let curr_value = field.defaultValue ? field.defaultValue : '';
       return { curr_value: curr_value, curr_type: curr_type };
 
@@ -129,6 +129,13 @@ export function getDefaultValue(field) {
           } else if (field.defaultValue === '') {
             return 'Select';
           } else return null;
+        case 'dayofweek':
+        case 'dayofthemonth':
+        case 'weekno':
+        case 'monthno':
+        case 'monthname':
+        case 'year':
+          return getDatePartValue(field.mode);
       }
     }
     case 'group':
@@ -453,8 +460,8 @@ export function customValidateData(field, from = '') {
               ? /^-?\d*\.?\d*$/
               : /^\d*\.?\d*$/
             : allowNegative
-            ? /^-?\d*$/
-            : /^\d*$/;
+              ? /^-?\d*$/
+              : /^\d*$/;
 
           if (!regex.test(numValue)) {
             error = true;
@@ -462,10 +469,10 @@ export function customValidateData(field, from = '') {
               allowDecimal && allowNegative
                 ? 'Number is required'
                 : allowDecimal
-                ? 'Negative value are not allowed'
-                : allowNegative
-                ? 'Decimal value are not allowed'
-                : 'Decimal and negative values are not allowed';
+                  ? 'Negative value are not allowed'
+                  : allowNegative
+                    ? 'Decimal value are not allowed'
+                    : 'Decimal and negative values are not allowed';
           }
         }
       }
@@ -690,8 +697,8 @@ export const customFieldCalculations = (field, fieldValue, allFields) => {
         field['name'] === fieldName
           ? fieldValue
           : !isEmpty(dfObjValue)
-          ? dfObjValue
-          : null;
+            ? dfObjValue
+            : null;
       if (!isEmpty(value)) dfValues[fieldName] = value;
     }
 
@@ -736,4 +743,24 @@ export const isFieldCalculated = (field) => {
     !isEmpty(field['additional_config']['calc']['expr'])
     ? true
     : false;
+};
+
+export const getDatePartValue = (type) => {
+  const date = moment();
+  switch (type) {
+    case 'dayofweek':
+      return date.format('dddd');
+    case 'dayofthemonth':
+      return date.format('DD');
+    case 'weekno':
+      return date.isoWeek().toString();
+    case 'monthno':
+      return date.format('MM');
+    case 'monthname':
+      return date.format('MMM-YY');
+    case 'year':
+      return date.format('YYYY');
+    default:
+      return null;
+  }
 };

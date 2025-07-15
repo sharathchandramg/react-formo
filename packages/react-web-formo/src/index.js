@@ -199,7 +199,18 @@ export default class FormO extends Component {
     ) {
       return parseFloat(field.value);
     } else if (field.type && field.type.match(/date/i)) {
-      return field.value ? moment(field.value).utc().valueOf() : '';
+      return field.value
+        ? [
+            'dayofweek',
+            'dayofthemonth',
+            'weekno',
+            'monthno',
+            'monthname',
+            'year',
+          ].includes(field.mode)
+          ? field.value
+          : moment(field.value).utc().valueOf()
+        : '';
     } else if (field.type && field.type.match(/document/i)) {
       return !isEmpty(field.value)
         ? field.value.map((item) => {
@@ -317,8 +328,8 @@ export default class FormO extends Component {
             const updatevalue = !isNaN(evaluateValue)
               ? Number(Number(evaluateValue).toFixed(2))
               : evaluateValue === 0
-              ? 0
-              : null;
+                ? 0
+                : null;
             // if (!isEmpty(updatevalue) && !isNaN(updatevalue)) {
             const updatedField = {};
             const obj = this.state[ele.name];
@@ -379,7 +390,16 @@ export default class FormO extends Component {
             values[field.name] = parseFloat(field.value);
           } else if (field.type && field.type.match(/date/i)) {
             values[field.name] = field.value
-              ? moment(field.value).utc().valueOf()
+              ? [
+                  'dayofweek',
+                  'dayofthemonth',
+                  'weekno',
+                  'monthno',
+                  'monthname',
+                  'year',
+                ].includes(field.mode)
+                ? field.value
+                : moment(field.value).utc().valueOf()
               : '';
           } else if (field.type && field.type.match(/document/i)) {
             values[field.name] = !isEmpty(field.value)
@@ -498,8 +518,8 @@ export default class FormO extends Component {
             const updatevalue = !isNaN(evaluateValue)
               ? Number(Number(evaluateValue).toFixed(2))
               : evaluateValue === 0
-              ? 0
-              : null;
+                ? 0
+                : null;
 
             newFields[stateObj.name] = this.getFieldValue(
               stateObj,

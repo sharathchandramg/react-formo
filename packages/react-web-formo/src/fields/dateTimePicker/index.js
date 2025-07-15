@@ -3,6 +3,7 @@ import moment from 'moment';
 import _ from 'lodash';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+
 import './style.css';
 
 export default class DateTimePicker extends Component {
@@ -92,6 +93,30 @@ export default class DateTimePicker extends Component {
     );
   };
 
+  renderDatePartData = () => {
+    const { attributes } = this.props;
+    const disableCondition = !attributes.editable;
+    return (
+      <input
+        type={'text'}
+        value={attributes['value'] || ''}
+        id={attributes['name']}
+        disabled={disableCondition}
+        style={{
+          width: '100%',
+          height: 45,
+          border: '1px solid #979797',
+          borderRadius: 5,
+          padding: 5,
+          fontSize: 16,
+          outline: 'none',
+          opacity: disableCondition ? 0.5 : 1,
+        }}
+        onChange={() => {}}
+      />
+    );
+  };
+
   renderDateTimePicker = () => {
     const { attributes } = this.props;
     let openPicker;
@@ -105,6 +130,14 @@ export default class DateTimePicker extends Component {
         break;
       case 'time':
         openPicker = this.showTimePicker();
+        break;
+      case 'dayofweek':
+      case 'dayofthemonth':
+      case 'weekno':
+      case 'monthno':
+      case 'monthname':
+      case 'year':
+        openPicker = this.renderDatePartData();
         break;
       default:
         openPicker = this.showDateTimePicker();
