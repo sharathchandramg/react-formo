@@ -20,19 +20,22 @@ export default class Lookup extends Component {
     let value = 'None';
     if (!isEmpty(attributes['value'])) {
       if (attributes.multiple) {
-        const labelKeyArr = attributes['value'].map(obj => {
+        const labelKeyArr = attributes['value'].map((obj) => {
           const labelKey = attributes.objectType
             ? obj[attributes.labelKey]
             : obj;
           return labelKey;
         });
         if (labelKeyArr.length) {
-          value = ` ${labelKeyArr.length} | ${labelKeyArr.toString()}`;
+          value = `${labelKeyArr.length} Selected`;
         }
       } else {
-        value = attributes.objectType
+        const selectedValue = attributes.objectType
           ? attributes['value'][attributes.labelKey]
           : attributes['value'];
+        if (selectedValue && selectedValue !== 'None') {
+          value = '1 Selected';
+        }
       }
     }
     return value;
