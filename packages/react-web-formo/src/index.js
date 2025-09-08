@@ -435,50 +435,58 @@ export default class FormO extends Component {
   };
 
   getFieldValue = (fieldObj, value) => {
-  const field = _.cloneDeep(fieldObj);
-  const normalizeOpt = (o) =>
-    (o && typeof o === 'object')
-      ? { label: o.label ?? String(o.value ?? ''), value: o.value ?? o.label }
-      : { label: String(o ?? ''), value: o };
+    const field = _.cloneDeep(fieldObj);
+    const normalizeOpt = (o) =>
+      o && typeof o === 'object'
+        ? { label: o.label ?? String(o.value ?? ''), value: o.value ?? o.label }
+        : { label: String(o ?? ''), value: o };
 
-  const normalizeVal = (v) =>
-    (v && typeof v === 'object') ? (v.value ?? v.label ?? '') : v;
+    const normalizeVal = (v) =>
+      v && typeof v === 'object' ? v.value ?? v.label ?? '' : v;
 
-  const isPlaceholder = (v) =>
-    v === undefined || v === null || v === '' || v === '-Select-';
+    const isPlaceholder = (v) =>
+      v === undefined || v === null || v === '' || v === '-Select-';
 
-  if (field.type === 'group') {
-    const sub = {};
-    Object.keys(value || {}).forEach(k => sub[k] = value[k]);
-    this[field.name].group.setValues(sub);
-    field.value = this[field.name].group.getValues();
-  } else {
-    if (field.type === 'status_picker' && Array.isArray(field.options)) {
-      const norm = field.options.map(normalizeOpt);
-      const selectable = norm.filter(o => !isPlaceholder(o.value));
-      const incoming = normalizeVal(value);
-      const hasValue = norm.some(o => o.value === incoming);
-      if (field.show_first_option && !hasValue && selectable[0]) {
-        field.value = selectable[0].value; 
-      } else {
-        field.value = incoming;       
-      }
+    if (field.type === 'group') {
+      const sub = {};
+      Object.keys(value || {}).forEach((k) => (sub[k] = value[k]));
+      this[field.name].group.setValues(sub);
+      field.value = this[field.name].group.getValues();
     } else {
-      field.value = value;
+      if (field.type === 'status_picker' && Array.isArray(field.options)) {
+        const norm = field.options.map(normalizeOpt);
+        const selectable = norm.filter((o) => !isPlaceholder(o.value));
+        const incoming = normalizeVal(value);
+        const hasValue = norm.some((o) => o.value === incoming);
+        if (field.show_first_option && !hasValue && selectable[0]) {
+          field.value = selectable[0].value;
+        } else {
+          field.value = incoming;
+        }
+      } else {
+        field.value = value;
+      }
+      if (
+        this.props.autoValidation === undefined ||
+        this.props.autoValidation
+      ) {
+        Object.assign(field, autoValidate(field));
+      }
+      if (
+        field.type === 'otp' ||
+        (field.type === 'number' && !isFieldCalculated(field))
+      ) {
+        Object.assign(field, customValidateData(field));
+      }
+      if (
+        this.props.customValidation &&
+        typeof this.props.customValidation === 'function'
+      ) {
+        Object.assign(field, this.props.customValidation(field));
+      }
     }
-    if (this.props.autoValidation === undefined || this.props.autoValidation) {
-      Object.assign(field, autoValidate(field));
-    }
-    if (field.type === 'otp' || (field.type === 'number' && !isFieldCalculated(field))) {
-      Object.assign(field, customValidateData(field));
-    }
-    if (this.props.customValidation && typeof this.props.customValidation === 'function') {
-      Object.assign(field, this.props.customValidation(field));
-    }
-  }
-  return field;
-};
-
+    return field;
+  };
 
   setValues = (...args) => {
     if (args && args.length && args[0]) {
@@ -790,4 +798,3 @@ export default class FormO extends Component {
     return <div className="mainForm">{this.generateFields()}</div>;
   }
 }
-
