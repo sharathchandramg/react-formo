@@ -4,12 +4,12 @@ import './style.css';
 
 const UserDirectoryField = (props) => {
   const { attributes } = props;
+  const showFirstOption = !!(attributes?.config?.show_first_option);
 
   const handleOnclick = () => {
     if (typeof props.renderComponent === 'function') {
       props.renderComponent(props);
     }
-    return;
   };
 
   const getLabel = () => {
@@ -30,15 +30,15 @@ const UserDirectoryField = (props) => {
     const disableCondition = !attributes.editable;
     return (
       <div
-        className={`user-directory-data-wrapper ${
-          disableCondition ? 'disabled' : ''
-        }`}
-        onClick={() => handleOnclick()}
+        className={`user-directory-data-wrapper ${disableCondition ? 'disabled' : ''}`}
+        onClick={handleOnclick}
       >
-        <p style={{ paddingStart: 5 }}>{attributes.label}</p>
+        <p style={{ paddingInlineStart: 5 }}>{attributes.label}</p>
         <div className="value-icon-wrapper">
-          <h6>{getLabel()}</h6>
-          <i className="fal fa-angle-right"></i>
+          <h6 className={showFirstOption ? 'value-chip' : ''}>
+            {getLabel()}
+          </h6>
+          <i className="fal fa-angle-right" aria-hidden="true"></i>
         </div>
       </div>
     );
