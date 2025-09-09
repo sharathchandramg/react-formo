@@ -1,10 +1,8 @@
-/* Wrapper for select + overlay */
 .status-picker-wrap {
   position: relative;
   width: 100%;
 }
 
-/* The select dropdown */
 .status-picker-select {
   width: 100%;
   height: 45px;
@@ -19,17 +17,14 @@
   background-size: 12px;
 }
 
-/* When first option should be hidden */
 .status-picker-transparent {
   color: transparent;
 }
 
-/* Custom arrow icon */
 .status-picker-select {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23222222' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
 }
 
-/* Overlay text shown on top of hidden value */
 .status-picker-overlay {
   position: absolute;
   left: 8px;
@@ -47,7 +42,6 @@
   pointer-events: none;
 }
 
-/* Error message */
 .status-picker-error {
   color: red;
   font-size: 12px;
