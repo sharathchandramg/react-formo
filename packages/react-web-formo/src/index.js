@@ -442,27 +442,22 @@ export default class FormO extends Component {
       this[field.name].group.setValues(sub);
       field.value = this[field.name].group.getValues();
     } else {
-     if (field.type === 'status_picker' && Array.isArray(field.options)) {
-      const isPlaceholder = (v) =>
-        v === undefined || v === null || v === '' || v === '-Select-';
-      const optVal = (o) =>
-        o && typeof o === 'object' ? (o.value ?? o.label ?? '') : o;
-      const incomingVal =
-        value && typeof value === 'object'
-          ? (value.value ?? value.label ?? '')
-          : value;
-      const options = field.options;
-      const selectable = options.filter((o) => !isPlaceholder(optVal(o)));
-      const hasValue = options.some((o) => optVal(o) === incomingVal);
-      const showFirst =
-        field.show_first_option ?? field.config?.show_first_option ?? false;
+      if (field.type === 'status_picker' && Array.isArray(field.options)) {
+        const isPlaceholder = (v) =>
+          v === undefined || v === null || v === '' || v === '-Select-';
 
-      if (showFirst && !hasValue && selectable[0]) {
-        field.value = optVal(selectable[0]);
+        const incomingVal = value ?? '';
+        const options = field.options;
+        const selectable = options.filter((o) => !isPlaceholder(o));
+        const hasValue = options.includes(incomingVal);
+        const showFirst = field.show_first_option ?? false;
+
+        if (showFirst && !hasValue && selectable.length > 0) {
+          field.value = selectable[0];
+        } else {
+          field.value = incomingVal;
+        }
       } else {
-        field.value = incomingVal;
-      }
-  } else {
         field.value = value;
       }
       if (
