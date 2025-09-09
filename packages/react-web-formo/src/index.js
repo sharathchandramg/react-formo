@@ -436,34 +436,33 @@ export default class FormO extends Component {
 
   getFieldValue = (fieldObj, value) => {
     const field = _.cloneDeep(fieldObj);
-    const normalizeOpt = (o) =>
-      o && typeof o === 'object'
-        ? { label: o.label ?? String(o.value ?? ''), value: o.value ?? o.label }
-        : { label: String(o ?? ''), value: o };
-
-    const normalizeVal = (v) =>
-      v && typeof v === 'object' ? v.value ?? v.label ?? '' : v;
-
-    const isPlaceholder = (v) =>
-      v === undefined || v === null || v === '' || v === '-Select-';
-
     if (field.type === 'group') {
       const sub = {};
       Object.keys(value || {}).forEach((k) => (sub[k] = value[k]));
       this[field.name].group.setValues(sub);
       field.value = this[field.name].group.getValues();
     } else {
-      if (field.type === 'status_picker' && Array.isArray(field.options)) {
-        const norm = field.options.map(normalizeOpt);
-        const selectable = norm.filter((o) => !isPlaceholder(o.value));
-        const incoming = normalizeVal(value);
-        const hasValue = norm.some((o) => o.value === incoming);
-        if (field.show_first_option && !hasValue && selectable[0]) {
-          field.value = selectable[0].value;
-        } else {
-          field.value = incoming;
-        }
+     if (field.type === 'status_picker' && Array.isArray(field.options)) {
+      const isPlaceholder = (v) =>
+        v === undefined || v === null || v === '' || v === '-Select-';
+      const optVal = (o) =>
+        o && typeof o === 'object' ? (o.value ?? o.label ?? '') : o;
+      const incomingVal =
+        value && typeof value === 'object'
+          ? (value.value ?? value.label ?? '')
+          : value;
+      const options = field.options;
+      const selectable = options.filter((o) => !isPlaceholder(optVal(o)));
+      const hasValue = options.some((o) => optVal(o) === incomingVal);
+      const showFirst =
+        field.show_first_option ?? field.config?.show_first_option ?? false;
+
+      if (showFirst && !hasValue && selectable[0]) {
+        field.value = optVal(selectable[0]);
       } else {
+        field.value = incomingVal;
+      }
+  } else {
         field.value = value;
       }
       if (
