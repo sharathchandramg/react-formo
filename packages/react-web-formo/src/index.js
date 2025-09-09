@@ -443,8 +443,7 @@ export default class FormO extends Component {
       field.value = this[field.name].group.getValues();
     } else {
       if (field.type === 'status_picker' && Array.isArray(field.options)) {
-        const isPlaceholder = (v) =>
-          v === undefined || v === null || v === '' || v === '-Select-';
+        const isPlaceholder = (v) => isEmpty(v) || v === '-Select-';
 
         const incomingVal = value ?? '';
         const options = field.options;
