@@ -37,17 +37,9 @@ export default class StatusPickerField extends Component {
   render() {
     const { attributes } = this.props;
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', margin: 10 }}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 8,
-          }}
-        >
-          <p style={{ fontSize: 20, margin: 0 }}>
+      <div className="status-picker-container">
+        <div className="status-picker-header">
+          <p className="status-picker-label">
             {attributes['label']} {attributes['required'] ? `*` : ''} :
           </p>
           {attributes['error'] && (
