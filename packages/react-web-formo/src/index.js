@@ -435,16 +435,30 @@ export default class FormO extends Component {
   };
 
   getFieldValue = (fieldObj, value) => {
-    const field = fieldObj;
+    const field = _.cloneDeep(fieldObj);
     if (field.type === 'group') {
-      const subFields = {};
-      Object.keys(value).forEach((fieldName) => {
-        subFields[fieldName] = value[fieldName];
-      });
-      this[field.name].group.setValues(subFields);
+      const sub = {};
+      Object.keys(value || {}).forEach((k) => (sub[k] = value[k]));
+      this[field.name].group.setValues(sub);
       field.value = this[field.name].group.getValues();
     } else {
-      field.value = value;
+      if (field.type === 'status_picker' && Array.isArray(field.options)) {
+        const isPlaceholder = (v) => isEmpty(v) || v === '-Select-';
+
+        const incomingVal = value ?? '';
+        const options = field.options;
+        const selectable = options.filter((o) => !isPlaceholder(o));
+        const hasValue = options.includes(incomingVal);
+        const showFirst = field.show_first_option ?? false;
+
+        if (showFirst && !hasValue && selectable.length > 0) {
+          field.value = selectable[0];
+        } else {
+          field.value = incomingVal;
+        }
+      } else {
+        field.value = value;
+      }
       if (
         this.props.autoValidation === undefined ||
         this.props.autoValidation
@@ -455,8 +469,7 @@ export default class FormO extends Component {
         field.type === 'otp' ||
         (field.type === 'number' && !isFieldCalculated(field))
       ) {
-        const validationResult = customValidateData(field);
-        Object.assign(field, validationResult);
+        Object.assign(field, customValidateData(field));
       }
       if (
         this.props.customValidation &&

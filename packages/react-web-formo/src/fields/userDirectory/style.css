@@ -75,3 +75,24 @@
   pointer-events: none;
   opacity: 0.5;
 }
+.value-icon-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.value-chip {
+  display: inline-block;
+  background: yellow;
+  border-radius: 4px;
+  padding: 2px 8px;
+  line-height: 20px;
+  max-width: calc(100% - 28px); /* leave room for arrow */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.value-icon-wrapper .fal.fa-angle-right {
+  flex: 0 0 auto;
+}
