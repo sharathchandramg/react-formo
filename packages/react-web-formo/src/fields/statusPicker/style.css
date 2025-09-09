@@ -1,0 +1,55 @@
+/* Wrapper for select + overlay */
+.status-picker-wrap {
+  position: relative;
+  width: 100%;
+}
+
+/* The select dropdown */
+.status-picker-select {
+  width: 100%;
+  height: 45px;
+  font-size: 16px;
+  border-radius: 5px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 36px;
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
+}
+
+/* When first option should be hidden */
+.status-picker-transparent {
+  color: transparent;
+}
+
+/* Custom arrow icon */
+.status-picker-select {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23222222' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+}
+
+/* Overlay text shown on top of hidden value */
+.status-picker-overlay {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: yellow;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 16px;
+  line-height: 20px;
+  white-space: nowrap;
+  max-width: calc(100% - 48px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+
+/* Error message */
+.status-picker-error {
+  color: red;
+  font-size: 12px;
+  margin: 0;
+}
