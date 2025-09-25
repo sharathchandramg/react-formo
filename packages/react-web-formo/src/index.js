@@ -720,6 +720,7 @@ export default class FormO extends Component {
                 }}
                 {...commonProps}
                 {...this.props}
+                getFormatedValues={this.getFormatedValues}
               />
             );
 
