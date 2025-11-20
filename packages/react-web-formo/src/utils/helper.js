@@ -116,8 +116,10 @@ export function getDefaultValue(field) {
           if (
             field.additional_config &&
             field.additional_config.data_source &&
-            ['local'].includes(field.additional_config.data_source)
+            ['server'].includes(field.additional_config.data_source)
           ) {
+            return null;
+          } else {
             if (field.defaultValue === 'today') return moment().utc().valueOf();
             else if (field.defaultValue === 'tomorrow')
               return moment().add(1, 'day').utc().valueOf();
@@ -135,7 +137,6 @@ export function getDefaultValue(field) {
               return 'Select';
             } else return null;
           }
-          return null;
         case 'dayofweek':
         case 'dayofthemonth':
         case 'weekno':
@@ -145,11 +146,12 @@ export function getDefaultValue(field) {
           if (
             field.additional_config &&
             field.additional_config.data_source &&
-            ['local'].includes(field.additional_config.data_source)
+            ['server'].includes(field.additional_config.data_source)
           ) {
+            return null;
+          } else {
             return getDatePartValue(field.mode);
           }
-          return null;
       }
     }
     case 'group':
