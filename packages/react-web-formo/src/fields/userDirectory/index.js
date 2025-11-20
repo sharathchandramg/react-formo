@@ -4,7 +4,7 @@ import './style.css';
 
 const UserDirectoryField = (props) => {
   const { attributes } = props;
-  const showFirstOption = !!(attributes?.config?.show_first_option);
+  const showFirstOption = !!attributes?.config?.show_first_option;
 
   const handleOnclick = () => {
     if (typeof props.renderComponent === 'function') {
@@ -20,7 +20,12 @@ const UserDirectoryField = (props) => {
       if (attributes.multiple) {
         label = value.length;
       } else {
-        label = lk && value[lk] ? value[lk] : 'None';
+        label =
+          lk && value[lk] && value['user_alias']
+            ? `${value[lk]}(${value['user_alias']})`
+            : lk && value[lk]
+              ? value[lk]
+              : 'None';
       }
     }
     return label;
@@ -30,16 +35,13 @@ const UserDirectoryField = (props) => {
     const disableCondition = !attributes.editable;
     return (
       <div
-        className={`user-directory-data-wrapper ${disableCondition ? 'disabled' : ''}`}
+        className={`user-directory-data-wrapper ${disableCondition ? 'user-disabled' : ''}`}
         onClick={handleOnclick}
       >
-        <p style={{ paddingInlineStart: 5 }}>{attributes.label}</p>
-        <div className="value-icon-wrapper">
-          <h6 className={showFirstOption ? 'value-chip' : ''}>
-            {getLabel()}
-          </h6>
-          <i className="fal fa-angle-right" aria-hidden="true"></i>
-        </div>
+        <h6 className={showFirstOption ? 'user-value-chip' : ''}>
+          {getLabel()}
+        </h6>
+        <i className="fal fa-angle-right" aria-hidden="true"></i>
       </div>
     );
   };
