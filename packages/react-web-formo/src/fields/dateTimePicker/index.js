@@ -34,7 +34,23 @@ export default class DateTimePicker extends Component {
     const disableCondition = !attributes.editable;
     return (
       <DatePicker
-        selected={attributes.value ? new Date(attributes.value) : null}
+        placeholderText={
+          attributes &&
+          attributes.additional_config &&
+          attributes.additional_config.data_source &&
+          ['server'].includes(attributes.additional_config.data_source)
+            ? 'Server Time'
+            : ''
+        }
+        selected={
+          attributes && attributes.value
+            ? attributes.additional_config &&
+              attributes.additional_config.data_source &&
+              ['server'].includes(attributes.additional_config.data_source)
+              ? null
+              : new Date(attributes.value)
+            : null
+        }
         disabled={disableCondition}
         minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
         maxDate={attributes.maxDate && this.dateFormatter(attributes.maxDate)}
@@ -52,7 +68,23 @@ export default class DateTimePicker extends Component {
     const disableCondition = !attributes.editable;
     return (
       <DatePicker
-        selected={attributes.value ? new Date(attributes.value) : null}
+        placeholderText={
+          attributes &&
+          attributes.additional_config &&
+          attributes.additional_config.data_source &&
+          ['server'].includes(attributes.additional_config.data_source)
+            ? 'Server Time'
+            : ''
+        }
+        selected={
+          attributes && attributes.value
+            ? attributes.additional_config &&
+              attributes.additional_config.data_source &&
+              ['server'].includes(attributes.additional_config.data_source)
+              ? null
+              : new Date(attributes.value)
+            : null
+        }
         onChange={(date) => this.handleChange(date)}
         disabled={disableCondition}
         minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
@@ -72,7 +104,23 @@ export default class DateTimePicker extends Component {
     const disableCondition = !attributes.editable;
     return (
       <DatePicker
-        selected={attributes.value ? new Date(attributes.value) : null}
+        placeholderText={
+          attributes &&
+          attributes.additional_config &&
+          attributes.additional_config.data_source &&
+          ['server'].includes(attributes.additional_config.data_source)
+            ? 'Server Time'
+            : ''
+        }
+        selected={
+          attributes && attributes.value
+            ? attributes.additional_config &&
+              attributes.additional_config.data_source &&
+              ['server'].includes(attributes.additional_config.data_source)
+              ? null
+              : new Date(attributes.value)
+            : null
+        }
         onChange={(date) => this.handleChange(date)}
         disabled={disableCondition}
         minDate={attributes.minDate && this.dateFormatter(attributes.minDate)}
@@ -99,7 +147,14 @@ export default class DateTimePicker extends Component {
     return (
       <input
         type={'text'}
-        value={attributes['value'] || ''}
+        value={
+          attributes &&
+          attributes.additional_config &&
+          attributes.additional_config.data_source &&
+          ['server'].includes(attributes.additional_config.data_source)
+            ? 'Server Time'
+            : attributes['value'] || ''
+        }
         id={attributes['name']}
         disabled={disableCondition}
         style={{

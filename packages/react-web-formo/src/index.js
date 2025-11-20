@@ -15,6 +15,7 @@ import {
   getCalculatedFields,
   customValidateData,
   isFieldCalculated,
+  getDatePartValue,
 } from './utils/helper';
 import DateTimePicker from './fields/dateTimePicker/index.js';
 import Lookup from './fields/lookup/index.js';
@@ -487,6 +488,31 @@ export default class FormO extends Component {
       Object.keys(value || {}).forEach((k) => (sub[k] = value[k]));
       this[field.name].group.setValues(sub);
       field.value = this[field.name].group.getValues();
+    } else if (
+      field.type === 'date' &&
+      field.refresh &&
+      field.additional_config &&
+      field.additional_config.data_source &&
+      field.additional_config.data_source === 'local'
+    ) {
+      switch (field.mode) {
+        case 'date':
+        case 'time':
+        case 'datetime':
+          field.value = moment().utc().valueOf();
+          break;
+        case 'dayofweek':
+        case 'dayofthemonth':
+        case 'weekno':
+        case 'monthno':
+        case 'monthname':
+        case 'year':
+          field.value = getDatePartValue(field.mode);
+          break;
+
+        default:
+          break;
+      }
     } else {
       if (field.type === 'status_picker' && Array.isArray(field.options)) {
         const isPlaceholder = (v) => isEmpty(v) || v === '-Select-';
