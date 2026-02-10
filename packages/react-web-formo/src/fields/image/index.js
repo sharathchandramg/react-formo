@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import moment from 'moment';
+
 import { isEmpty } from '../../utils/validators';
 import { fileToBase64 } from '../../utils/helper';
 import './style.css';
@@ -11,7 +13,7 @@ export default class ImageField extends Component {
     };
   }
 
-  getLabel = value => {
+  getLabel = (value) => {
     let label = 'None';
     if (typeof value !== 'undefined' && value && Object.keys(value).length) {
       return value.label ? value.label : 'None';
@@ -42,9 +44,7 @@ export default class ImageField extends Component {
           return;
         } else if (img['size'] > 1048576) {
           this.props.openAlertModal(
-            `${
-              img['name']
-            } file size is greater than 1MB. Please select file size less than 1MB`
+            `${img['name']} file size is greater than 1MB. Please select file size less than 1MB`
           );
           return;
         }
@@ -52,12 +52,22 @@ export default class ImageField extends Component {
       const imgValue = [];
 
       await Promise.all(
-        Object.keys(images).map(async key => {
-          const base64 = await fileToBase64(images[key]);
+        Object.keys(images).map(async (key) => {
+          const file = images[key];
+          const base64 = await fileToBase64(file);
+
+          const timestamp = moment().utc().valueOf();
+
+          const nameParts = file.name.split('.');
+          const ext = nameParts.pop();
+          const baseName = nameParts.join('.');
+
+          const uniqueFileName = `${baseName}_${timestamp}.${ext}`;
+
           imgValue.push({
             url: base64,
-            file_name: images[key].name,
-            mime_type: images[key].type,
+            file_name: uniqueFileName,
+            mime_type: file.type,
           });
         })
       );
@@ -88,7 +98,7 @@ export default class ImageField extends Component {
           type="file"
           className="file-input"
           accept="image/jpeg,image/png,image/jpg"
-          onChange={event =>
+          onChange={(event) =>
             this.handleFile(additionalConfig, event.target.files)
           }
           id={attributes.name}
@@ -104,17 +114,17 @@ export default class ImageField extends Component {
     );
   };
 
-  getImgurl = item => {
+  getImgurl = (item) => {
     return !isEmpty(item['base64Data']) ? item['base64Data'] : item['url'];
   };
 
-  renderSelectedImages = attributes => {
+  renderSelectedImages = (attributes) => {
     const value = attributes.value;
     const images = this.state.images;
 
     let data = [];
     if (!isEmpty(images) && _.some(images, 'url')) {
-      _.forEach(images, image => {
+      _.forEach(images, (image) => {
         data.push({
           url: image['url'],
         });
@@ -123,7 +133,7 @@ export default class ImageField extends Component {
       !isEmpty(value) &&
       (_.some(value, 'url') || _.some(value, 'base64Data'))
     ) {
-      _.forEach(value, image => {
+      _.forEach(value, (image) => {
         data.push({
           url: this.getImgurl(image),
         });
@@ -146,7 +156,7 @@ export default class ImageField extends Component {
               }}
               onClick={() => {
                 const imageList = [];
-                data.forEach(ele => {
+                data.forEach((ele) => {
                   imageList.push({
                     original: ele.url,
                   });
